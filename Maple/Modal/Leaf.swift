@@ -13,7 +13,32 @@ struct Leaf {
     var shortDescription: String = ""
     var imageName: String = ""
     
-    func getImage() -> NSImage? {
+    public func getImage() -> NSImage? {
         return nil
+    }
+    
+    /// Useless(non-functioning) Leaf object
+    /// - Returns: Randomly generated Leaf object
+    public static func generate() -> Leaf {
+        let names: [String] = [
+            "Carton",
+            "Speaker Bump",
+            "Slick mouse",
+            "CoolCursor",
+            "EasyKeys",
+            "mE Apps"
+        ]
+        
+        let descriptions: [String] = [
+            "Integrate your authentication!",
+            "Change your MacOS cursor",
+            "Create some funky folders",
+            "Smoooth a life",
+            "MacOS. Redesigned. Flat",
+            "Oranges. Oranges everywhere",
+            "Super random description"
+        ]
+        
+        return Leaf(enabled: false, name: names.randomElement() ?? "Slinky", shortDescription: descriptions.randomElement() ?? "Smooth your animations on MacOS", imageName: "folder.circle.fill")
     }
 }

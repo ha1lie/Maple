@@ -10,9 +10,7 @@ import SwiftUI
 struct InstallWelcomeView: View {
     
     @Binding var completed: Bool
-    
-    
-    var title: String = "Start installing a new Leaf"
+    @Binding var title: String
     
     var body: some View {
         VStack {
@@ -21,6 +19,7 @@ struct InstallWelcomeView: View {
             }
         }.onAppear {
             self.completed = true
+            self.title = "Start installing a new Leaf"
         }
     }
 }

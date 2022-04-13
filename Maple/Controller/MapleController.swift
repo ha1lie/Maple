@@ -18,7 +18,7 @@ class MapleController: ObservableObject {
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
     
-    func installLeaf() {
+    func installLeaf(_ leaf: Leaf) {
         
     }
     
@@ -29,12 +29,11 @@ class MapleController: ObservableObject {
         
         if self.installerWindow == nil {
             self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: InstallerView()))
-            self.installerWindow?.setContentSize(NSSize(width: 400, height: 300))
+            self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
             self.installerWindow?.title = "Maple: Install a new leaf"
             self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
-            self.installerWindow?.minSize = NSSize(width: 400, height: 300)
-            self.installerWindow?.contentMinSize = NSSize(width: 400, height: 300)
-            self.installerWindow?.collectionBehavior = .canJoinAllSpaces
+            self.installerWindow?.minSize = NSSize(width: 600, height: 400)
+            self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
         }
         
         NSApp.setActivationPolicy(.regular)

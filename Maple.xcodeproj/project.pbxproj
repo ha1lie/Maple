@@ -22,9 +22,11 @@
 		26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BA627FA8A1F00BD4B2B /* EventMonitor.swift */; };
 		26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BBE27FA8A7700BD4B2B /* Leaf.swift */; };
 		26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC027FA8A7700BD4B2B /* MapleController.swift */; };
+		26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC327FB734900BD4B2B /* MapleButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		26C35B7827FA89E800BD4B2B /* Maple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Maple.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26C35B7B27FA89E800BD4B2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26C35B7D27FA89E800BD4B2B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 		26C35BA627FA8A1F00BD4B2B /* EventMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		26C35BBE27FA8A7700BD4B2B /* Leaf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leaf.swift; sourceTree = "<group>"; };
 		26C35BC027FA8A7700BD4B2B /* MapleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapleController.swift; sourceTree = "<group>"; };
+		26C35BC327FB734900BD4B2B /* MapleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +77,7 @@
 		26C35B7A27FA89E800BD4B2B /* Maple */ = {
 			isa = PBXGroup;
 			children = (
+				266AF4A22803ABDF0090447B /* Info.plist */,
 				26C35B8427FA89E900BD4B2B /* Maple.entitlements */,
 				26C35B7B27FA89E800BD4B2B /* AppDelegate.swift */,
 				26C35B8B27FA8A0400BD4B2B /* UI */,
@@ -100,6 +104,7 @@
 				26C35BA427FA8A1F00BD4B2B /* StatusBarTools */,
 				26C35BA127FA8A1F00BD4B2B /* BarApp */,
 				26C35B8C27FA8A1F00BD4B2B /* Install */,
+				26C35BC527FB734D00BD4B2B /* Essentials */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -107,8 +112,8 @@
 		26C35B8C27FA8A1F00BD4B2B /* Install */ = {
 			isa = PBXGroup;
 			children = (
-				26C35B8D27FA8A1F00BD4B2B /* StepViews */,
 				26C35B9227FA8A1F00BD4B2B /* InstallerView.swift */,
+				26C35B8D27FA8A1F00BD4B2B /* StepViews */,
 			);
 			path = Install;
 			sourceTree = "<group>";
@@ -116,10 +121,10 @@
 		26C35B8D27FA8A1F00BD4B2B /* StepViews */ = {
 			isa = PBXGroup;
 			children = (
-				26C35B8E27FA8A1F00BD4B2B /* InstallStartView.swift */,
 				26C35B8F27FA8A1F00BD4B2B /* InstallWelcomeView.swift */,
-				26C35B9027FA8A1F00BD4B2B /* InstallVerifyView.swift */,
 				26C35B9127FA8A1F00BD4B2B /* InstallSelectView.swift */,
+				26C35B9027FA8A1F00BD4B2B /* InstallVerifyView.swift */,
+				26C35B8E27FA8A1F00BD4B2B /* InstallStartView.swift */,
 			);
 			path = StepViews;
 			sourceTree = "<group>";
@@ -156,6 +161,14 @@
 				26C35BC027FA8A7700BD4B2B /* MapleController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		26C35BC527FB734D00BD4B2B /* Essentials */ = {
+			isa = PBXGroup;
+			children = (
+				26C35BC327FB734900BD4B2B /* MapleButton.swift */,
+			);
+			path = Essentials;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,6 +246,7 @@
 				26C35BBA27FA8A2000BD4B2B /* HomeScreen.swift in Sources */,
 				26C35BA927FA8A1F00BD4B2B /* InstallVerifyView.swift in Sources */,
 				26C35BA827FA8A1F00BD4B2B /* InstallWelcomeView.swift in Sources */,
+				26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
@@ -383,6 +397,7 @@
 				DEVELOPMENT_TEAM = 5RD23JCCKU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Maple/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -410,6 +425,7 @@
 				DEVELOPMENT_TEAM = 5RD23JCCKU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Maple/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;

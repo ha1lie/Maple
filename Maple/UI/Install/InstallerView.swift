@@ -9,15 +9,51 @@ import SwiftUI
 
 struct InstallerView: View {
     
+    @State var stepNum: Int = 0
+    
+    @State var canContinue: Bool = false
+    @State var currentTitle: String = ""
+    @State var chosenPackageName: String = ""
+    @State var leaf: Leaf? = nil
+    
+    @State var views: [AnyView] = [AnyView(EmptyView())]
+    
     var body: some View {
-        HStack {
+        VStack {
+            Text("Leaf Installer: Step #\(self.stepNum)")
+                .font(.title)
+                .bold()
+            Text(self.currentTitle)
+            
+            Spacer() // This is where the content of each step will go, gotta figure out the best way to do that first
+            
+            self.views[self.stepNum]
+            
             Spacer()
-            VStack {
+            
+            HStack {
                 Spacer()
-                Text("THIS IS THE INSTALLER VIEW")
-                Spacer()
+                
+                MapleButton(action: {
+                    if (self.stepNum != 0) {
+                        self.stepNum -= 1
+                    }
+                }, title: "BACK").disabled(self.stepNum == 0)
+                
+                MapleButton(action: {
+                    if self.stepNum != 3 {
+                        self.stepNum += 1
+                    }
+                }, title: "NEXT").disabled(!self.canContinue || self.stepNum == 3)
             }
-            Spacer()
+        }.padding()
+        .onAppear {
+            self.views = [
+                AnyView(InstallWelcomeView(completed: $canContinue, title: $currentTitle)),
+                AnyView(InstallSelectView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName)),
+                AnyView(InstallVerifyView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName, leaf: $leaf)),
+                AnyView(InstallStartView(complete: $canContinue, title: $currentTitle, leaf: $leaf))
+            ]
         }
     }
 }

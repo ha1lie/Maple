@@ -28,6 +28,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.async {
             NSApp.windows.first?.close()
         }
+        
+        MapleController.shared.openWindowToInstallLeaf()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
