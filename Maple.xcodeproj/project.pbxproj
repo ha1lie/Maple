@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35B7B27FA89E800BD4B2B /* AppDelegate.swift */; };
 		26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35B7D27FA89E800BD4B2B /* ViewController.swift */; };
 		26C35B8027FA89E900BD4B2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26C35B7F27FA89E900BD4B2B /* Assets.xcassets */; };
@@ -52,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				268047682807637900FD60D2 /* Zip in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,6 +189,9 @@
 			dependencies = (
 			);
 			name = Maple;
+			packageProductDependencies = (
+				268047672807637900FD60D2 /* Zip */,
+			);
 			productName = Maple;
 			productReference = 26C35B7827FA89E800BD4B2B /* Maple.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +220,9 @@
 				Base,
 			);
 			mainGroup = 26C35B6F27FA89E800BD4B2B;
+			packageReferences = (
+				268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */,
+			);
 			productRefGroup = 26C35B7927FA89E800BD4B2B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -463,6 +471,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		268047672807637900FD60D2 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 26C35B7027FA89E800BD4B2B /* Project object */;
 }

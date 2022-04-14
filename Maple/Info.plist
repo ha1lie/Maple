@@ -4,9 +4,59 @@
 <dict>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Maple Leaf Package</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>AppIcon</string>
+				<key>UTTypeIconText</key>
+				<string>Leaf</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>dev.halz.maple.mapleleaf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mapleleaf</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Maple Leaf Package</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconText</key>
+				<string>Leaf</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>dev.halz.maple.mapleleaf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mapleleaf</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

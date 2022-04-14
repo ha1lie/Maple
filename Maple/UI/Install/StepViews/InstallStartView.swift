@@ -15,13 +15,20 @@ struct InstallStartView: View {
     
     var body: some View {
         VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Text("Choose below if you would like to install or discard the tweak you approved on the last slide")
             
-            Button {
-                self.complete = false
-            } label: {
-                Text("Complete")
+            HStack(spacing: 8) {
+                MapleButton(action: {
+                    guard let _ = self.leaf else { return }
+                    MapleController.shared.installLeaf(self.leaf!)
+                    self.complete = true
+                }, title: "INSTALL AND START")
+                MapleButton(action: {
+                    print("Cancelling an install")
+                    self.complete = true
+                }, title: "DELETE AND CANCEL")
             }
+            
         }.onAppear {
             self.complete = false
             self.title = "Confirm your Leaf package"

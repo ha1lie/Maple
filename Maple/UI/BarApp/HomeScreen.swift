@@ -33,10 +33,12 @@ struct HomeScreen: View {
                     }.buttonStyle(PlainButtonStyle())
                 }
                 
-                ForEach(0...5, id: \.self) { _ in
-                    Divider()
-                        .padding(.horizontal)
-                    LeafCell()
+                if self.mapleController.installedLeaves.count == 0 {
+                    Text("You don't have any Leaves installed currently")
+                } else {
+                    ForEach(self.mapleController.installedLeaves) { leaf in
+                        LeafCell(leaf)
+                    }
                 }
             }.padding()
         }

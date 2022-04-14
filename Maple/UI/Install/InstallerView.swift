@@ -13,7 +13,7 @@ struct InstallerView: View {
     
     @State var canContinue: Bool = false
     @State var currentTitle: String = ""
-    @State var chosenPackageName: String = ""
+    @State var chosenPackageName: URL? = nil
     @State var leaf: Leaf? = nil
     
     @State var views: [AnyView] = [AnyView(EmptyView())]
@@ -43,8 +43,11 @@ struct InstallerView: View {
                 MapleButton(action: {
                     if self.stepNum != 3 {
                         self.stepNum += 1
+                    } else {
+                        // Close the window
+                        MapleController.shared.closeInstallWindow()
                     }
-                }, title: "NEXT").disabled(!self.canContinue || self.stepNum == 3)
+                }, title: self.stepNum != 3 ? "NEXT" : "FINISH").disabled(!self.canContinue)
             }
         }.padding()
         .onAppear {
