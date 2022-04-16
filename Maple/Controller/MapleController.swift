@@ -18,11 +18,100 @@ class MapleController: ObservableObject {
     /// File Manager singleton for this class, simplicity's sake
     final private let fManager: FileManager = .default
     
+    final private let uDefaults: UserDefaults = .standard
+    
     //MARK: Public state management
     @Published var installedLeaves: [Leaf] = []
     
+    var runningLeaves: [Leaf] {
+        get {
+            return installedLeaves.filter({ $0.enabled })
+        }
+    }
+    
+    @Published var canCurrentlyInject: Bool = false
+    
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
+    private var injectedLeaves: [Leaf] = []
+    
+    private static let installedLeavesKey: String = "installedLeaves"
+    
+    /// Setup initial state for Maple Controller
+    /// Also initialize injection for enabled Leaves
+    public func configure() {
+        self.installedLeaves = self.fetchLocallyStoredLeaves()
+        self.startInjectingEnabledLeaves()
+    }
+    
+    public func startInjectingEnabledLeaves() {
+        print("Start injecting all enabled leaves")
+        
+        // Create contents of listen.txt file
+        
+        for leaf in self.installedLeaves {
+            if leaf.enabled {
+                print("ENABLING: \(leaf.name ?? "")")
+            }
+        }
+        
+        // Write listen.txt file
+        
+        
+        // Spin up an instance of Maple-LibInjector with above file
+        
+        
+        // Kill the processes, optionally check if the user would like them to be restarted
+        
+        
+        // Success
+    }
+    
+    public func startInjectingLeaf(_ leaf: Leaf) {
+        if !leaf.enabled {
+            print("Cannot begin injecting Leaf: Leaf is not enabled")
+        }
+        // TODO: Actually begin injecting this leaf
+        print("Beginning to inject: \(leaf.name ?? "NAME")")
+        
+        // Check if anything is currently injecting
+        
+            // YES - Edit the file by appending this to the end, after checking it's not there!
+        
+            // NO - Create the file with just this one
+        
+        
+        // Spin up Maple-Inject
+        
+        
+        // Optionally kill the injecting process
+        
+        
+    }
+    
+    public func stopInjectingEnabledLeaves() {
+        print("STOPPING INJECTION OF ALL LEAVES")
+        // TODO: Stop all injections
+        
+        // Kill Maple-LibInject
+        
+        
+        // Delete listen.txt file
+        
+        
+    }
+    
+    public func stopInjectingLeaf(_ leaf: Leaf) {
+        print("Stopping injecting leaf: \(leaf.name ?? "NAME")")
+        // TODO: Actually stop it!
+        
+        // Edit listen.txt to remove it
+        
+        
+        // If it was there to remove, then kill and restart Maple-LibInjector
+        
+        
+    }
     
     /// Creates a Leaf object from a file
     /// - Parameter file: URL of the file, wherever it is stored on disk
@@ -92,7 +181,7 @@ class MapleController: ObservableObject {
         }
         
         // Create a Leaf object
-        var resultLeaf: Leaf? = Leaf()
+        let resultLeaf: Leaf? = Leaf()
         
         // Process the .sap file to get all information about it
         for line in sapInfo! {
@@ -122,8 +211,36 @@ class MapleController: ObservableObject {
         
         // Add this to the live list
         self.installedLeaves.append(leaf)
+        self.updateLocallyStoredLeaves()
+    }
+    
+    /// Save self.installedLeaves to UserDefaults
+    func updateLocallyStoredLeaves() {
+        let encodedData = try? JSONEncoder().encode(self.installedLeaves)
         
-        // TODO: Add this leaf to permanent storage
+        guard let _ = encodedData else { print("Could not encode self.installedLeaves"); return }
+        
+        if encodedData!.isEmpty {
+            print("Failed to properly convert leaves to Data")
+            return
+        }
+        
+        self.uDefaults.set(encodedData, forKey: MapleController.installedLeavesKey)
+    }
+    
+    /// Get locally stored + installed Leaves
+    /// - Returns: Array of Leaf objects, empty if none are installed
+    private func fetchLocallyStoredLeaves() -> [Leaf] {
+        if let encodedData = UserDefaults.standard.data(forKey: MapleController.installedLeavesKey) {
+            if let leaves = try? JSONDecoder().decode([Leaf].self, from: encodedData) {
+                return leaves
+            } else {
+                print("COULD NOT DECODE DATA")
+            }
+        } else {
+            print("COULD NOT GET DATA")
+        }
+        return []
     }
     
     /// Opens a seperate window which hosts the installer program

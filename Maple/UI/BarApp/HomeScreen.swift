@@ -9,38 +9,22 @@ import SwiftUI
 
 struct HomeScreen: View {
     
-    private var mapleController: MapleController = .shared
+    @State var selectedLeaf: Leaf? = nil
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            VStack {
-                HStack {
-                    Text("Maple")
-                        .font(.title)
-                        .bold()
-                    Spacer()
-                    
-                    Button {
-                        self.mapleController.openWindowToInstallLeaf()
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 60, height: 30)
-                                .foregroundColor(.gray)
-                            Text("NEW")
-                                .bold()
-                        }
-                    }.buttonStyle(PlainButtonStyle())
+        HStack {
+            LeafList(selectedLeaf: self.$selectedLeaf)
+                .animation(.easeInOut, value: self.selectedLeaf)
+                .if(self.selectedLeaf != nil) { v in
+                    v.frame(width: 0)
+                        .opacity(0)
                 }
-                
-                if self.mapleController.installedLeaves.count == 0 {
-                    Text("You don't have any Leaves installed currently")
-                } else {
-                    ForEach(self.mapleController.installedLeaves) { leaf in
-                        LeafCell(leaf)
-                    }
+            LeafDetailView(selectedLeaf: self.$selectedLeaf)
+                .animation(.easeInOut, value: self.selectedLeaf)
+                .if(self.selectedLeaf == nil) { v in
+                    v.frame(width: 0)
+                        .opacity(0)
                 }
-            }.padding()
         }
     }
 }

@@ -11,13 +11,11 @@ import SwiftUI
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    
     var popover = NSPopover()
     var statusBar: StatusBarController?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        
         let contentView = HomeScreen()
         
         self.popover.contentViewController = NSHostingController(rootView: contentView)
@@ -29,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.windows.first?.close()
         }
         
-        MapleController.shared.openWindowToInstallLeaf()
+        MapleController.shared.configure()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -44,7 +42,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
-
-
 }
 

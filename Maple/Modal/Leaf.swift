@@ -7,7 +7,7 @@
 
 import AppKit
 
-struct Leaf: Identifiable {
+class Leaf: Identifiable, Codable, Equatable {
     
     var enabled: Bool = false
     var name: String? = nil
@@ -20,12 +20,11 @@ struct Leaf: Identifiable {
     var libraryName: String? = nil
     var targetBundleID: String? = nil
     var leafID: String? = nil
-    
-    var id: ObjectIdentifier = .init(Leaf.self)
+//    var id: ObjectIdentifier = UUID().uuidString
     
     /// Add a value to the initialized leaf
     /// - Parameter field: Line from Sap file
-    public mutating func add(field: String) {
+    public func add(field: String) {
         let split: [String] = field.components(separatedBy: ": ")
         if split.count < 2 {
             print("Could not add field to Leaf, not enough information on line")
@@ -57,6 +56,18 @@ struct Leaf: Identifiable {
         }
     }
     
+    /// Toggles the enability of this Leaf
+    public func toggleEnable() {
+        if self.enabled {
+            self.enabled = false
+        } else {
+            self.enabled = true
+            print(self)
+            MapleController.shared.updateLocallyStoredLeaves()
+            MapleController.shared.startInjectingLeaf(self)
+        }
+    }
+    
     /// Checks if a given Leaf is valid, eg. has enough information to run
     /// - Returns: true if valid
     public func isValid() -> Bool {
@@ -64,28 +75,21 @@ struct Leaf: Identifiable {
             libraryName != nil && targetBundleID != nil && leafID != nil
     }
     
-    /// Useless(non-functioning) Leaf object
-    /// - Returns: Randomly generated Leaf object
-    public static func generate() -> Leaf {
-        let names: [String] = [
-            "Carton",
-            "Speaker Bump",
-            "Slick mouse",
-            "CoolCursor",
-            "EasyKeys",
-            "mE Apps"
-        ]
-        
-        let descriptions: [String] = [
-            "Integrate your authentication!",
-            "Change your MacOS cursor",
-            "Create some funky folders",
-            "Smoooth a life",
-            "MacOS. Redesigned. Flat",
-            "Oranges. Oranges everywhere",
-            "Super random description"
-        ]
-        
-        return Leaf(enabled: false, name: names.randomElement() ?? "Slinky", description: descriptions.randomElement() ?? "Smooth your animations on MacOS", imageName: "folder.circle.fill")
+    static func == (lhs: Leaf, rhs: Leaf) -> Bool {
+        return lhs.leafID == rhs.leafID
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case enabled = "enabled"
+        case name = "name"
+        case description = "description"
+        case imageName = "image_name"
+        case author = "author"
+        case authorEmail = "author-email"
+        case authorDiscord = "author-discord"
+        case tweakWebsite = "tweak-website"
+        case libraryName = "library-name"
+        case targetBundleID = "target-bid"
+        case leafID = "leaf-id"
     }
 }
