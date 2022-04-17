@@ -28,6 +28,8 @@
 		26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BBE27FA8A7700BD4B2B /* Leaf.swift */; };
 		26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC027FA8A7700BD4B2B /* MapleController.swift */; };
 		26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC327FB734900BD4B2B /* MapleButton.swift */; };
+		26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */; };
+		26EC67D7280BA9CE000181B3 /* InjectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D6280BA9CE000181B3 /* InjectionError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		26C35BBE27FA8A7700BD4B2B /* Leaf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leaf.swift; sourceTree = "<group>"; };
 		26C35BC027FA8A7700BD4B2B /* MapleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapleController.swift; sourceTree = "<group>"; };
 		26C35BC327FB734900BD4B2B /* MapleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleButton.swift; sourceTree = "<group>"; };
+		26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleFileHelper.swift; sourceTree = "<group>"; };
+		26EC67D6280BA9CE000181B3 /* InjectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 			children = (
 				26C35BC027FA8A7700BD4B2B /* MapleController.swift */,
 				268047842809CE5A00FD60D2 /* MapleNotificationController.swift */,
+				26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */,
+				26EC67D6280BA9CE000181B3 /* InjectionError.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -273,9 +279,11 @@
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
+				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
 				26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */,
 				26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */,
+				26EC67D7280BA9CE000181B3 /* InjectionError.swift in Sources */,
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,
 				26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */,

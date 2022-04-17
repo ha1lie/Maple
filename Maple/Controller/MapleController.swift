@@ -33,17 +33,27 @@ class MapleController: ObservableObject {
     
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
-    private var injectedLeaves: [Leaf] = []
+    private var runningInjector: Bool = false
     
     private static let installedLeavesKey: String = "installedLeaves"
+    
+    private static let runnablesDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Runnables", isDirectory: true)
+    private static let installedDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Installed", isDirectory: true)
+    private static let preferencesDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Preferences", isDirectory: true)
     
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
         self.installedLeaves = self.fetchLocallyStoredLeaves()
         self.startInjectingEnabledLeaves()
+        
+        // Make sure that the directories will exist when you need them... doesn't hurt to put them there now
+        try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
+        try? self.fManager.createDirectory(at: MapleController.installedDir, withIntermediateDirectories: true)
+        try? self.fManager.createDirectory(at: MapleController.preferencesDir, withIntermediateDirectories: true)
     }
     
+    /// Begins injecting all enabled leaves
     public func startInjectingEnabledLeaves() {
         print("Start injecting all enabled leaves")
         
@@ -59,14 +69,20 @@ class MapleController: ObservableObject {
         
         
         // Spin up an instance of Maple-LibInjector with above file
-        
+        self.startMapleInjector()
         
         // Kill the processes, optionally check if the user would like them to be restarted
-        
+        do {
+            try self.killProcesses(withBIDs: self.runningLeaves.map({ $0.targetBundleID! }))
+        } catch {
+            print("ERRORED while attempting to begin injection: \(error)")
+        }
         
         // Success
     }
     
+    /// Begins injecting given leaf
+    /// - Parameter leaf: Leaf which you would like to inject
     public func startInjectingLeaf(_ leaf: Leaf) {
         if !leaf.enabled {
             print("Cannot begin injecting Leaf: Leaf is not enabled")
@@ -82,25 +98,28 @@ class MapleController: ObservableObject {
         
         
         // Spin up Maple-Inject
-        
+        self.startMapleInjector() // OR restartMapleInjector()
         
         // Optionally kill the injecting process
         
         
     }
     
+    /// Stops all leaves from running
     public func stopInjectingEnabledLeaves() {
         print("STOPPING INJECTION OF ALL LEAVES")
         // TODO: Stop all injections
         
         // Kill Maple-LibInject
-        
+        self.stopMapleInjector()
         
         // Delete listen.txt file
         
         
     }
     
+    /// Stops injection of a particular leaf
+    /// - Parameter leaf: Leaf to stop injecting
     public func stopInjectingLeaf(_ leaf: Leaf) {
         print("Stopping injecting leaf: \(leaf.name ?? "NAME")")
         // TODO: Actually stop it!
@@ -109,23 +128,60 @@ class MapleController: ObservableObject {
         
         
         // If it was there to remove, then kill and restart Maple-LibInjector
+        self.reloadMapleInjector()
+    }
+    
+    /// Kills multiple processes
+    /// - Parameter bids: BIDs of desired processes to end
+    private func killProcesses(withBIDs bids: [String]) throws {
+        for running in NSWorkspace.shared.runningApplications {
+            if running.bundleIdentifier != nil && bids.contains(running.bundleIdentifier!) {
+                if !running.forceTerminate() {
+                    throw InjectionError.unableToTerminateProcess
+                }
+            }
+        }
+    }
+    
+    /// Kills a given process if it's currently running
+    /// - Parameter bid: Bundle ID of a process you would like to kill
+    func killProcess(withBID bid: String) throws {
+        for running in NSWorkspace.shared.runningApplications {
+            if running.bundleIdentifier == bid {
+                if !running.forceTerminate() {
+                    throw InjectionError.unableToTerminateProcess
+                }
+            }
+        }
+    }
+    
+    /// Starts up Maple-LibInjector with default listen file
+    private func startMapleInjector() {
         
+    }
+    
+    /// Stops Maple-LibInjector from injecting
+    private func stopMapleInjector() {
         
+    }
+    
+    /// Reloads Maple-LibInjector after changing a listen file
+    private func reloadMapleInjector() {
+        self.stopMapleInjector()
+        self.startMapleInjector()
     }
     
     /// Creates a Leaf object from a file
     /// - Parameter file: URL of the file, wherever it is stored on disk
     /// - Returns: Optional Leaf object, if no errors are thrown
-    func installFile(_ file: URL) -> Leaf? {
+    func installFile(_ file: URL) throws -> Leaf? {
         
         //Move it to internal storage
-        let internalLoc: URL? = self.fManager.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("tmpInstallLeaf2.zip")
-        
-        guard let _ = internalLoc else { return nil }
+        let internalLoc: URL = MapleController.installedDir.appendingPathComponent("tmpInstallLeaf2.zip")
         
         do {
-            try self.fManager.copyItem(at: file , to: internalLoc!)
-            print("Internal Location: " + internalLoc!.absoluteString)
+            try self.fManager.copyItem(at: file , to: internalLoc)
+            print("Internal Location: " + internalLoc.absoluteString)
         } catch {
             print("Couldn't copy file to local storage: ", error)
             return nil
@@ -134,7 +190,7 @@ class MapleController: ObservableObject {
         //Decompress .mapleleaf file to a folder containing .sap and .dylib
         var unzippedPackageURL: URL?
         do {
-            unzippedPackageURL = try Zip.quickUnzipFile(internalLoc!)
+            unzippedPackageURL = try Zip.quickUnzipFile(internalLoc)
         } catch {
             print("Error decompressing file: ", error)
             return nil
@@ -145,17 +201,11 @@ class MapleController: ObservableObject {
             return nil
         }
         
-        var items: [String]? = nil
-        do {
-            items = try self.fManager.contentsOfDirectory(atPath: unzippedPackageURL!.absoluteString.replacingOccurrences(of: "file://", with: ""))
-        } catch {
-            print("Couldn't get contents: ", error)
-            return nil
-        }
+        let items: [String] = MapleFileHelper.shared.contentsOf(Directory: unzippedPackageURL!)
         
         var containingFolder: String? = nil
         
-        for f in items! {
+        for f in items {
             if f.first != "." && !f.contains("__") {
                 containingFolder = f
             }
@@ -167,13 +217,7 @@ class MapleController: ObservableObject {
         }
         
         // Sap file is located at unzipped + folder-name + "info.sap"
-        var sapInfo: [String]? = nil
-        do {
-            sapInfo = (String(data: try Data(contentsOf: unzippedPackageURL!.appendingPathComponent(containingFolder! + "/info.sap")), encoding: .utf8) ?? "FAILURE").components(separatedBy: "\n")
-            
-        } catch {
-            print("Could not get the info.sap data; Throwing ", error)
-        }
+        let sapInfo: [String]? = (MapleFileHelper.shared.readFile(atLocation: unzippedPackageURL!.appendingPathComponent(containingFolder! + "/info.sap")) ?? "FAILURE").components(separatedBy: "\n")
         
         guard let _ = sapInfo else {
             print("Sap Info could not be found")
@@ -188,11 +232,26 @@ class MapleController: ObservableObject {
             resultLeaf?.add(field: line)
         }
         
-        // Get the internal methods which are hooked for the user to verify
+        if resultLeaf?.isValid() ?? false {
+            do {
+                try self.fManager.copyItem(at: internalLoc, to: MapleController.installedDir.appendingPathComponent("/\(resultLeaf!.leafID ?? "").mapleleaf"))
+            } catch {
+                print("Could not copy to installed directory")
+            }
+            
+            do {
+                try self.fManager.createDirectory(at: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)"), withIntermediateDirectories: true)
+                try self.fManager.copyItem(at: unzippedPackageURL!.appendingPathComponent("\(containingFolder!)/\(resultLeaf!.libraryName!)"), to: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)/\(resultLeaf!.libraryName!)"))
+            } catch {
+                // Could not copy dylib to runnables directory
+                print("Failed to copy dylib to runnables directory")
+            }
+        }
+        
         // TODO: Create a script which can read into the dylib to parse which methods are hooked!
         
         // Clean up!
-        try? self.fManager.removeItem(at: internalLoc!)
+        try? self.fManager.removeItem(at: internalLoc)
         try? self.fManager.removeItem(at: unzippedPackageURL!)
         
         // Return the Leaf object which holds all this information

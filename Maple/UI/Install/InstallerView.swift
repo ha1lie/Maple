@@ -15,6 +15,7 @@ struct InstallerView: View {
     @State var currentTitle: String = ""
     @State var chosenPackageName: URL? = nil
     @State var leaf: Leaf? = nil
+    @State var error: String? = nil
     
     @State var views: [AnyView] = [AnyView(EmptyView())]
     
@@ -27,7 +28,18 @@ struct InstallerView: View {
             
             Spacer() // This is where the content of each step will go, gotta figure out the best way to do that first
             
-            self.views[self.stepNum]
+            if let _ = self.error {
+                ScrollView {
+                    Text("Oops!")
+                        .bold()
+                        .font(.title)
+                    Text("We couldn't install your leaf currently, we had an error we couldn't fix.")
+                    Text("Error: \(self.error!)")
+                        .foregroundColor(.red)
+                }
+            } else {
+                self.views[self.stepNum]
+            }
             
             Spacer()
             
@@ -47,14 +59,14 @@ struct InstallerView: View {
                         // Close the window
                         MapleController.shared.closeInstallWindow()
                     }
-                }, title: self.stepNum != 3 ? "NEXT" : "FINISH").disabled(!self.canContinue)
+                }, title: self.stepNum != 3 && self.error == nil ? "NEXT" : "FINISH").disabled(!self.canContinue)
             }
         }.padding()
         .onAppear {
             self.views = [
                 AnyView(InstallWelcomeView(completed: $canContinue, title: $currentTitle)),
                 AnyView(InstallSelectView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName)),
-                AnyView(InstallVerifyView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName, leaf: $leaf)),
+                AnyView(InstallVerifyView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName, leaf: $leaf, foundError: self.$error)),
                 AnyView(InstallStartView(complete: $canContinue, title: $currentTitle, leaf: $leaf))
             ]
         }

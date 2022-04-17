@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LeafList: View {
     
-    let mapleController: MapleController = .shared
+    @ObservedObject var mapleController: MapleController = .shared
     
     @Binding var selectedLeaf: Leaf?
     

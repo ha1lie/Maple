@@ -72,7 +72,9 @@ class Leaf: Identifiable, Codable, Equatable {
     /// - Returns: true if valid
     public func isValid() -> Bool {
         return name != nil && description != nil && author != nil &&
-            libraryName != nil && targetBundleID != nil && leafID != nil
+            libraryName != nil && targetBundleID != nil && leafID != nil &&
+            name != "" && description != "" && author != "" &&
+            libraryName != "" && targetBundleID != "" && leafID != ""
     }
     
     static func == (lhs: Leaf, rhs: Leaf) -> Bool {

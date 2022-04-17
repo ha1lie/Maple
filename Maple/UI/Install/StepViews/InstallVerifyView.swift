@@ -15,6 +15,7 @@ struct InstallVerifyView: View {
     @Binding var title: String
     @Binding var fileName: URL?
     @Binding var leaf: Leaf?
+    @Binding var foundError: String?
     
     @State var statusStrings: [String] = []
     @State var statusSuccess: [Bool?] = []
@@ -41,6 +42,15 @@ struct InstallVerifyView: View {
                     Text("*Library name*: " + (self.leaf!.libraryName ?? "LIBRARY NAME"))
                     Text("*Target BID*: " + (self.leaf!.targetBundleID ?? "TARGET BID"))
                 }
+            } else if let _ = self.foundError {
+                ScrollView {
+                    Text("ERROR")
+                        .foregroundColor(.red)
+                        .font(.title)
+                        .bold()
+                    Text(self.foundError!)
+                        .foregroundColor(.red)
+                }
             } else {
                 HStack {
                     // Icons
@@ -55,8 +65,13 @@ struct InstallVerifyView: View {
                     self.completed = false
                     return
                 }
-                self.leaf = MapleController.shared.installFile(self.fileName!)
-                self.completed = self.leaf != nil
+                do {
+                    self.leaf = try MapleController.shared.installFile(self.fileName!)
+                    self.completed = self.leaf != nil
+                } catch {
+                    self.completed = true // TODO: Also make this display an error!
+                    self.foundError = "\(error)"
+                }
             }
         }
     }
