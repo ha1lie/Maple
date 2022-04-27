@@ -51,8 +51,8 @@ class MapleFileHelper {
     /// Gets the String of a URL
     /// - Parameter url: URL to stringify
     /// - Returns: The string's representation of given URL
-    private func urlToString(_ url: URL) -> String {
-        return url.absoluteString.replacingOccurrences(of: "file://", with: "")
+    public func urlToString(_ url: URL) -> String {
+        return url.absoluteString.replacingOccurrences(of: "file://", with: "").replacingOccurrences(of: "%20", with: " ")
     }
 }
 

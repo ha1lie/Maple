@@ -25,7 +25,7 @@ class MapleController: ObservableObject {
     
     var runningLeaves: [Leaf] {
         get {
-            return installedLeaves.filter({ $0.enabled })
+            return installedLeaves.filter({ $0.enabled && $0.isValid() })
         }
     }
     
@@ -33,19 +33,22 @@ class MapleController: ObservableObject {
     
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
-    private var runningInjector: Bool = false
+    private var injector: Process? = nil
     
     private static let installedLeavesKey: String = "installedLeaves"
     
-    private static let runnablesDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Runnables", isDirectory: true)
-    private static let installedDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Installed", isDirectory: true)
-    private static let preferencesDir: URL = URL(fileURLWithPath: "/Library/Application Support/Maple/Preferences", isDirectory: true)
+    private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
+    private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
+    private static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
+    
+    private static let injectorFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
+    private static let listenFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
     
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
         self.installedLeaves = self.fetchLocallyStoredLeaves()
-        self.startInjectingEnabledLeaves()
+//        self.startInjectingEnabledLeaves()
         
         // Make sure that the directories will exist when you need them... doesn't hurt to put them there now
         try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
@@ -53,27 +56,49 @@ class MapleController: ObservableObject {
         try? self.fManager.createDirectory(at: MapleController.preferencesDir, withIntermediateDirectories: true)
     }
     
+    /// Create contents of the listen file
+    /// - Parameter pieces: Pieces of the listen file to pass in
+    /// - Returns: Concatenated and formatted listen file
+    private func listenContents(for pieces: [String: [String]]) -> String {
+        var contents: String = ""
+        for piece in pieces.keys {
+            contents += piece
+            for lib in pieces[piece]! {
+                contents += " /Users/hallie/Library/Application Support/Maple/Runnables/\(lib)"
+            }
+            contents += "\n"
+        }
+        return contents
+    }
+    
     /// Begins injecting all enabled leaves
     public func startInjectingEnabledLeaves() {
         print("Start injecting all enabled leaves")
         
-        // Create contents of listen.txt file
+        var procs: [String] = []
         
-        for leaf in self.installedLeaves {
-            if leaf.enabled {
-                print("ENABLING: \(leaf.name ?? "")")
+        // Create contents of listen.txt file
+        var listenFile: [String : [String]] = [:]
+        for leaf in self.runningLeaves {
+            for i in 0..<leaf.targetBundleID!.count {
+                if let _ = listenFile[leaf.targetBundleID![i]] {
+                    listenFile[leaf.targetBundleID![i]]!.append("\(leaf.leafID!)/\(leaf.libraryName!)")
+                } else {
+                    listenFile[leaf.targetBundleID![i]] = ["\(leaf.leafID!)/\(leaf.libraryName!)"]
+                }
             }
+            procs.append(contentsOf: leaf.targetBundleID!)
         }
         
         // Write listen.txt file
-        
+        MapleFileHelper.shared.writeFile(withContents: self.listenContents(for: listenFile), atLocation: MapleController.listenFile)
         
         // Spin up an instance of Maple-LibInjector with above file
         self.startMapleInjector()
         
         // Kill the processes, optionally check if the user would like them to be restarted
         do {
-            try self.killProcesses(withBIDs: self.runningLeaves.map({ $0.targetBundleID! }))
+            try self.killProcesses(withBIDs: procs)
         } catch {
             print("ERRORED while attempting to begin injection: \(error)")
         }
@@ -102,7 +127,6 @@ class MapleController: ObservableObject {
         
         // Optionally kill the injecting process
         
-        
     }
     
     /// Stops all leaves from running
@@ -114,7 +138,6 @@ class MapleController: ObservableObject {
         self.stopMapleInjector()
         
         // Delete listen.txt file
-        
         
     }
     
@@ -157,12 +180,44 @@ class MapleController: ObservableObject {
     
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
+        if self.injector != nil { return }
         
+        self.injector = Process()
+//        self.injector?.executableURL = MapleController.injectorFile
+//        self.injector?.arguments = [MapleFileHelper.shared.urlToString(MapleController.listenFile)]
+//        self.injector?.terminationHandler = { _ in
+//            print("THE PROCESS TERMINATED AND IM NOT SURE WHY")
+//        }
+//
+//        do {
+//            try self.injector?.run()
+//        } catch {
+//            print("FAILED TO RUN!")
+//            print(error.localizedDescription)
+//            exit(1)
+//        }
+//        self.runSudoInjector("BoxCat20")
+        self.runScriptThatNeedsSudo()
+    }
+    
+    func runScriptThatNeedsSudo() {
+        print("RUNNING SCRIPT")
+        let myAppleScript = """
+    do shell script "
+    sudo \(MapleFileHelper.shared.urlToString(MapleController.injectorFile)) \(MapleFileHelper.shared.urlToString(MapleController.listenFile))" with administrator privileges
+    """
+        var error: NSDictionary?
+        let scriptObject = NSAppleScript(source: myAppleScript)!
+        scriptObject.executeAndReturnError(&error)
     }
     
     /// Stops Maple-LibInjector from injecting
     private func stopMapleInjector() {
+        if self.injector == nil { return }
         
+        self.injector?.terminate()
+        
+        self.injector = nil
     }
     
     /// Reloads Maple-LibInjector after changing a listen file
@@ -181,27 +236,20 @@ class MapleController: ObservableObject {
         
         do {
             try self.fManager.copyItem(at: file , to: internalLoc)
-            print("Internal Location: " + internalLoc.absoluteString)
         } catch {
-            print("Couldn't copy file to local storage: ", error)
-            return nil
+            throw InstallError.fileDidntExist
         }
         
         //Decompress .mapleleaf file to a folder containing .sap and .dylib
-        var unzippedPackageURL: URL?
+        let unzippedPackageURL: URL = MapleController.installedDir.appendingPathComponent("installing", isDirectory: true)
         do {
-            unzippedPackageURL = try Zip.quickUnzipFile(internalLoc)
+            try Zip.unzipFile(internalLoc, destination: unzippedPackageURL, overwrite: true, password: nil)
         } catch {
-            print("Error decompressing file: ", error)
-            return nil
+            throw InstallError.compressionError
         }
         
-        guard let _ = unzippedPackageURL else {
-            
-            return nil
-        }
         
-        let items: [String] = MapleFileHelper.shared.contentsOf(Directory: unzippedPackageURL!)
+        let items: [String] = MapleFileHelper.shared.contentsOf(Directory: unzippedPackageURL)
         
         var containingFolder: String? = nil
         
@@ -211,25 +259,21 @@ class MapleController: ObservableObject {
             }
         }
         
-        guard let _ = containingFolder else {
-            print("Could not find a valid containing folder")
-            return nil
-        }
+        guard let _ = containingFolder else { throw InstallError.invalidDirectories }
         
         // Sap file is located at unzipped + folder-name + "info.sap"
-        let sapInfo: [String]? = (MapleFileHelper.shared.readFile(atLocation: unzippedPackageURL!.appendingPathComponent(containingFolder! + "/info.sap")) ?? "FAILURE").components(separatedBy: "\n")
+        let sapRes: String? = MapleFileHelper.shared.readFile(atLocation: unzippedPackageURL.appendingPathComponent(containingFolder! + "/info.sap"))
         
-        guard let _ = sapInfo else {
-            print("Sap Info could not be found")
-            return nil
-        }
+        guard let _ = sapRes else { throw InstallError.invalidSap }
+        
+        let sapInfo: [String] = sapRes!.components(separatedBy: "\n")
         
         // Create a Leaf object
         let resultLeaf: Leaf? = Leaf()
         
         // Process the .sap file to get all information about it
-        for line in sapInfo! {
-            resultLeaf?.add(field: line)
+        for line in sapInfo {
+            try resultLeaf?.add(field: line)
         }
         
         if resultLeaf?.isValid() ?? false {
@@ -241,10 +285,10 @@ class MapleController: ObservableObject {
             
             do {
                 try self.fManager.createDirectory(at: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)"), withIntermediateDirectories: true)
-                try self.fManager.copyItem(at: unzippedPackageURL!.appendingPathComponent("\(containingFolder!)/\(resultLeaf!.libraryName!)"), to: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)/\(resultLeaf!.libraryName!)"))
+                try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf!.libraryName!)"), to: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)/\(resultLeaf!.libraryName!)"))
             } catch {
                 // Could not copy dylib to runnables directory
-                print("Failed to copy dylib to runnables directory")
+                print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
             }
         }
         
@@ -252,7 +296,7 @@ class MapleController: ObservableObject {
         
         // Clean up!
         try? self.fManager.removeItem(at: internalLoc)
-        try? self.fManager.removeItem(at: unzippedPackageURL!)
+        try? self.fManager.removeItem(at: unzippedPackageURL)
         
         // Return the Leaf object which holds all this information
         return resultLeaf
@@ -293,11 +337,7 @@ class MapleController: ObservableObject {
         if let encodedData = UserDefaults.standard.data(forKey: MapleController.installedLeavesKey) {
             if let leaves = try? JSONDecoder().decode([Leaf].self, from: encodedData) {
                 return leaves
-            } else {
-                print("COULD NOT DECODE DATA")
             }
-        } else {
-            print("COULD NOT GET DATA")
         }
         return []
     }
@@ -330,6 +370,29 @@ class MapleController: ObservableObject {
         if self.installerWindow != nil {
             self.installerWindow!.close()
             self.installerWindow = nil
+        }
+    }
+}
+
+enum InstallError: Error, CustomStringConvertible {
+    case fileDidntExist
+    case compressionError
+    case invalidSap
+    case invalidDirectories
+    case unknown
+    
+    var description: String {
+        switch self {
+        case .fileDidntExist:
+            return "Couldn't find a file which we expected to exist. Ensure all file names are correct, and where they belong"
+        case .compressionError:
+            return "Failed to decompress .mapleleaf file. Ensure all compression is correct"
+        case .invalidDirectories:
+            return "Invalid folder structure. Ensure all names are correct"
+        case .invalidSap:
+            return "Invalid .sap file. Ensure all words and encoding"
+        case .unknown:
+            return "Unknown error. Contact developer"
         }
     }
 }

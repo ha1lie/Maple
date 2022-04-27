@@ -39,8 +39,14 @@ struct InstallVerifyView: View {
                         .font(.body)
                     Text("*Name*: " + (self.leaf!.name ?? "NAME"))
                     Text("*Author*: " + (self.leaf!.author ?? "AUTHOR"))
-                    Text("*Library name*: " + (self.leaf!.libraryName ?? "LIBRARY NAME"))
-                    Text("*Target BID*: " + (self.leaf!.targetBundleID ?? "TARGET BID"))
+                    if self.leaf!.isValid() {
+                        if self.leaf!.isValid() {
+                            ForEach(Array(self.leaf!.targetBundleID!.enumerated()), id: \.element) { i, _ in
+                                Text("*Library name*: \(self.leaf!.libraryName!)")
+                                Text("*Target BID*: \(self.leaf!.targetBundleID![i])")
+                            }
+                        }
+                    }
                 }
             } else if let _ = self.foundError {
                 ScrollView {
@@ -60,7 +66,7 @@ struct InstallVerifyView: View {
         }.onAppear {
             self.completed = false
             self.title = "Verify your Leaf package"
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard let _ = self.fileName else {
                     self.completed = false
                     return

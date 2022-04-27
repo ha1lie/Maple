@@ -28,13 +28,16 @@ struct LeafDetailView: View {
                 }
                 
                 Text("Created by *\(self.selectedLeaf?.author ?? "AUTHOR")*")
-                Text("Modifies \(self.selectedLeaf?.targetBundleID ?? "BID")")
+                ForEach(self.selectedLeaf?.targetBundleID ?? [], id: \.self) { bid in
+                    Text("Modifies: *\(bid)*")
+                }
                 
                 MapleButton(action: {
                     let answer = MapleNotificationController.shared.sendUserDialogue(withTitle: "Enable?", andBody: "Would you like to \(self.selectedLeaf?.enabled ?? true ? "disable" : "enable") \(self.selectedLeaf?.name ?? "NAME")", withOptions: ["YES", "NO"])
                     
                     if answer == "YES" {
                         self.selectedLeaf?.toggleEnable()
+                        self.selectedLeaf = nil
                     }
                 }, title: (self.selectedLeaf?.enabled ?? true) ? "DISABLE" : "ENABLE")
                 

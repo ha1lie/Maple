@@ -43,6 +43,11 @@ struct LeafList: View {
                             LeafCell(leaf, withSelected: self.$selectedLeaf)
                         }
                     }
+                    
+                    MapleButton(action: {
+                        print("RUNNING START FOR YOU")
+                        MapleController.shared.startInjectingEnabledLeaves()
+                    }, title: "BEGIN INJECTION")
                 }
                 
                 Spacer()

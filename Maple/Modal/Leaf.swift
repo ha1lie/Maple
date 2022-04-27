@@ -18,16 +18,14 @@ class Leaf: Identifiable, Codable, Equatable {
     var authorDiscord: String? = nil
     var tweakWebsite: String? = nil
     var libraryName: String? = nil
-    var targetBundleID: String? = nil
+    var targetBundleID: [String]? = nil
     var leafID: String? = nil
-//    var id: ObjectIdentifier = UUID().uuidString
     
     /// Add a value to the initialized leaf
     /// - Parameter field: Line from Sap file
-    public func add(field: String) {
+    public func add(field: String) throws {
         let split: [String] = field.components(separatedBy: ": ")
         if split.count < 2 {
-            print("Could not add field to Leaf, not enough information on line")
             return
         }
         switch split[0] {
@@ -48,11 +46,12 @@ class Leaf: Identifiable, Codable, Equatable {
         case "lib-name":
             self.libraryName = split[1]
         case "target-bundle-id":
-            self.targetBundleID = split[1]
+            let inputs = split[1].components(separatedBy: " ")
+            self.targetBundleID = inputs
         case "leaf-id":
             self.leafID = split[1]
         default:
-            print("Ignoring line: " + field)
+            return
         }
     }
     
@@ -74,7 +73,7 @@ class Leaf: Identifiable, Codable, Equatable {
         return name != nil && description != nil && author != nil &&
             libraryName != nil && targetBundleID != nil && leafID != nil &&
             name != "" && description != "" && author != "" &&
-            libraryName != "" && targetBundleID != "" && leafID != ""
+            targetBundleID != [] && leafID != ""  
     }
     
     static func == (lhs: Leaf, rhs: Leaf) -> Bool {
