@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268047842809CE5A00FD60D2 /* MapleNotificationController.swift */; };
+		268B0D3A281F70180049F090 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D39281F70180049F090 /* SettingsView.swift */; };
+		268B0D3C281F71B90049F090 /* HelperSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D3B281F71B90049F090 /* HelperSettingsView.swift */; };
 		26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CC92809E5A2004617C2 /* LeafList.swift */; };
 		26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CCB2809E663004617C2 /* LeafDetailView.swift */; };
 		26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CCD2809E8A0004617C2 /* Maple+View.swift */; };
@@ -35,6 +37,8 @@
 /* Begin PBXFileReference section */
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
+		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		268B0D3B281F71B90049F090 /* HelperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperSettingsView.swift; sourceTree = "<group>"; };
 		26BC6CC92809E5A2004617C2 /* LeafList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafList.swift; sourceTree = "<group>"; };
 		26BC6CCB2809E663004617C2 /* LeafDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafDetailView.swift; sourceTree = "<group>"; };
 		26BC6CCD2809E8A0004617C2 /* Maple+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Maple+View.swift"; sourceTree = "<group>"; };
@@ -72,6 +76,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		268B0D38281F700E0049F090 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				268B0D39281F70180049F090 /* SettingsView.swift */,
+				268B0D3B281F71B90049F090 /* HelperSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		26C35B6F27FA89E800BD4B2B = {
 			isa = PBXGroup;
 			children = (
@@ -114,8 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				26C35B7D27FA89E800BD4B2B /* ViewController.swift */,
+				268B0D38281F700E0049F090 /* Settings */,
 				26C35B8A27FA89FD00BD4B2B /* Autogen */,
-				26C35BA427FA8A1F00BD4B2B /* StatusBarTools */,
 				26C35BA127FA8A1F00BD4B2B /* BarApp */,
 				26C35B8C27FA8A1F00BD4B2B /* Install */,
 				26C35BC527FB734D00BD4B2B /* Essentials */,
@@ -146,6 +159,7 @@
 		26C35BA127FA8A1F00BD4B2B /* BarApp */ = {
 			isa = PBXGroup;
 			children = (
+				26C35BA427FA8A1F00BD4B2B /* StatusBarTools */,
 				26C35BA227FA8A1F00BD4B2B /* LeafCell.swift */,
 				26BC6CCB2809E663004617C2 /* LeafDetailView.swift */,
 				26BC6CC92809E5A2004617C2 /* LeafList.swift */,
@@ -283,6 +297,7 @@
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
 				26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */,
 				26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */,
+				268B0D3C281F71B90049F090 /* HelperSettingsView.swift in Sources */,
 				26EC67D7280BA9CE000181B3 /* InjectionError.swift in Sources */,
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,

@@ -345,16 +345,30 @@ class MapleController: ObservableObject {
     /// Opens a seperate window which hosts the installer program
     /// - Used to install a new Leaf
     public func openWindowToInstallLeaf() {
-        print("Opening a new window so you can install the thing")
+        self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: InstallerView()))
+        self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
+        self.installerWindow?.title = "Maple: Install a new leaf"
+        self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        self.installerWindow?.minSize = NSSize(width: 600, height: 400)
+        self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
         
-        if self.installerWindow == nil {
-            self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: InstallerView()))
-            self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
-            self.installerWindow?.title = "Maple: Install a new leaf"
-            self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
-            self.installerWindow?.minSize = NSSize(width: 600, height: 400)
-            self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
-        }
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        self.installerWindow?.makeKey()
+        self.installerWindow?.orderFrontRegardless()
+        
+        // Hide the menu bar app in case they overlap
+        StatusBarController.shared?.hidePopover(self);
+    }
+    
+    /// Open a window to change and modify Maple settings
+    public func openSettingsWindow() {
+        self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
+        self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
+        self.installerWindow?.title = "Maple: Install a new leaf"
+        self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        self.installerWindow?.minSize = NSSize(width: 600, height: 400)
+        self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
         
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)

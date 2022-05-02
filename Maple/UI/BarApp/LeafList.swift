@@ -24,6 +24,15 @@ struct LeafList: View {
                         Spacer()
                         
                         Button {
+                            print("Open settings window")
+                            self.mapleController.openSettingsWindow()
+                        } label: {
+                            Image(systemName: "gear")
+                                .font(.system(size: 14))
+                        }.buttonStyle(PlainButtonStyle())
+
+                        
+                        Button {
                             self.mapleController.openWindowToInstallLeaf()
                         } label: {
                             ZStack {
