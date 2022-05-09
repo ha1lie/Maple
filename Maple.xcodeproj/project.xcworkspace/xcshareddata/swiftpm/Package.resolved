@@ -1,6 +1,33 @@
 {
   "pins" : [
     {
+      "identity" : "blessed",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trilemma-dev/Blessed",
+      "state" : {
+        "branch" : "main",
+        "revision" : "40ac7289f6d794fb2982fb382af016a6abffa3f7"
+      }
+    },
+    {
+      "identity" : "embeddedpropertylist",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trilemma-dev/EmbeddedPropertyList",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bc65bbba59436df38a6ce441d09b50d08f23e14c"
+      }
+    },
+    {
+      "identity" : "securexpc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trilemma-dev/SecureXPC",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3b0b7ca6166b99ecd32657efdebe7f704a023292"
+      }
+    },
+    {
       "identity" : "zip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/Zip",

@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>SMPrivilegedExecutables</key>
+	<dict>
+		<key>dev.halz.Maple.helper</key>
+		<string>anchor apple generic and identifier "dev.halz.Maple.helper" and certificate leaf[subject.OU] = "5RD23JCCKU"</string>
+	</dict>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

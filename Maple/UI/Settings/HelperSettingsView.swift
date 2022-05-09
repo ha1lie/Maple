@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import Blessed
+import SecureXPC
+import EmbeddedPropertyList
 
 struct HelperSettingsView: View {
     var body: some View {
@@ -17,7 +20,7 @@ struct HelperSettingsView: View {
             Text("Installed: NOPE")
             HStack(spacing: 8) {
                 Button {
-                    print("INSTALL THE HELPER TOOL")
+                    self.installHelper()
                 } label: {
                     Text("Install")
                 }
@@ -35,5 +38,18 @@ struct HelperSettingsView: View {
                 }
             }
         }
+    }
+    
+    private func installHelper() {
+        print("Installing the helper")
+        do {
+            try LaunchdManager.authorizeAndBless(message: "Do you want to install the sample helper tool?")
+        } catch AuthorizationError.canceled {
+            // No user feedback needed, user canceled
+            print("User canceled the install")
+        } catch {
+            print("Failed to instal the helper: \(error.localizedDescription)")
+        }
+        print("Finished installing the helper")
     }
 }

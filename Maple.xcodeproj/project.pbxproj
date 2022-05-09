@@ -32,13 +32,60 @@
 		26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC327FB734900BD4B2B /* MapleButton.swift */; };
 		26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */; };
 		26EC67D7280BA9CE000181B3 /* InjectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D6280BA9CE000181B3 /* InjectionError.swift */; };
+		26F686DC28232BFA0010D28A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26F686DB28232BFA0010D28A /* Config.xcconfig */; };
+		26F686DF28232C760010D28A /* AllowedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686DE28232C760010D28A /* AllowedCommand.swift */; };
+		26F686F228232CCC0010D28A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F128232CCC0010D28A /* main.swift */; };
+		26F686F628232CDB0010D28A /* AllowedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686DE28232C760010D28A /* AllowedCommand.swift */; };
+		26F686F828232CE70010D28A /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F728232CE70010D28A /* SharedConstants.swift */; };
+		26F686F928232CE70010D28A /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F728232CE70010D28A /* SharedConstants.swift */; };
+		26F686FB28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */; };
+		26F686FC28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */; };
+		26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686FD28232D660010D28A /* HelperToolLaunchdPropertyList.swift */; };
+		26F686FF28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686FD28232D660010D28A /* HelperToolLaunchdPropertyList.swift */; };
+		26F6870128232D7D0010D28A /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870028232D7D0010D28A /* CodeInfo.swift */; };
+		26F6870228232D7D0010D28A /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870028232D7D0010D28A /* CodeInfo.swift */; };
+		26F6870628232E130010D28A /* Uninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870528232E130010D28A /* Uninstaller.swift */; };
+		26F6870828232E360010D28A /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870728232E360010D28A /* Updater.swift */; };
+		26F6870A28232E7E0010D28A /* AllowedCommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */; };
+		26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870E28232F310010D28A /* DiagnosticSigningInfo.swift */; };
+		26F6871128232F700010D28A /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26F6871028232F700010D28A /* AppConfig.xcconfig */; };
+		26F68719282331BF0010D28A /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 26F68718282331BF0010D28A /* Blessed */; };
+		26F6871C282331D30010D28A /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 26F6871B282331D30010D28A /* EmbeddedPropertyList */; };
+		26F6871F282331E60010D28A /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 26F6871E282331E60010D28A /* SecureXPC */; };
+		26F68722282331F10010D28A /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 26F68721282331F10010D28A /* Blessed */; };
+		26F68724282331F60010D28A /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 26F68723282331F60010D28A /* EmbeddedPropertyList */; };
+		26F68726282331FA0010D28A /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 26F68725282331FA0010D28A /* SecureXPC */; };
+		26F68728282332510010D28A /* dev.halz.Maple.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F68727282332510010D28A /* dev.halz.Maple.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		26F686ED28232CCC0010D28A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		26F68713282330F70010D28A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchServices;
+			dstSubfolderSpec = 1;
+			files = (
+				26F68728282332510010D28A /* dev.halz.Maple.helper in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
 		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		268B0D3B281F71B90049F090 /* HelperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperSettingsView.swift; sourceTree = "<group>"; };
+		2696BB4628234659003B0B24 /* MapleDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MapleDebug.entitlements; sourceTree = "<group>"; };
 		26BC6CC92809E5A2004617C2 /* LeafList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafList.swift; sourceTree = "<group>"; };
 		26BC6CCB2809E663004617C2 /* LeafDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafDetailView.swift; sourceTree = "<group>"; };
 		26BC6CCD2809E8A0004617C2 /* Maple+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Maple+View.swift"; sourceTree = "<group>"; };
@@ -47,7 +94,6 @@
 		26C35B7D27FA89E800BD4B2B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		26C35B7F27FA89E900BD4B2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		26C35B8227FA89E900BD4B2B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		26C35B8427FA89E900BD4B2B /* Maple.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Maple.entitlements; sourceTree = "<group>"; };
 		26C35B8E27FA8A1F00BD4B2B /* InstallStartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallStartView.swift; sourceTree = "<group>"; };
 		26C35B8F27FA8A1F00BD4B2B /* InstallWelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallWelcomeView.swift; sourceTree = "<group>"; };
 		26C35B9027FA8A1F00BD4B2B /* InstallVerifyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstallVerifyView.swift; sourceTree = "<group>"; };
@@ -62,6 +108,23 @@
 		26C35BC327FB734900BD4B2B /* MapleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleButton.swift; sourceTree = "<group>"; };
 		26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleFileHelper.swift; sourceTree = "<group>"; };
 		26EC67D6280BA9CE000181B3 /* InjectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionError.swift; sourceTree = "<group>"; };
+		26F686DB28232BFA0010D28A /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		26F686DE28232C760010D28A /* AllowedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedCommand.swift; sourceTree = "<group>"; };
+		26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dev.halz.Maple.helper; sourceTree = BUILT_PRODUCTS_DIR; };
+		26F686F128232CCC0010D28A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		26F686F728232CE70010D28A /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
+		26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolInfoPropertyList.swift; sourceTree = "<group>"; };
+		26F686FD28232D660010D28A /* HelperToolLaunchdPropertyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolLaunchdPropertyList.swift; sourceTree = "<group>"; };
+		26F6870028232D7D0010D28A /* CodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeInfo.swift; sourceTree = "<group>"; };
+		26F6870328232DAE0010D28A /* HelperToolConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HelperToolConfig.xcconfig; sourceTree = "<group>"; };
+		26F6870428232DDE0010D28A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26F6870528232E130010D28A /* Uninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uninstaller.swift; sourceTree = "<group>"; };
+		26F6870728232E360010D28A /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
+		26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedCommandRunner.swift; sourceTree = "<group>"; };
+		26F6870C28232EB30010D28A /* PropertyListModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyListModifier.swift; sourceTree = "<group>"; };
+		26F6870E28232F310010D28A /* DiagnosticSigningInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticSigningInfo.swift; sourceTree = "<group>"; };
+		26F6871028232F700010D28A /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
+		26F68727282332510010D28A /* dev.halz.Maple.helper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = dev.halz.Maple.helper; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +133,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				268047682807637900FD60D2 /* Zip in Frameworks */,
+				26F68719282331BF0010D28A /* Blessed in Frameworks */,
+				26F6871C282331D30010D28A /* EmbeddedPropertyList in Frameworks */,
+				26F6871F282331E60010D28A /* SecureXPC in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26F686EC28232CCC0010D28A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26F68722282331F10010D28A /* Blessed in Frameworks */,
+				26F68724282331F60010D28A /* EmbeddedPropertyList in Frameworks */,
+				26F68726282331FA0010D28A /* SecureXPC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,8 +164,14 @@
 		26C35B6F27FA89E800BD4B2B = {
 			isa = PBXGroup;
 			children = (
+				26F68727282332510010D28A /* dev.halz.Maple.helper */,
+				26F686DB28232BFA0010D28A /* Config.xcconfig */,
 				26C35B7A27FA89E800BD4B2B /* Maple */,
+				26F686DD28232C410010D28A /* Shared */,
+				26F686F028232CCC0010D28A /* helper */,
+				26F6870B28232E940010D28A /* BuildScripts */,
 				26C35B7927FA89E800BD4B2B /* Products */,
+				26F68720282331F10010D28A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				26C35B7827FA89E800BD4B2B /* Maple.app */,
+				26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,12 +187,14 @@
 		26C35B7A27FA89E800BD4B2B /* Maple */ = {
 			isa = PBXGroup;
 			children = (
+				2696BB4628234659003B0B24 /* MapleDebug.entitlements */,
+				26F6871028232F700010D28A /* AppConfig.xcconfig */,
 				266AF4A22803ABDF0090447B /* Info.plist */,
-				26C35B8427FA89E900BD4B2B /* Maple.entitlements */,
 				26C35B7B27FA89E800BD4B2B /* AppDelegate.swift */,
 				26C35B8B27FA8A0400BD4B2B /* UI */,
 				26C35BBF27FA8A7700BD4B2B /* Controller */,
 				26C35BBD27FA8A7700BD4B2B /* Modal */,
+				26F6870D28232F020010D28A /* Helper Connection */,
 			);
 			path = Maple;
 			sourceTree = "<group>";
@@ -205,6 +290,54 @@
 			path = Essentials;
 			sourceTree = "<group>";
 		};
+		26F686DD28232C410010D28A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				26F686DE28232C760010D28A /* AllowedCommand.swift */,
+				26F686F728232CE70010D28A /* SharedConstants.swift */,
+				26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */,
+				26F686FD28232D660010D28A /* HelperToolLaunchdPropertyList.swift */,
+				26F6870028232D7D0010D28A /* CodeInfo.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		26F686F028232CCC0010D28A /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				26F6870328232DAE0010D28A /* HelperToolConfig.xcconfig */,
+				26F6870428232DDE0010D28A /* Info.plist */,
+				26F686F128232CCC0010D28A /* main.swift */,
+				26F6870528232E130010D28A /* Uninstaller.swift */,
+				26F6870728232E360010D28A /* Updater.swift */,
+				26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */,
+			);
+			path = helper;
+			sourceTree = "<group>";
+		};
+		26F6870B28232E940010D28A /* BuildScripts */ = {
+			isa = PBXGroup;
+			children = (
+				26F6870C28232EB30010D28A /* PropertyListModifier.swift */,
+			);
+			path = BuildScripts;
+			sourceTree = "<group>";
+		};
+		26F6870D28232F020010D28A /* Helper Connection */ = {
+			isa = PBXGroup;
+			children = (
+				26F6870E28232F310010D28A /* DiagnosticSigningInfo.swift */,
+			);
+			path = "Helper Connection";
+			sourceTree = "<group>";
+		};
+		26F68720282331F10010D28A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -212,9 +345,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26C35B8727FA89E900BD4B2B /* Build configuration list for PBXNativeTarget "Maple" */;
 			buildPhases = (
+				26F68712282330C80010D28A /* ShellScript */,
 				26C35B7427FA89E800BD4B2B /* Sources */,
 				26C35B7527FA89E800BD4B2B /* Frameworks */,
 				26C35B7627FA89E800BD4B2B /* Resources */,
+				26F68713282330F70010D28A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -223,10 +358,36 @@
 			name = Maple;
 			packageProductDependencies = (
 				268047672807637900FD60D2 /* Zip */,
+				26F68718282331BF0010D28A /* Blessed */,
+				26F6871B282331D30010D28A /* EmbeddedPropertyList */,
+				26F6871E282331E60010D28A /* SecureXPC */,
 			);
 			productName = Maple;
 			productReference = 26C35B7827FA89E800BD4B2B /* Maple.app */;
 			productType = "com.apple.product-type.application";
+		};
+		26F686EE28232CCC0010D28A /* helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26F686F328232CCC0010D28A /* Build configuration list for PBXNativeTarget "helper" */;
+			buildPhases = (
+				26F687152823314D0010D28A /* ShellScript */,
+				26F686EB28232CCC0010D28A /* Sources */,
+				26F686EC28232CCC0010D28A /* Frameworks */,
+				26F686ED28232CCC0010D28A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = helper;
+			packageProductDependencies = (
+				26F68721282331F10010D28A /* Blessed */,
+				26F68723282331F60010D28A /* EmbeddedPropertyList */,
+				26F68725282331FA0010D28A /* SecureXPC */,
+			);
+			productName = helper;
+			productReference = 26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */;
+			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
@@ -241,6 +402,9 @@
 					26C35B7727FA89E800BD4B2B = {
 						CreatedOnToolsVersion = 13.3;
 					};
+					26F686EE28232CCC0010D28A = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
 				};
 			};
 			buildConfigurationList = 26C35B7327FA89E800BD4B2B /* Build configuration list for PBXProject "Maple" */;
@@ -254,12 +418,16 @@
 			mainGroup = 26C35B6F27FA89E800BD4B2B;
 			packageReferences = (
 				268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */,
+				26F68717282331BF0010D28A /* XCRemoteSwiftPackageReference "Blessed" */,
+				26F6871A282331D30010D28A /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */,
+				26F6871D282331E60010D28A /* XCRemoteSwiftPackageReference "SecureXPC" */,
 			);
 			productRefGroup = 26C35B7927FA89E800BD4B2B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				26C35B7727FA89E800BD4B2B /* Maple */,
+				26F686EE28232CCC0010D28A /* helper */,
 			);
 		};
 /* End PBXProject section */
@@ -269,21 +437,66 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F6871128232F700010D28A /* AppConfig.xcconfig in Resources */,
 				26C35B8027FA89E900BD4B2B /* Assets.xcassets in Resources */,
+				26F686DC28232BFA0010D28A /* Config.xcconfig in Resources */,
 				26C35B8327FA89E900BD4B2B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		26F68712282330C80010D28A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}\"/BuildScripts/PropertyListModifier.swift satisfy-job-bless-requirements\n\n";
+		};
+		26F687152823314D0010D28A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}\"/BuildScripts/PropertyListModifier.swift satisfy-job-bless-requirements specify-mach-services auto-increment-version\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		26C35B7427FA89E800BD4B2B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				268B0D3A281F70180049F090 /* SettingsView.swift in Sources */,
 				26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */,
+				26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */,
 				26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */,
+				26F686FB28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */,
 				26C35BA727FA8A1F00BD4B2B /* InstallStartView.swift in Sources */,
+				26F686F828232CE70010D28A /* SharedConstants.swift in Sources */,
 				268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */,
 				26C35BAB27FA8A1F00BD4B2B /* InstallerView.swift in Sources */,
 				26C35BBA27FA8A2000BD4B2B /* HomeScreen.swift in Sources */,
@@ -292,8 +505,11 @@
 				26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
+				26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
+				26F686DF28232C760010D28A /* AllowedCommand.swift in Sources */,
 				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
+				26F6870128232D7D0010D28A /* CodeInfo.swift in Sources */,
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
 				26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */,
 				26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */,
@@ -302,6 +518,22 @@
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,
 				26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26F686EB28232CCC0010D28A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26F6870228232D7D0010D28A /* CodeInfo.swift in Sources */,
+				26F686FC28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */,
+				26F686F628232CDB0010D28A /* AllowedCommand.swift in Sources */,
+				26F686F928232CE70010D28A /* SharedConstants.swift in Sources */,
+				26F686FF28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
+				26F6870828232E360010D28A /* Updater.swift in Sources */,
+				26F6870628232E130010D28A /* Uninstaller.swift in Sources */,
+				26F6870A28232E7E0010D28A /* AllowedCommandRunner.swift in Sources */,
+				26F686F228232CCC0010D28A /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +553,7 @@
 /* Begin XCBuildConfiguration section */
 		26C35B8527FA89E900BD4B2B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F686DB28232BFA0010D28A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -376,11 +609,13 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		26C35B8627FA89E900BD4B2B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F686DB28232BFA0010D28A /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -429,15 +664,17 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 		26C35B8827FA89E900BD4B2B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F6871028232F700010D28A /* AppConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Maple/Maple.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Maple/MapleDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -462,10 +699,11 @@
 		};
 		26C35B8927FA89E900BD4B2B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F6871028232F700010D28A /* AppConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Maple/Maple.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -484,6 +722,30 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.halz.Maple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		26F686F428232CCC0010D28A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F6870328232DAE0010D28A /* HelperToolConfig.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5RD23JCCKU;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		26F686F528232CCC0010D28A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26F6870328232DAE0010D28A /* HelperToolConfig.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5RD23JCCKU;
+				ENABLE_HARDENED_RUNTIME = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -509,6 +771,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		26F686F328232CCC0010D28A /* Build configuration list for PBXNativeTarget "helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26F686F428232CCC0010D28A /* Debug */,
+				26F686F528232CCC0010D28A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -520,6 +791,30 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		26F68717282331BF0010D28A /* XCRemoteSwiftPackageReference "Blessed" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/Blessed";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		26F6871A282331D30010D28A /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/EmbeddedPropertyList";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		26F6871D282331E60010D28A /* XCRemoteSwiftPackageReference "SecureXPC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/SecureXPC";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -527,6 +822,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
+		};
+		26F68718282331BF0010D28A /* Blessed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F68717282331BF0010D28A /* XCRemoteSwiftPackageReference "Blessed" */;
+			productName = Blessed;
+		};
+		26F6871B282331D30010D28A /* EmbeddedPropertyList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F6871A282331D30010D28A /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */;
+			productName = EmbeddedPropertyList;
+		};
+		26F6871E282331E60010D28A /* SecureXPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F6871D282331E60010D28A /* XCRemoteSwiftPackageReference "SecureXPC" */;
+			productName = SecureXPC;
+		};
+		26F68721282331F10010D28A /* Blessed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F68717282331BF0010D28A /* XCRemoteSwiftPackageReference "Blessed" */;
+			productName = Blessed;
+		};
+		26F68723282331F60010D28A /* EmbeddedPropertyList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F6871A282331D30010D28A /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */;
+			productName = EmbeddedPropertyList;
+		};
+		26F68725282331FA0010D28A /* SecureXPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F6871D282331E60010D28A /* XCRemoteSwiftPackageReference "SecureXPC" */;
+			productName = SecureXPC;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
