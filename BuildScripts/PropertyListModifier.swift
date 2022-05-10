@@ -534,6 +534,7 @@ func autoIncrementVersion() throws {
 
 do {
     for task in try determineScriptTasks() {
+        print("Doing task")
         try task()
     }
 }
@@ -546,3 +547,4 @@ catch ScriptError.wrapped(let message, let wrappedError) {
     print("internal error: \(wrappedError)")
     exit(2)
 }
+print("Finished the build scripts")

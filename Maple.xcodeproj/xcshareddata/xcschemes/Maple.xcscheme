@@ -20,20 +20,6 @@
                ReferencedContainer = "container:Maple.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "265599522816F01E000CA975"
-               BuildableName = "InjectionHelper"
-               BlueprintName = "InjectionHelper"
-               ReferencedContainer = "container:Maple.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

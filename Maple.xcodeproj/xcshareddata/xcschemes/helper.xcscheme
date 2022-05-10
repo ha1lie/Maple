@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "265599522816F01E000CA975"
-               BuildableName = "InjectionHelper"
-               BlueprintName = "InjectionHelper"
+               BlueprintIdentifier = "26F686EE28232CCC0010D28A"
+               BuildableName = "dev.halz.Maple.helper"
+               BlueprintName = "helper"
                ReferencedContainer = "container:Maple.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "265599522816F01E000CA975"
-            BuildableName = "InjectionHelper"
-            BlueprintName = "InjectionHelper"
+            BlueprintIdentifier = "26F686EE28232CCC0010D28A"
+            BuildableName = "dev.halz.Maple.helper"
+            BlueprintName = "helper"
             ReferencedContainer = "container:Maple.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "265599522816F01E000CA975"
-            BuildableName = "InjectionHelper"
-            BlueprintName = "InjectionHelper"
+            BlueprintIdentifier = "26F686EE28232CCC0010D28A"
+            BuildableName = "dev.halz.Maple.helper"
+            BlueprintName = "helper"
             ReferencedContainer = "container:Maple.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

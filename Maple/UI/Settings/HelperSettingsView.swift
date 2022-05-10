@@ -36,6 +36,18 @@ struct HelperSettingsView: View {
                 } label: {
                     Text("Uninstall")
                 }
+                
+                Button {
+                    DiagnosticSigningInfo.printDiagnosticInfo()
+                } label: {
+                    Text("PRINT DIAGNOSTIC")
+                }
+                
+                Button {
+                    self.writeToLibrary()
+                } label: {
+                    Text("Library Ownership")
+                }
             }
         }
     }
@@ -51,5 +63,15 @@ struct HelperSettingsView: View {
             print("Failed to instal the helper: \(error.localizedDescription)")
         }
         print("Finished installing the helper")
+    }
+    
+    private func writeToLibrary() {
+        print("Going to try to write to /Library/PrivilegedHelperTools")
+        let d = Data("I CAN WRITE HAHA".utf8)
+        if FileManager.default.createFile(atPath: "/Library/PrivilegedHelperTools/magic", contents: d) {
+            print("Successfully wrote the file!")
+        } else {
+            print("Okay this is probably why we can't write here")
+        }
     }
 }
