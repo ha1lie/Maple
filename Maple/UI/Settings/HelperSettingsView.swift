@@ -11,13 +11,43 @@ import SecureXPC
 import EmbeddedPropertyList
 
 struct HelperSettingsView: View {
+    
+    @State var connectionTestResult: String = "Unknown"
+    @State var helperToolVersionString: String = "Unknown"
+    @State var helperToolInstalledState: String = "Unknown"
+    @State var helperToolTopQuote: String = ""
+    
+    let xpcService: XPCClient
+    let sharedConstants: SharedConstants
+    let bundledLocation: URL
+    
+    init() {
+        guard let tsc = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
+            fatalError("Could not find AppDelegate's SharedConstants")
+        }
+        
+        guard let bl = tsc.bundledLocation else {
+            fatalError("Helper Tool Location Shouldn't Not Exist")
+        }
+        
+        self.sharedConstants = tsc
+        self.bundledLocation = bl
+        self.xpcService = XPCClient.forMachService(named: sharedConstants.machServiceName)
+    }
+    
     var body: some View {
         VStack {
             Text("Helper Tool")
                 .font(.title2)
                 .bold()
-            Text("Version: ???")
-            Text("Installed: NOPE")
+            
+            Text(self.helperToolTopQuote)
+            
+            HStack {
+                Text("Installed: \(self.helperToolInstalledState)")
+                Text("Version: \(self.helperToolVersionString)")
+            }
+            
             HStack(spacing: 8) {
                 Button {
                     self.installHelper()
@@ -26,52 +56,101 @@ struct HelperSettingsView: View {
                 }
 
                 Button {
-                    print("UPDATE THE HELPER TOOL")
+                    self.updateHelper()
                 } label: {
                     Text("Update")
                 }
 
                 Button {
-                    print("UNINSTALL THE HELPER TOOL")
+                    self.uninstallHelper()
                 } label: {
                     Text("Uninstall")
                 }
-                
+            }
+            
+            Divider()
+            
+            Text("Debug Only")
+                .font(.title2)
+                .bold()
+            
+            HStack {
                 Button {
                     DiagnosticSigningInfo.printDiagnosticInfo()
                 } label: {
-                    Text("PRINT DIAGNOSTIC")
+                    Text("Print Diagnostic Info")
                 }
                 
                 Button {
-                    self.writeToLibrary()
+                    self.testRun()
                 } label: {
-                    Text("Library Ownership")
+                    Text("Test Connection")
+                }
+                
+                Text("Connection: \(self.connectionTestResult)")
+            }
+        }.onAppear {
+            self.determineHelperStatus()
+        }
+    }
+    
+    /// Install the helper tool
+    private func installHelper() {
+        do {
+            try LaunchdManager.authorizeAndBless(message: "Do you want to install the sample helper tool?")
+        } catch AuthorizationError.canceled {
+        } catch {
+            self.helperToolTopQuote = "Helper Tool Install Failed"
+            return
+        }
+        self.helperToolTopQuote = "Helper Tool Install Succeeded"
+    }
+    
+    /// Call the helper to uninstall itself
+    private func uninstallHelper() {
+        self.xpcService.send(to: SharedConstants.uninstallRoute) { response in
+            if case .failure(let error) = response {
+                switch error {
+                case .connectionInterrupted:
+                    return
+                default:
+                    print("Uninstall error: \(error.localizedDescription)")
+                    self.helperToolTopQuote = "Helper Tool Uninstall Failed"
                 }
             }
         }
     }
     
-    private func installHelper() {
-        print("Installing the helper")
-        do {
-            try LaunchdManager.authorizeAndBless(message: "Do you want to install the sample helper tool?")
-        } catch AuthorizationError.canceled {
-            // No user feedback needed, user canceled
-            print("User canceled the install")
-        } catch {
-            print("Failed to instal the helper: \(error.localizedDescription)")
+    /// Call the helper to update itself
+    private func updateHelper() {
+        self.xpcService.sendMessage(self.bundledLocation, to: SharedConstants.updateRoute) { response in
+            if case .failure(let error) = response {
+                switch error {
+                case .connectionInterrupted:
+                    return
+                default:
+                    print("Update error: \(error.localizedDescription)")
+                    self.helperToolTopQuote = "Helper Tool Update Failed"
+                }
+            }
         }
-        print("Finished installing the helper")
     }
     
-    private func writeToLibrary() {
-        print("Going to try to write to /Library/PrivilegedHelperTools")
-        let d = Data("I CAN WRITE HAHA".utf8)
-        if FileManager.default.createFile(atPath: "/Library/PrivilegedHelperTools/magic", contents: d) {
-            print("Successfully wrote the file!")
-        } else {
-            print("Okay this is probably why we can't write here")
+    /// Check the connection for the user
+    private func testRun() {
+        self.xpcService.send(to: SharedConstants.mapleInjectionTestConnection) { result in
+            switch result {
+            case .success(_):
+                self.connectionTestResult = "Connected"
+            case .failure(let error):
+                self.connectionTestResult = "Failure"
+                print("Failed to connect: \(error.localizedDescription)")
+            }
         }
+    }
+    
+    /// Run to determine or update the status of the helper tool
+    private func determineHelperStatus() {
+        //TODO: Make this function :) I refuse
     }
 }

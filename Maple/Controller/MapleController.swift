@@ -365,7 +365,7 @@ class MapleController: ObservableObject {
     public func openSettingsWindow() {
         self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
         self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
-        self.installerWindow?.title = "Maple: Install a new leaf"
+        self.installerWindow?.title = "Maple Settings"
         self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
         self.installerWindow?.minSize = NSSize(width: 600, height: 400)
         self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)

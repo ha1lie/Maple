@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2617AC1D282B2E5C00E40CE8 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 2617AC1C282B2E5C00E40CE8 /* Blessed */; };
+		2617AC1F282B2E6800E40CE8 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 2617AC1E282B2E6800E40CE8 /* Blessed */; };
+		2617AC21282DB39B00E40CE8 /* MapleInjectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */; };
 		262B490E2829C3FC00DF1C03 /* dev.halz.Maple.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		262B4915282AF80C00DF1C03 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 262B4914282AF80C00DF1C03 /* Blessed */; };
-		262B4917282AF81C00DF1C03 /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 262B4916282AF81C00DF1C03 /* Blessed */; };
 		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268047842809CE5A00FD60D2 /* MapleNotificationController.swift */; };
 		268B0D3A281F70180049F090 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D39281F70180049F090 /* SettingsView.swift */; };
@@ -36,9 +37,7 @@
 		26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */; };
 		26EC67D7280BA9CE000181B3 /* InjectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D6280BA9CE000181B3 /* InjectionError.swift */; };
 		26F686DC28232BFA0010D28A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26F686DB28232BFA0010D28A /* Config.xcconfig */; };
-		26F686DF28232C760010D28A /* AllowedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686DE28232C760010D28A /* AllowedCommand.swift */; };
 		26F686F228232CCC0010D28A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F128232CCC0010D28A /* main.swift */; };
-		26F686F628232CDB0010D28A /* AllowedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686DE28232C760010D28A /* AllowedCommand.swift */; };
 		26F686F828232CE70010D28A /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F728232CE70010D28A /* SharedConstants.swift */; };
 		26F686F928232CE70010D28A /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686F728232CE70010D28A /* SharedConstants.swift */; };
 		26F686FB28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */; };
@@ -49,7 +48,6 @@
 		26F6870228232D7D0010D28A /* CodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870028232D7D0010D28A /* CodeInfo.swift */; };
 		26F6870628232E130010D28A /* Uninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870528232E130010D28A /* Uninstaller.swift */; };
 		26F6870828232E360010D28A /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870728232E360010D28A /* Updater.swift */; };
-		26F6870A28232E7E0010D28A /* AllowedCommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */; };
 		26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F6870E28232F310010D28A /* DiagnosticSigningInfo.swift */; };
 		26F6871128232F700010D28A /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26F6871028232F700010D28A /* AppConfig.xcconfig */; };
 		26F6871C282331D30010D28A /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 26F6871B282331D30010D28A /* EmbeddedPropertyList */; };
@@ -81,7 +79,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		262B4913282AF7CC00DF1C03 /* Blessed-0.3.0 */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "Blessed-0.3.0"; path = "../../Downloads/Blessed-0.3.0"; sourceTree = "<group>"; };
+		2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleInjectionHelper.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
 		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -109,7 +107,6 @@
 		26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleFileHelper.swift; sourceTree = "<group>"; };
 		26EC67D6280BA9CE000181B3 /* InjectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionError.swift; sourceTree = "<group>"; };
 		26F686DB28232BFA0010D28A /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		26F686DE28232C760010D28A /* AllowedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedCommand.swift; sourceTree = "<group>"; };
 		26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dev.halz.Maple.helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F686F128232CCC0010D28A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		26F686F728232CE70010D28A /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
@@ -120,7 +117,6 @@
 		26F6870428232DDE0010D28A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26F6870528232E130010D28A /* Uninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uninstaller.swift; sourceTree = "<group>"; };
 		26F6870728232E360010D28A /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
-		26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowedCommandRunner.swift; sourceTree = "<group>"; };
 		26F6870C28232EB30010D28A /* PropertyListModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyListModifier.swift; sourceTree = "<group>"; };
 		26F6870E28232F310010D28A /* DiagnosticSigningInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticSigningInfo.swift; sourceTree = "<group>"; };
 		26F6871028232F700010D28A /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
@@ -132,7 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				268047682807637900FD60D2 /* Zip in Frameworks */,
-				262B4917282AF81C00DF1C03 /* Blessed in Frameworks */,
+				2617AC1D282B2E5C00E40CE8 /* Blessed in Frameworks */,
 				26F6871C282331D30010D28A /* EmbeddedPropertyList in Frameworks */,
 				26F6871F282331E60010D28A /* SecureXPC in Frameworks */,
 			);
@@ -142,7 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				262B4915282AF80C00DF1C03 /* Blessed in Frameworks */,
+				2617AC1F282B2E6800E40CE8 /* Blessed in Frameworks */,
 				26F68724282331F60010D28A /* EmbeddedPropertyList in Frameworks */,
 				26F68726282331FA0010D28A /* SecureXPC in Frameworks */,
 			);
@@ -290,7 +286,6 @@
 		26F686DD28232C410010D28A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				26F686DE28232C760010D28A /* AllowedCommand.swift */,
 				26F686F728232CE70010D28A /* SharedConstants.swift */,
 				26F686FA28232D3C0010D28A /* HelperToolInfoPropertyList.swift */,
 				26F686FD28232D660010D28A /* HelperToolLaunchdPropertyList.swift */,
@@ -307,7 +302,7 @@
 				26F686F128232CCC0010D28A /* main.swift */,
 				26F6870528232E130010D28A /* Uninstaller.swift */,
 				26F6870728232E360010D28A /* Updater.swift */,
-				26F6870928232E7E0010D28A /* AllowedCommandRunner.swift */,
+				2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */,
 			);
 			path = helper;
 			sourceTree = "<group>";
@@ -331,7 +326,6 @@
 		26F68720282331F10010D28A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				262B4913282AF7CC00DF1C03 /* Blessed-0.3.0 */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -359,7 +353,7 @@
 				268047672807637900FD60D2 /* Zip */,
 				26F6871B282331D30010D28A /* EmbeddedPropertyList */,
 				26F6871E282331E60010D28A /* SecureXPC */,
-				262B4916282AF81C00DF1C03 /* Blessed */,
+				2617AC1C282B2E5C00E40CE8 /* Blessed */,
 			);
 			productName = Maple;
 			productReference = 26C35B7827FA89E800BD4B2B /* Maple.app */;
@@ -383,7 +377,7 @@
 			packageProductDependencies = (
 				26F68723282331F60010D28A /* EmbeddedPropertyList */,
 				26F68725282331FA0010D28A /* SecureXPC */,
-				262B4914282AF80C00DF1C03 /* Blessed */,
+				2617AC1E282B2E6800E40CE8 /* Blessed */,
 			);
 			productName = helper;
 			productReference = 26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */;
@@ -420,6 +414,7 @@
 				268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */,
 				26F6871A282331D30010D28A /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */,
 				26F6871D282331E60010D28A /* XCRemoteSwiftPackageReference "SecureXPC" */,
+				2617AC1B282B2E5C00E40CE8 /* XCRemoteSwiftPackageReference "Blessed" */,
 			);
 			productRefGroup = 26C35B7927FA89E800BD4B2B /* Products */;
 			projectDirPath = "";
@@ -538,7 +533,6 @@
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
-				26F686DF28232C760010D28A /* AllowedCommand.swift in Sources */,
 				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
 				26F6870128232D7D0010D28A /* CodeInfo.swift in Sources */,
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
@@ -558,12 +552,11 @@
 			files = (
 				26F6870228232D7D0010D28A /* CodeInfo.swift in Sources */,
 				26F686FC28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */,
-				26F686F628232CDB0010D28A /* AllowedCommand.swift in Sources */,
+				2617AC21282DB39B00E40CE8 /* MapleInjectionHelper.swift in Sources */,
 				26F686F928232CE70010D28A /* SharedConstants.swift in Sources */,
 				26F686FF28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
 				26F6870828232E360010D28A /* Updater.swift in Sources */,
 				26F6870628232E130010D28A /* Uninstaller.swift in Sources */,
-				26F6870A28232E7E0010D28A /* AllowedCommandRunner.swift in Sources */,
 				26F686F228232CCC0010D28A /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -709,7 +702,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = 5RD23JCCKU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -738,7 +731,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = 5RD23JCCKU;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -815,6 +808,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2617AC1B282B2E5C00E40CE8 /* XCRemoteSwiftPackageReference "Blessed" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trilemma-dev/Blessed";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		268047662807637900FD60D2 /* XCRemoteSwiftPackageReference "Zip" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/Zip";
@@ -842,12 +843,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		262B4914282AF80C00DF1C03 /* Blessed */ = {
+		2617AC1C282B2E5C00E40CE8 /* Blessed */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 2617AC1B282B2E5C00E40CE8 /* XCRemoteSwiftPackageReference "Blessed" */;
 			productName = Blessed;
 		};
-		262B4916282AF81C00DF1C03 /* Blessed */ = {
+		2617AC1E282B2E6800E40CE8 /* Blessed */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 2617AC1B282B2E5C00E40CE8 /* XCRemoteSwiftPackageReference "Blessed" */;
 			productName = Blessed;
 		};
 		268047672807637900FD60D2 /* Zip */ = {

@@ -19,6 +19,6 @@ struct SettingsView: View {
                 }
                 HelperSettingsView()
             }
-        }
+        }.padding()
     }
 }

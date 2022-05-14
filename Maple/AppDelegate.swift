@@ -27,20 +27,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Issue: \(error)")
             exit(-1)
         }
-        
-        // Setup authorization right
-        do {
-            let right = SharedConstants.exampleRight
-            if !(try right.isDefined()) {
-                let description = ProcessInfo.processInfo.processName + " would like to perform a secure action."
-                try right.createOrUpdateDefinition(rules: [CannedAuthorizationRightRules.authenticateAsAdmin],
-                                                   descriptionKey: description)
-            }
-        } catch {
-            print("Unable to create authorization right: \(SharedConstants.exampleRight.name)")
-            print("Issue: \(error)")
-            exit(-2)
-        }
+//        
+//        // Setup authorization right
+//        do {
+//            let right = SharedConstants.exampleRight
+//            if !(try right.isDefined()) {
+//                let description = ProcessInfo.processInfo.processName + " would like to perform a secure action."
+//                try right.createOrUpdateDefinition(rules: [CannedAuthorizationRightRules.authenticateAsAdmin],
+//                                                   descriptionKey: description)
+//            }
+//        } catch {
+//            print("Unable to create authorization right: \(SharedConstants.exampleRight.name)")
+//            print("Issue: \(error)")
+//            exit(-2)
+//        }
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {

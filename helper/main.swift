@@ -27,11 +27,16 @@ if CommandLine.arguments.count > 1 {
     }
 } else if getppid() == 1 { // Otherwise if started by launchd, start up XPC server
     NSLog("parent is launchd, starting up XPC server")
-    
     let server = try XPCServer.forThisBlessedHelperTool()
-    server.registerRoute(SharedConstants.allowedCommandRoute, handler: AllowedCommandRunner.run(message:))
+    
     server.registerRoute(SharedConstants.uninstallRoute, handler: Uninstaller.uninstallFromXPC)
     server.registerRoute(SharedConstants.updateRoute, handler: Updater.updateHelperTool(atPath:))
+    
+    server.registerRoute(SharedConstants.mapleInjectionTestConnection, handler: MapleInjectionHelper.testConnection)
+    
+    server.registerRoute(SharedConstants.mapleInjectionBeginInjection, handler: MapleInjectionHelper.beginInjection)
+    server.registerRoute(SharedConstants.mapleInjectionEndInjection, handler: MapleInjectionHelper.endInjection)
+    
     server.setErrorHandler { error in
         if case .connectionInvalid = error {
             // Ignore invalidated connections as this happens whenever the client disconnects which is not a problem

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "blessed",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trilemma-dev/Blessed",
+      "state" : {
+        "branch" : "main",
+        "revision" : "40ac7289f6d794fb2982fb382af016a6abffa3f7"
+      }
+    },
+    {
       "identity" : "embeddedpropertylist",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/trilemma-dev/EmbeddedPropertyList",

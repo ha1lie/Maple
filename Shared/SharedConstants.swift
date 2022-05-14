@@ -19,17 +19,20 @@ struct SharedConstants {
         case missingSMPrivilegedExecutables
     }
     
-    /// Authorization right used to force user to authenticate as admin before performing an action.
-    static let exampleRight = AuthorizationRight(name: "dev.halz.Maple.secure-action")
-    /// XPC route to run an allowed command as root.
-    static let allowedCommandRoute = XPCRoute.named("process")
-                                             .withMessageType(AllowedCommandMessage.self)
-                                             .withReplyType(AllowedCommandReply.self)
     /// XPC route to uninstall the helper tool.
     static let uninstallRoute = XPCRoute.named("uninstall")
     /// XPC route to update the helper tool.
     static let updateRoute = XPCRoute.named("update")
                                      .withMessageType(URL.self)
+    
+    static let mapleInjectionTestConnection = XPCRoute.named("connectionTest")
+                                                      .withReplyType(Bool.self)
+    
+    static let mapleInjectionBeginInjection = XPCRoute.named("mapleBeginInjecting")
+                                                      .withReplyType(Bool.self)
+    
+    static let mapleInjectionEndInjection = XPCRoute.named("mapleEndInjecting")
+                                                    .withReplyType(Bool.self)
     
     /// The label of the helper tool. This is required by SMJobBless to match its filename.
     let helperToolLabel: String
