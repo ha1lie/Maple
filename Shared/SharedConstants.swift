@@ -19,20 +19,26 @@ struct SharedConstants {
         case missingSMPrivilegedExecutables
     }
     
+    static let injectorFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
+    static let listenFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
+    
+    static let injectorFileString: String = "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector"
+    static let listenFileString: String = "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt"
+    
     /// XPC route to uninstall the helper tool.
     static let uninstallRoute = XPCRoute.named("uninstall")
     /// XPC route to update the helper tool.
     static let updateRoute = XPCRoute.named("update")
                                      .withMessageType(URL.self)
     
-    static let mapleInjectionTestConnection = XPCRoute.named("connectionTest")
+    static let mapleInjectionTestConnection = XPCRoute.named("mapleConnectionTest")
                                                       .withReplyType(Bool.self)
     
     static let mapleInjectionBeginInjection = XPCRoute.named("mapleBeginInjecting")
-                                                      .withReplyType(Bool.self)
+                                                      .withReplyType(Optional<TerminalResponse>.self)
     
     static let mapleInjectionEndInjection = XPCRoute.named("mapleEndInjecting")
-                                                    .withReplyType(Bool.self)
+                                                    .withReplyType(Optional<TerminalResponse>.self)
     
     /// The label of the helper tool. This is required by SMJobBless to match its filename.
     let helperToolLabel: String

@@ -140,7 +140,8 @@ struct HelperSettingsView: View {
     private func testRun() {
         self.xpcService.send(to: SharedConstants.mapleInjectionTestConnection) { result in
             switch result {
-            case .success(_):
+            case .success(let reply):
+                print("Reply: \(reply)")
                 self.connectionTestResult = "Connected"
             case .failure(let error):
                 self.connectionTestResult = "Failure"

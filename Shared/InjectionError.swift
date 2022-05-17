@@ -2,7 +2,7 @@
 //  InjectionError.swift
 //  Maple
 //
-//  Created by Hallie on 4/16/22.
+//  Created by Hallie on 5/13/22.
 //
 
 import Foundation
@@ -11,6 +11,8 @@ enum InjectionError: Error {
     case unableToTerminateProcess
     case unableToStartInjector
     case unableToCreateListenFile
+    case injectionAlreadySpawned
+    case injectionNotRunning
 }
 
 extension InjectionError: CustomStringConvertible {
@@ -22,6 +24,10 @@ extension InjectionError: CustomStringConvertible {
             return "Unable to create injector process"
         case .unableToCreateListenFile:
             return "Failed to create listen file"
+        case .injectionAlreadySpawned:
+            return "You are not permitted to spawn more than one injection process"
+        case .injectionNotRunning:
+            return "An injection process is not currently running"
         }
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import Zip
 import SwiftUI
+import SecureXPC
 
 /// Controls all Leafs, and their running status
 class MapleController: ObservableObject {
@@ -35,20 +36,34 @@ class MapleController: ObservableObject {
     private var installerWindow: NSWindow? = nil
     private var injector: Process? = nil
     
+    private let xpcService: XPCClient
+    private let sharedConstants: SharedConstants
+    private let bundledLocation: URL
+    
     private static let installedLeavesKey: String = "installedLeaves"
     
     private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
     private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
     private static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
     
-    private static let injectorFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
-    private static let listenFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
-    
+    init() {
+        guard let tsc = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
+            fatalError("Could not find AppDelegate's SharedConstants")
+        }
+        
+        guard let bl = tsc.bundledLocation else {
+            fatalError("Helper Tool Location Shouldn't Not Exist")
+        }
+        
+        self.sharedConstants = tsc
+        self.bundledLocation = bl
+        self.xpcService = XPCClient.forMachService(named: sharedConstants.machServiceName)
+    }
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
         self.installedLeaves = self.fetchLocallyStoredLeaves()
-//        self.startInjectingEnabledLeaves()
+        self.startInjectingEnabledLeaves()
         
         // Make sure that the directories will exist when you need them... doesn't hurt to put them there now
         try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
@@ -73,7 +88,7 @@ class MapleController: ObservableObject {
     
     /// Begins injecting all enabled leaves
     public func startInjectingEnabledLeaves() {
-        print("Start injecting all enabled leaves")
+//        print("Start injecting all enabled leaves")
         
         var procs: [String] = []
         
@@ -91,7 +106,7 @@ class MapleController: ObservableObject {
         }
         
         // Write listen.txt file
-        MapleFileHelper.shared.writeFile(withContents: self.listenContents(for: listenFile), atLocation: MapleController.listenFile)
+        MapleFileHelper.shared.writeFile(withContents: self.listenContents(for: listenFile), atLocation: SharedConstants.listenFile)
         
         // Spin up an instance of Maple-LibInjector with above file
         self.startMapleInjector()
@@ -131,9 +146,6 @@ class MapleController: ObservableObject {
     
     /// Stops all leaves from running
     public func stopInjectingEnabledLeaves() {
-        print("STOPPING INJECTION OF ALL LEAVES")
-        // TODO: Stop all injections
-        
         // Kill Maple-LibInject
         self.stopMapleInjector()
         
@@ -180,44 +192,32 @@ class MapleController: ObservableObject {
     
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
-        if self.injector != nil { return }
-        
-        self.injector = Process()
-//        self.injector?.executableURL = MapleController.injectorFile
-//        self.injector?.arguments = [MapleFileHelper.shared.urlToString(MapleController.listenFile)]
-//        self.injector?.terminationHandler = { _ in
-//            print("THE PROCESS TERMINATED AND IM NOT SURE WHY")
-//        }
-//
-//        do {
-//            try self.injector?.run()
-//        } catch {
-//            print("FAILED TO RUN!")
-//            print(error.localizedDescription)
-//            exit(1)
-//        }
-//        self.runSudoInjector("BoxCat20")
-        self.runScriptThatNeedsSudo()
-    }
-    
-    func runScriptThatNeedsSudo() {
-        print("RUNNING SCRIPT")
-        let myAppleScript = """
-    do shell script "
-    sudo \(MapleFileHelper.shared.urlToString(MapleController.injectorFile)) \(MapleFileHelper.shared.urlToString(MapleController.listenFile))" with administrator privileges
-    """
-        var error: NSDictionary?
-        let scriptObject = NSAppleScript(source: myAppleScript)!
-        scriptObject.executeAndReturnError(&error)
+        self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection) { response in
+            switch response {
+            case .success(let reply):
+                if reply == nil {
+                    // Success
+                    print("Maple injection successfully begun")
+                } else {
+                    // Failed because
+                    print("Errored when beginning injection: \(reply!.description)")
+                }
+            case .failure(let error):
+                print("Failed to begin injection: \(error.localizedDescription)")
+            }
+        }
     }
     
     /// Stops Maple-LibInjector from injecting
     private func stopMapleInjector() {
-        if self.injector == nil { return }
-        
-        self.injector?.terminate()
-        
-        self.injector = nil
+        self.xpcService.send(to: SharedConstants.mapleInjectionEndInjection) { response in
+            switch response {
+            case .success(let reply):
+                print("Successfully ended injection")
+            case .failure(let error):
+                print("Failed to end injection: \(error.localizedDescription)")
+            }
+        }
     }
     
     /// Reloads Maple-LibInjector after changing a listen file
