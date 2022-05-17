@@ -200,7 +200,7 @@ class MapleController: ObservableObject {
                     print("Maple injection successfully begun")
                 } else {
                     // Failed because
-                    print("Errored when beginning injection: \(reply!.description)")
+                    print("Errored when beginning injection: \(reply!)")
                 }
             case .failure(let error):
                 print("Failed to begin injection: \(error.localizedDescription)")
@@ -210,14 +210,17 @@ class MapleController: ObservableObject {
     
     /// Stops Maple-LibInjector from injecting
     private func stopMapleInjector() {
-        self.xpcService.send(to: SharedConstants.mapleInjectionEndInjection) { response in
-            switch response {
-            case .success(let reply):
+        let sema = DispatchSemaphore(value: 0)
+        Task(priority: .userInitiated) {
+            do {
+                let _ = try await self.xpcService.send(to: SharedConstants.mapleInjectionEndInjection)
                 print("Successfully ended injection")
-            case .failure(let error):
-                print("Failed to end injection: \(error.localizedDescription)")
+            } catch {
+                print("Errored when ending injection: \(error.localizedDescription)")
             }
+            sema.signal()
         }
+        sema.wait()
     }
     
     /// Reloads Maple-LibInjector after changing a listen file

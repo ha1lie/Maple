@@ -153,5 +153,7 @@ struct HelperSettingsView: View {
     /// Run to determine or update the status of the helper tool
     private func determineHelperStatus() {
         //TODO: Make this function :) I refuse
+        
+        
     }
 }

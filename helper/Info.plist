@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>BuildHash</key>
-	<string>0ec4d86725639ef503f0b5b198aabaaabec6986d62f3d3e2055a47b2a61376d5</string>
+	<string>914dc9ae009b2cade5f1f6ac6fc341df5894e2b1a594cf13c3464f12ee800a9e</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.55</string>
+	<string>1.0.60</string>
 </dict>
 </plist>

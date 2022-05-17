@@ -8,6 +8,7 @@
 import Cocoa
 import SwiftUI
 import Blessed
+import SecureXPC
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -16,10 +17,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBar: StatusBarController?
     
     let sharedConstants: SharedConstants
+    let helperMonitor: HelperToolMonitor
     
     override init() {
         do {
             self.sharedConstants = try SharedConstants(caller: .app)
+            self.helperMonitor = HelperToolMonitor(constants: self.sharedConstants)
+            self.helperMonitor.determineStatus()
         } catch {
             print("One or more property list configuration issues exist. Please check the PropertyListModifier.swift " +
                   "script is run as part of the build process for both the app and helper tool targets. This script " +
@@ -27,20 +31,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Issue: \(error)")
             exit(-1)
         }
-//        
-//        // Setup authorization right
-//        do {
-//            let right = SharedConstants.exampleRight
-//            if !(try right.isDefined()) {
-//                let description = ProcessInfo.processInfo.processName + " would like to perform a secure action."
-//                try right.createOrUpdateDefinition(rules: [CannedAuthorizationRightRules.authenticateAsAdmin],
-//                                                   descriptionKey: description)
-//            }
-//        } catch {
-//            print("Unable to create authorization right: \(SharedConstants.exampleRight.name)")
-//            print("Issue: \(error)")
-//            exit(-2)
-//        }
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -54,6 +44,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         DispatchQueue.main.async {
             NSApp.windows.first?.close()
+        }
+        
+        guard let bl = self.sharedConstants.bundledLocation else { return }
+        
+        if self.helperMonitor.helperToolBundleVersion == nil || (try! HelperToolInfoPropertyList(from: bl).version) > self.helperMonitor.helperToolBundleVersion! {
+            DispatchQueue.main.async {
+                let xpcService: XPCClient = XPCClient.forMachService(named: self.sharedConstants.machServiceName)
+                xpcService.sendMessage(bl, to: SharedConstants.updateRoute) { response in
+                    if case .failure(let error) = response {
+                        switch error {
+                        case .connectionInterrupted:
+                            return
+                        default:
+                            print("Update error: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }
         }
         
         MapleController.shared.configure()
