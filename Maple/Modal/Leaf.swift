@@ -63,7 +63,6 @@ class Leaf: Identifiable, Codable, Equatable {
             self.enabled = true
             print(self)
             MapleController.shared.updateLocallyStoredLeaves()
-            MapleController.shared.startInjectingLeaf(self)
         }
     }
     

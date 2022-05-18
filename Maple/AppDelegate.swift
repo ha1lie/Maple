@@ -23,7 +23,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             self.sharedConstants = try SharedConstants(caller: .app)
             self.helperMonitor = HelperToolMonitor(constants: self.sharedConstants)
-            self.helperMonitor.determineStatus()
         } catch {
             print("One or more property list configuration issues exist. Please check the PropertyListModifier.swift " +
                   "script is run as part of the build process for both the app and helper tool targets. This script " +
@@ -46,6 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.windows.first?.close()
         }
         
+        self.helperMonitor.determineStatus()
+        
         guard let bl = self.sharedConstants.bundledLocation else { return }
         
         if self.helperMonitor.helperToolBundleVersion == nil || (try! HelperToolInfoPropertyList(from: bl).version) > self.helperMonitor.helperToolBundleVersion! {
@@ -63,6 +64,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
+        
+        self.helperMonitor.determineStatus()
         
         MapleController.shared.configure()
         MapleController.shared.openSettingsWindow()

@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import AppKit
 
-enum MapleInjectionHelper {
+struct MapleInjectionHelper {
     
     static private var injectionProcess: Process? = nil
     static private var outputPipe: Pipe? = nil
@@ -22,15 +23,35 @@ enum MapleInjectionHelper {
         
         MapleInjectionHelper.injectionProcess = Process()
         
-        return TerminalResponse(exitCode: 0, output: "Successfully began", error: nil)
+        if MapleInjectionHelper.outputPipe == nil { MapleInjectionHelper.outputPipe = Pipe() }
+        if MapleInjectionHelper.errorPipe == nil { MapleInjectionHelper.errorPipe = Pipe() }
+        
+        MapleInjectionHelper.injectionProcess!.launchPath = SharedConstants.injectorFileString
+        MapleInjectionHelper.injectionProcess!.arguments = [SharedConstants.listenFileString]
+        MapleInjectionHelper.injectionProcess!.qualityOfService = QualityOfService.userInitiated
+        MapleInjectionHelper.injectionProcess!.standardOutput = MapleInjectionHelper.outputPipe!
+        MapleInjectionHelper.injectionProcess!.standardError = MapleInjectionHelper.errorPipe!
+        try? MapleInjectionHelper.injectionProcess!.run()
+        
+        if MapleInjectionHelper.injectionProcess!.isRunning {
+            return nil
+        } else {
+            return TerminalResponse(exitCode: Int(MapleInjectionHelper.injectionProcess!.terminationStatus), output: String(data: MapleInjectionHelper.outputPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8), error: String(data: MapleInjectionHelper.errorPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8))
+        }
     }
     
     static func endInjection() -> TerminalResponse? {
-        guard let _ = MapleInjectionHelper.injectionProcess else { return nil } // Ensure you're not trying to stop a non-existant process
+        guard let _ = MapleInjectionHelper.injectionProcess else { return TerminalResponse(exitCode: -1, output: nil, error: "Injection process not running") } // Ensure you're not trying to stop a non-existant process
         
+        MapleInjectionHelper.injectionProcess?.terminate()
         MapleInjectionHelper.injectionProcess = nil
+        MapleInjectionHelper.outputPipe = nil
+        MapleInjectionHelper.errorPipe = nil
+//        let res = TerminalResponse(exitCode: Int(MapleInjectionHelper.injectionProcess?.terminationStatus ?? 0), output: String(data: MapleInjectionHelper.outputPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8), error: String(data: MapleInjectionHelper.errorPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8))
         
-        return TerminalResponse(exitCode: 0, output: "Successfully terminated", error: nil)
+        
+        
+        return nil
     }
     
     static private func run(command: String, arguments: [String]) -> TerminalResponse? {

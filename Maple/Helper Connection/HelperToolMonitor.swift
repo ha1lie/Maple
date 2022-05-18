@@ -7,17 +7,20 @@
 
 import Foundation
 import EmbeddedPropertyList
+import AppKit
+import SecureXPC
 
 /// Monitors the on disk location of the helper tool and its launchd property list.
 /// Updates information on call of `determineStatus()`
-class HelperToolMonitor {
+class HelperToolMonitor: ObservableObject {
     /// Name of the privileged executable being monitored
     private let constants: SharedConstants
     
-    public var registeredWithLaunchd: Bool = false
-    public var registrationPlistExists: Bool = false
-    public var helperToolExists: Bool = false
-    public var helperToolBundleVersion: BundleVersion? = nil
+    @Published public var registeredWithLaunchd: Bool = false
+    @Published public var registrationPlistExists: Bool = false
+    @Published public var helperToolExists: Bool = false
+    @Published public var helperToolBundleVersion: BundleVersion? = nil
+    @Published public var connectionValid: Bool = false
     
     /// Creates the monitor.
     /// - Parameter constants: Constants defining needed file paths.
@@ -57,5 +60,23 @@ class HelperToolMonitor {
         self.registrationPlistExists = plistExists
         self.helperToolExists = hte
         self.helperToolBundleVersion = htbv
+        
+        guard let sharedConstants = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
+            fatalError("Should be able to get the app's sharedConstants")
+        }
+        
+        let xpcService = XPCClient.forMachService(named: sharedConstants.machServiceName)
+        
+        xpcService.send(to: SharedConstants.mapleInjectionTestConnection) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self.connectionValid = true
+                case .failure(let error):
+                    self.connectionValid = false
+                    print("Failed to connect: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }

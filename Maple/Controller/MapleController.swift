@@ -34,7 +34,7 @@ class MapleController: ObservableObject {
     
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
-    private var injector: Process? = nil
+    private var injecting: Bool = false
     
     private let xpcService: XPCClient
     private let sharedConstants: SharedConstants
@@ -88,8 +88,6 @@ class MapleController: ObservableObject {
     
     /// Begins injecting all enabled leaves
     public func startInjectingEnabledLeaves() {
-//        print("Start injecting all enabled leaves")
-        
         var procs: [String] = []
         
         // Create contents of listen.txt file
@@ -118,52 +116,18 @@ class MapleController: ObservableObject {
             print("ERRORED while attempting to begin injection: \(error)")
         }
         
-        // Success
     }
-    
-    /// Begins injecting given leaf
-    /// - Parameter leaf: Leaf which you would like to inject
-    public func startInjectingLeaf(_ leaf: Leaf) {
-        if !leaf.enabled {
-            print("Cannot begin injecting Leaf: Leaf is not enabled")
-        }
-        // TODO: Actually begin injecting this leaf
-        print("Beginning to inject: \(leaf.name ?? "NAME")")
-        
-        // Check if anything is currently injecting
-        
-            // YES - Edit the file by appending this to the end, after checking it's not there!
-        
-            // NO - Create the file with just this one
-        
-        
-        // Spin up Maple-Inject
-        self.startMapleInjector() // OR restartMapleInjector()
-        
-        // Optionally kill the injecting process
-        
-    }
-    
+
     /// Stops all leaves from running
     public func stopInjectingEnabledLeaves() {
-        // Kill Maple-LibInject
         self.stopMapleInjector()
+        try? self.fManager.removeItem(at: SharedConstants.listenFile)
         
-        // Delete listen.txt file
-        
-    }
-    
-    /// Stops injection of a particular leaf
-    /// - Parameter leaf: Leaf to stop injecting
-    public func stopInjectingLeaf(_ leaf: Leaf) {
-        print("Stopping injecting leaf: \(leaf.name ?? "NAME")")
-        // TODO: Actually stop it!
-        
-        // Edit listen.txt to remove it
-        
-        
-        // If it was there to remove, then kill and restart Maple-LibInjector
-        self.reloadMapleInjector()
+        var bids: [String] = []
+        for leaf in self.runningLeaves {
+            bids.append(contentsOf: leaf.targetBundleID!)
+        }
+        try? self.killProcesses(withBIDs: bids)
     }
     
     /// Kills multiple processes
@@ -171,9 +135,12 @@ class MapleController: ObservableObject {
     private func killProcesses(withBIDs bids: [String]) throws {
         for running in NSWorkspace.shared.runningApplications {
             if running.bundleIdentifier != nil && bids.contains(running.bundleIdentifier!) {
-                if !running.forceTerminate() {
-                    throw InjectionError.unableToTerminateProcess
-                }
+                let kp = Process()
+                kp.launchPath = "/bin/kill"
+                print("\(running.processIdentifier)")
+                kp.arguments = ["-9", "\(running.processIdentifier)"]
+                kp.launch()
+                kp.waitUntilExit()
             }
         }
     }
@@ -183,44 +150,50 @@ class MapleController: ObservableObject {
     func killProcess(withBID bid: String) throws {
         for running in NSWorkspace.shared.runningApplications {
             if running.bundleIdentifier == bid {
-                if !running.forceTerminate() {
-                    throw InjectionError.unableToTerminateProcess
-                }
+                let kp = Process()
+                kp.launchPath = "/bin/kill"
+                print("\(running.processIdentifier)")
+                kp.arguments = ["-9", "\(running.processIdentifier)"]
+                kp.launch()
+                kp.waitUntilExit()
             }
         }
     }
     
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
-        self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection) { response in
-            switch response {
-            case .success(let reply):
-                if reply == nil {
-                    // Success
-                    print("Maple injection successfully begun")
+        let sema = DispatchSemaphore(value: 1)
+        Task {
+            do {
+                let response = try await self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection)
+                if response == nil {
+                    print("Successfully began injection")
                 } else {
-                    // Failed because
-                    print("Errored when beginning injection: \(reply!)")
+                    print("Errored while beginning injection: \(response!)")
                 }
-            case .failure(let error):
+            } catch {
                 print("Failed to begin injection: \(error.localizedDescription)")
             }
+            sema.signal()
         }
+        sema.wait()
+        self.injecting = true
     }
     
     /// Stops Maple-LibInjector from injecting
     private func stopMapleInjector() {
         let sema = DispatchSemaphore(value: 0)
-        Task(priority: .userInitiated) {
+        Task {
             do {
                 let _ = try await self.xpcService.send(to: SharedConstants.mapleInjectionEndInjection)
                 print("Successfully ended injection")
             } catch {
-                print("Errored when ending injection: \(error.localizedDescription)")
+                print("Errored when ending injection: \(error)")
             }
             sema.signal()
         }
         sema.wait()
+        self.injecting = false
     }
     
     /// Reloads Maple-LibInjector after changing a listen file
@@ -387,29 +360,6 @@ class MapleController: ObservableObject {
         if self.installerWindow != nil {
             self.installerWindow!.close()
             self.installerWindow = nil
-        }
-    }
-}
-
-enum InstallError: Error, CustomStringConvertible {
-    case fileDidntExist
-    case compressionError
-    case invalidSap
-    case invalidDirectories
-    case unknown
-    
-    var description: String {
-        switch self {
-        case .fileDidntExist:
-            return "Couldn't find a file which we expected to exist. Ensure all file names are correct, and where they belong"
-        case .compressionError:
-            return "Failed to decompress .mapleleaf file. Ensure all compression is correct"
-        case .invalidDirectories:
-            return "Invalid folder structure. Ensure all names are correct"
-        case .invalidSap:
-            return "Invalid .sap file. Ensure all words and encoding"
-        case .unknown:
-            return "Unknown error. Contact developer"
         }
     }
 }

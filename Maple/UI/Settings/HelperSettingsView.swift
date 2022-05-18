@@ -20,6 +20,7 @@ struct HelperSettingsView: View {
     let xpcService: XPCClient
     let sharedConstants: SharedConstants
     let bundledLocation: URL
+    @ObservedObject var helperMonitor: HelperToolMonitor
     
     init() {
         guard let tsc = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
@@ -33,6 +34,11 @@ struct HelperSettingsView: View {
         self.sharedConstants = tsc
         self.bundledLocation = bl
         self.xpcService = XPCClient.forMachService(named: sharedConstants.machServiceName)
+        
+        guard let hm = (NSApplication.shared.delegate as? AppDelegate)?.helperMonitor else {
+            fatalError("Helper Monitor should be accessible")
+        }
+        self.helperMonitor = hm
     }
     
     var body: some View {
@@ -44,8 +50,8 @@ struct HelperSettingsView: View {
             Text(self.helperToolTopQuote)
             
             HStack {
-                Text("Installed: \(self.helperToolInstalledState)")
-                Text("Version: \(self.helperToolVersionString)")
+                Text("Installed: \(self.helperMonitor.helperToolExists ? "Yes" : "No")")
+                Text("Version: \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "N/A")")
             }
             
             HStack(spacing: 8) {
@@ -87,7 +93,7 @@ struct HelperSettingsView: View {
                     Text("Test Connection")
                 }
                 
-                Text("Connection: \(self.connectionTestResult)")
+                Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
             }
         }.onAppear {
             self.determineHelperStatus()
