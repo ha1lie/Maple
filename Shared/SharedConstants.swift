@@ -31,12 +31,15 @@ struct SharedConstants {
     static let updateRoute = XPCRoute.named("update")
                                      .withMessageType(URL.self)
     
+    /// XPC Route to check the helper tool is online and functioning
     static let mapleInjectionTestConnection = XPCRoute.named("mapleConnectionTest")
                                                       .withReplyType(Bool.self)
     
+    /// XPC Route to tell the helper tool to begin leaf injection
     static let mapleInjectionBeginInjection = XPCRoute.named("mapleBeginInjecting")
                                                       .withReplyType(Optional<TerminalResponse>.self)
     
+    /// XPC Route to tell the helper tool to end leaf injection
     static let mapleInjectionEndInjection = XPCRoute.named("mapleEndInjecting")
                                                     .withReplyType(Optional<TerminalResponse>.self)
     

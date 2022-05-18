@@ -7,15 +7,18 @@
 
 import Foundation
 
-enum InjectionError: Error {
+enum InjectionError: Error, CustomStringConvertible {
+    /// A currently running process is unable to be terminated programmatically
     case unableToTerminateProcess
+    /// Helper tool is unable to start the injector
     case unableToStartInjector
+    /// Unable to write the listen file for the injector
     case unableToCreateListenFile
+    /// Injection cannot be restarted as it is already live
     case injectionAlreadySpawned
+    /// Maple injector is not alive
     case injectionNotRunning
-}
-
-extension InjectionError: CustomStringConvertible {
+    
     public var description: String {
         switch self {
         case .unableToTerminateProcess:

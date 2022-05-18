@@ -9,6 +9,7 @@ import Foundation
 import AppKit
 import UserNotifications
 
+/// Shows notifications and alert dialogues to the user
 class MapleNotificationController {
     static let shared: MapleNotificationController = MapleNotificationController()
     

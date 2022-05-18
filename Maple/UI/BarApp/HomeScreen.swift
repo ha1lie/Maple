@@ -7,8 +7,8 @@
 
 import SwiftUI
 
+/// Status bar app container view
 struct HomeScreen: View {
-    
     @State var selectedLeaf: Leaf? = nil
     
     var body: some View {

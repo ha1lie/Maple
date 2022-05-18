@@ -8,16 +8,20 @@
 import Foundation
 import AppKit
 
+/// Helper class to run injection-focused functions
 struct MapleInjectionHelper {
-    
     static private var injectionProcess: Process? = nil
     static private var outputPipe: Pipe? = nil
     static private var errorPipe: Pipe? = nil
     
+    /// Test if the helper tool is able to communicate with the main app
+    /// - Returns: True
     static func testConnection() -> Bool {
         return true
     }
     
+    /// Begin the helper's injection process
+    /// - Returns: TerminalResponse if there is an issue starting up the process
     static func beginInjection() -> TerminalResponse? {
         if MapleInjectionHelper.injectionProcess != nil { let _ = MapleInjectionHelper.endInjection() } // Ensure no one is doing any double dipping
         
@@ -40,6 +44,8 @@ struct MapleInjectionHelper {
         }
     }
     
+    /// Ends the injection process
+    /// - Returns: TerminalResponse with appropriate output from the process
     static func endInjection() -> TerminalResponse? {
         guard let _ = MapleInjectionHelper.injectionProcess else { return TerminalResponse(exitCode: -1, output: nil, error: "Injection process not running") } // Ensure you're not trying to stop a non-existant process
         
@@ -48,41 +54,6 @@ struct MapleInjectionHelper {
         MapleInjectionHelper.outputPipe = nil
         MapleInjectionHelper.errorPipe = nil
 //        let res = TerminalResponse(exitCode: Int(MapleInjectionHelper.injectionProcess?.terminationStatus ?? 0), output: String(data: MapleInjectionHelper.outputPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8), error: String(data: MapleInjectionHelper.errorPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8))
-        
-        
-        
         return nil
-    }
-    
-    static private func run(command: String, arguments: [String]) -> TerminalResponse? {
-        let process = Process()
-        process.launchPath = command
-        process.arguments = arguments
-        process.qualityOfService = QualityOfService.userInitiated
-        let outputPipe = Pipe()
-        process.standardOutput = outputPipe
-        let errorPipe = Pipe()
-        process.standardError = errorPipe
-        process.launch()
-        process.waitUntilExit()
-        
-        // Process and return response
-        let terminationStatus = Int(process.terminationStatus)
-        var standardOutput: String?
-        var standardError: String?
-        if let output = String(data: outputPipe.fileHandleForReading.availableData,
-                               encoding: String.Encoding.utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
-           output.count != 0 {
-            standardOutput = output
-        }
-        if let error = String(data: errorPipe.fileHandleForReading.availableData,
-                              encoding: String.Encoding.utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
-           error.count != 0 {
-            standardError = error
-        }
-        outputPipe.fileHandleForReading.closeFile()
-        errorPipe.fileHandleForReading.closeFile()
-        
-        return TerminalResponse(exitCode: terminationStatus, output: standardOutput, error: standardError)
     }
 }

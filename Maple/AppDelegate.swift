@@ -76,6 +76,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         MapleController.shared.stopInjectingEnabledLeaves()
     }
     
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        print("Checking if it should terminate")
+        let shouldQuit = MapleNotificationController.shared.sendUserDialogue(withTitle: "Are you sure you want to quit?", andBody: "If you quit Maple, any currently injecting leaves will stop injecting and reset", withOptions: ["Quit", "Cancel"])
+        if shouldQuit == "Quit" {
+            return .terminateNow
+        } else {
+            return .terminateCancel
+        }
+    }
+    
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         NSApp.setActivationPolicy(.accessory)
         return false

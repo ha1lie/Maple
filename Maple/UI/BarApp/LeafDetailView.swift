@@ -7,8 +7,8 @@
 
 import SwiftUI
 
+/// Detail view about a Leaf
 struct LeafDetailView: View {
-    
     @Binding var selectedLeaf: Leaf?
     
     var body: some View {

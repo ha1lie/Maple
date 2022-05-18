@@ -7,10 +7,9 @@
 
 import SwiftUI
 
+/// A list displaying all installed leaves
 struct LeafList: View {
-    
     @ObservedObject var mapleController: MapleController = .shared
-    
     @Binding var selectedLeaf: Leaf?
     
     var body: some View {

@@ -12,35 +12,29 @@ import SecureXPC
 
 /// Controls all Leafs, and their running status
 class MapleController: ObservableObject {
-    
     /// Shared MapleController singleton
     static let shared: MapleController = MapleController()
     
-    /// File Manager singleton for this class, simplicity's sake
     final private let fManager: FileManager = .default
-    
     final private let uDefaults: UserDefaults = .standard
     
     //MARK: Public state management
     @Published var installedLeaves: [Leaf] = []
-    
-    var runningLeaves: [Leaf] {
-        get {
-            return installedLeaves.filter({ $0.enabled && $0.isValid() })
-        }
-    }
-    
     @Published var canCurrentlyInject: Bool = false
     
     //MARK: Private state management
     private var installerWindow: NSWindow? = nil
     private var injecting: Bool = false
-    
     private let xpcService: XPCClient
     private let sharedConstants: SharedConstants
     private let bundledLocation: URL
-    
     private static let installedLeavesKey: String = "installedLeaves"
+    
+    private var runningLeaves: [Leaf] {
+        get {
+            return installedLeaves.filter({ $0.enabled && $0.isValid() })
+        }
+    }
     
     private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
     private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
@@ -59,6 +53,7 @@ class MapleController: ObservableObject {
         self.bundledLocation = bl
         self.xpcService = XPCClient.forMachService(named: sharedConstants.machServiceName)
     }
+    
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
@@ -342,7 +337,7 @@ class MapleController: ObservableObject {
         self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: SettingsView()))
         self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
         self.installerWindow?.title = "Maple Settings"
-        self.installerWindow?.styleMask = [.titled, .closable, .resizable, .miniaturizable]
+        self.installerWindow?.styleMask = [.titled, .closable, .miniaturizable, .resizable]
         self.installerWindow?.minSize = NSSize(width: 600, height: 400)
         self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
         

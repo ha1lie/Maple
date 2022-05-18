@@ -7,8 +7,8 @@
 
 import SwiftUI
 
+/// A leaf cell to use to display the Leaf
 struct LeafCell: View {
-    
     let leaf: Leaf
     
     @Binding var selectedLeaf: Leaf?

@@ -9,7 +9,6 @@ import Foundation
 
 // You should not ship this as part of your app, this exists only to provide diagnostic information to assist in
 // diagnosing code signing related issues
-
 private enum DiagnosticSigningInfoError: Error {
     case appInfoNotDeterminable
     case helperToolNotFound

@@ -10,12 +10,13 @@ import Blessed
 import SecureXPC
 import EmbeddedPropertyList
 
-struct HelperSettingsView: View {
+/// Settings section to display information on the helper
+struct HelperSettings: View {
     
-    @State var connectionTestResult: String = "Unknown"
     @State var helperToolVersionString: String = "Unknown"
     @State var helperToolInstalledState: String = "Unknown"
     @State var helperToolTopQuote: String = ""
+    @State var connectionTestResult: String = ""
     
     let xpcService: XPCClient
     let sharedConstants: SharedConstants
@@ -96,7 +97,7 @@ struct HelperSettingsView: View {
                 Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
             }
         }.onAppear {
-            self.determineHelperStatus()
+            self.helperMonitor.determineStatus()
         }
     }
     
@@ -154,12 +155,5 @@ struct HelperSettingsView: View {
                 print("Failed to connect: \(error.localizedDescription)")
             }
         }
-    }
-    
-    /// Run to determine or update the status of the helper tool
-    private func determineHelperStatus() {
-        //TODO: Make this function :) I refuse
-        
-        
     }
 }

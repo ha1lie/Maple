@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct InstallerView: View {
-    
     @State var stepNum: Int = 0
-    
     @State var canContinue: Bool = false
     @State var currentTitle: String = ""
     @State var chosenPackageName: URL? = nil
     @State var leaf: Leaf? = nil
     @State var error: String? = nil
-    
     @State var views: [AnyView] = [AnyView(EmptyView())]
     
     var body: some View {

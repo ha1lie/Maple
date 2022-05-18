@@ -55,7 +55,3 @@ class MapleFileHelper {
         return url.absoluteString.replacingOccurrences(of: "file://", with: "").replacingOccurrences(of: "%20", with: " ")
     }
 }
-
-enum FileError: Error {
-    case notDirectory
-}

@@ -7,8 +7,8 @@
 
 import AppKit
 
+/// Monitor watching for events on the status bar application
 class EventMonitor {
-    
     private var monitor: Any?
     private let mask: NSEvent.EventTypeMask
     private let handler: (NSEvent?) -> Void

@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+/// Button which conforms to Maple's design style
 struct MapleButton: View {
+    /// Action performed when clicked
     let action: () -> Void
+    /// Title to display on the button
     let title: String
     
     var body: some View {

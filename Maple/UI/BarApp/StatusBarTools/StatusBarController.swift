@@ -7,8 +7,10 @@
 
 import AppKit
 
+/// Controls status bar app events
 class StatusBarController {
     
+    /// Singleton StatusBarController
     static var shared: StatusBarController?
     
     private var statusBar: NSStatusBar
@@ -34,6 +36,8 @@ class StatusBarController {
         StatusBarController.shared = self
     }
     
+    /// Hide if shown, show if hidden
+    /// - Parameter sender: Object which calls for this action
     @objc func togglePopover(sender: AnyObject) {
         if self.popover.isShown {
             self.hidePopover(sender)
@@ -42,6 +46,8 @@ class StatusBarController {
         }
     }
     
+    /// Display the status bar application
+    /// - Parameter sender: Object calling for this action
     func showPopover(_ sender: AnyObject) {
         if let statusBarButton = statusItem.button {
             self.popover.show(relativeTo: statusBarButton.bounds, of: statusBarButton, preferredEdge: NSRectEdge.maxY)
@@ -49,11 +55,15 @@ class StatusBarController {
         }
     }
     
+    /// Hide the status bar application
+    /// - Parameter sender: Object calling for this action
     func hidePopover(_ sender: AnyObject) {
         self.popover.performClose(sender)
         self.eventMonitor?.stop()
     }
     
+    /// Handler for click actions
+    /// - Parameter event: Event object requiring action
     func mouseEventHandler(_ event: NSEvent?) {
         if self.popover.isShown {
             self.hidePopover(event!)

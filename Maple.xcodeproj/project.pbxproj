@@ -17,10 +17,15 @@
 		2617AC292833239600E40CE8 /* HelperToolMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC282833239600E40CE8 /* HelperToolMonitor.swift */; };
 		262B490E2829C3FC00DF1C03 /* dev.halz.Maple.helper in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		26303F8928347619000A0CEC /* InstallError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F8828347619000A0CEC /* InstallError.swift */; };
+		26303F8C28356905000A0CEC /* LeafSettingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F8B28356905000A0CEC /* LeafSettingsList.swift */; };
+		26303F8E28356B19000A0CEC /* FileError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F8D28356B19000A0CEC /* FileError.swift */; };
+		26303F902835701A000A0CEC /* LeafSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F8F2835701A000A0CEC /* LeafSettings.swift */; };
+		26303F922835703B000A0CEC /* MapleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F912835703B000A0CEC /* MapleSettings.swift */; };
+		26303F94283570B3000A0CEC /* MapleSegmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */; };
 		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268047842809CE5A00FD60D2 /* MapleNotificationController.swift */; };
 		268B0D3A281F70180049F090 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D39281F70180049F090 /* SettingsView.swift */; };
-		268B0D3C281F71B90049F090 /* HelperSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D3B281F71B90049F090 /* HelperSettingsView.swift */; };
+		268B0D3C281F71B90049F090 /* HelperSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D3B281F71B90049F090 /* HelperSettings.swift */; };
 		26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CC92809E5A2004617C2 /* LeafList.swift */; };
 		26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CCB2809E663004617C2 /* LeafDetailView.swift */; };
 		26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC6CCD2809E8A0004617C2 /* Maple+View.swift */; };
@@ -89,10 +94,15 @@
 		2617AC25282F3C0900E40CE8 /* InjectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionError.swift; sourceTree = "<group>"; };
 		2617AC282833239600E40CE8 /* HelperToolMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolMonitor.swift; sourceTree = "<group>"; };
 		26303F8828347619000A0CEC /* InstallError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallError.swift; sourceTree = "<group>"; };
+		26303F8B28356905000A0CEC /* LeafSettingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettingsList.swift; sourceTree = "<group>"; };
+		26303F8D28356B19000A0CEC /* FileError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileError.swift; sourceTree = "<group>"; };
+		26303F8F2835701A000A0CEC /* LeafSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettings.swift; sourceTree = "<group>"; };
+		26303F912835703B000A0CEC /* MapleSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleSettings.swift; sourceTree = "<group>"; };
+		26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleSegmentPicker.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
 		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		268B0D3B281F71B90049F090 /* HelperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperSettingsView.swift; sourceTree = "<group>"; };
+		268B0D3B281F71B90049F090 /* HelperSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperSettings.swift; sourceTree = "<group>"; };
 		26BC6CC92809E5A2004617C2 /* LeafList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafList.swift; sourceTree = "<group>"; };
 		26BC6CCB2809E663004617C2 /* LeafDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafDetailView.swift; sourceTree = "<group>"; };
 		26BC6CCD2809E8A0004617C2 /* Maple+View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Maple+View.swift"; sourceTree = "<group>"; };
@@ -155,11 +165,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26303F8A283568DA000A0CEC /* Leaf Settings */ = {
+			isa = PBXGroup;
+			children = (
+				26303F8B28356905000A0CEC /* LeafSettingsList.swift */,
+				26303F8F2835701A000A0CEC /* LeafSettings.swift */,
+			);
+			path = "Leaf Settings";
+			sourceTree = "<group>";
+		};
 		268B0D38281F700E0049F090 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				268B0D39281F70180049F090 /* SettingsView.swift */,
-				268B0D3B281F71B90049F090 /* HelperSettingsView.swift */,
+				268B0D3B281F71B90049F090 /* HelperSettings.swift */,
+				26303F912835703B000A0CEC /* MapleSettings.swift */,
+				26303F8A283568DA000A0CEC /* Leaf Settings */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -213,8 +234,8 @@
 			isa = PBXGroup;
 			children = (
 				26C35B7D27FA89E800BD4B2B /* ViewController.swift */,
-				268B0D38281F700E0049F090 /* Settings */,
 				26C35B8A27FA89FD00BD4B2B /* Autogen */,
+				268B0D38281F700E0049F090 /* Settings */,
 				26C35BA127FA8A1F00BD4B2B /* BarApp */,
 				26C35B8C27FA8A1F00BD4B2B /* Install */,
 				26C35BC527FB734D00BD4B2B /* Essentials */,
@@ -268,6 +289,7 @@
 			children = (
 				26C35BBE27FA8A7700BD4B2B /* Leaf.swift */,
 				26303F8828347619000A0CEC /* InstallError.swift */,
+				26303F8D28356B19000A0CEC /* FileError.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -286,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				26C35BC327FB734900BD4B2B /* MapleButton.swift */,
+				26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */,
 				26BC6CCD2809E8A0004617C2 /* Maple+View.swift */,
 			);
 			path = Essentials;
@@ -532,6 +555,7 @@
 				26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */,
 				26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */,
 				26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */,
+				26303F94283570B3000A0CEC /* MapleSegmentPicker.swift in Sources */,
 				26F686FB28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */,
 				26C35BA727FA8A1F00BD4B2B /* InstallStartView.swift in Sources */,
 				26F686F828232CE70010D28A /* SharedConstants.swift in Sources */,
@@ -539,6 +563,7 @@
 				26C35BAB27FA8A1F00BD4B2B /* InstallerView.swift in Sources */,
 				26303F8928347619000A0CEC /* InstallError.swift in Sources */,
 				26C35BBA27FA8A2000BD4B2B /* HomeScreen.swift in Sources */,
+				26303F922835703B000A0CEC /* MapleSettings.swift in Sources */,
 				26C35BA927FA8A1F00BD4B2B /* InstallVerifyView.swift in Sources */,
 				26C35BA827FA8A1F00BD4B2B /* InstallWelcomeView.swift in Sources */,
 				2617AC26282F3C0900E40CE8 /* InjectionError.swift in Sources */,
@@ -547,16 +572,19 @@
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
+				26303F8E28356B19000A0CEC /* FileError.swift in Sources */,
+				26303F902835701A000A0CEC /* LeafSettings.swift in Sources */,
 				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
 				26F6870128232D7D0010D28A /* CodeInfo.swift in Sources */,
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
 				26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */,
 				26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */,
-				268B0D3C281F71B90049F090 /* HelperSettingsView.swift in Sources */,
+				268B0D3C281F71B90049F090 /* HelperSettings.swift in Sources */,
 				2617AC23282F360E00E40CE8 /* TerminalResponse.swift in Sources */,
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,
 				26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */,
+				26303F8C28356905000A0CEC /* LeafSettingsList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
