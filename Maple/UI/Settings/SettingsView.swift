@@ -17,15 +17,9 @@ struct SettingsView: View {
                 .font(.title)
                 .bold()
             
-            Picker("", selection: self.$section) {
-                Text("Maple App").tag(0)
-                Text("Helper Tool").tag(1)
-                Text("Leaves").tag(2)
-            }.pickerStyle(.segmented)
-            
             MapleSegmentPicker(withOptions: ["Maple App", "Helper Tool", "Leaves"], andValue: self.$section)
             
-            ScrollView(.vertical, showsIndicators: true) {
+            Group {
                 if self.section == 0 {
                     MapleSettings()
                 } else if self.section == 1 {
@@ -33,7 +27,7 @@ struct SettingsView: View {
                 } else {
                     LeafSettings()
                 }
-            }.padding()
+            }
         }.padding()
     }
 }

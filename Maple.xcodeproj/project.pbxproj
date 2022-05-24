@@ -22,6 +22,8 @@
 		26303F902835701A000A0CEC /* LeafSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F8F2835701A000A0CEC /* LeafSettings.swift */; };
 		26303F922835703B000A0CEC /* MapleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F912835703B000A0CEC /* MapleSettings.swift */; };
 		26303F94283570B3000A0CEC /* MapleSegmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */; };
+		26303F962839D534000A0CEC /* LeafSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F952839D534000A0CEC /* LeafSettingsCell.swift */; };
+		26303F98283C6D57000A0CEC /* LeafSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */; };
 		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268047842809CE5A00FD60D2 /* MapleNotificationController.swift */; };
 		268B0D3A281F70180049F090 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D39281F70180049F090 /* SettingsView.swift */; };
@@ -99,6 +101,8 @@
 		26303F8F2835701A000A0CEC /* LeafSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettings.swift; sourceTree = "<group>"; };
 		26303F912835703B000A0CEC /* MapleSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleSettings.swift; sourceTree = "<group>"; };
 		26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleSegmentPicker.swift; sourceTree = "<group>"; };
+		26303F952839D534000A0CEC /* LeafSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettingsCell.swift; sourceTree = "<group>"; };
+		26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettingsSection.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
 		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -168,8 +172,10 @@
 		26303F8A283568DA000A0CEC /* Leaf Settings */ = {
 			isa = PBXGroup;
 			children = (
-				26303F8B28356905000A0CEC /* LeafSettingsList.swift */,
 				26303F8F2835701A000A0CEC /* LeafSettings.swift */,
+				26303F8B28356905000A0CEC /* LeafSettingsList.swift */,
+				26303F952839D534000A0CEC /* LeafSettingsCell.swift */,
+				26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */,
 			);
 			path = "Leaf Settings";
 			sourceTree = "<group>";
@@ -568,6 +574,7 @@
 				26C35BA827FA8A1F00BD4B2B /* InstallWelcomeView.swift in Sources */,
 				2617AC26282F3C0900E40CE8 /* InjectionError.swift in Sources */,
 				26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */,
+				26303F962839D534000A0CEC /* LeafSettingsCell.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
@@ -584,6 +591,7 @@
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,
 				26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */,
+				26303F98283C6D57000A0CEC /* LeafSettingsSection.swift in Sources */,
 				26303F8C28356905000A0CEC /* LeafSettingsList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

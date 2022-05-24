@@ -43,58 +43,62 @@ struct HelperSettings: View {
     }
     
     var body: some View {
-        VStack {
-            Text("Helper Tool")
-                .font(.title2)
-                .bold()
-            
-            Text(self.helperToolTopQuote)
-            
-            HStack {
-                Text("Installed: \(self.helperMonitor.helperToolExists ? "Yes" : "No")")
-                Text("Version: \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "N/A")")
-            }
-            
-            HStack(spacing: 8) {
-                Button {
-                    self.installHelper()
-                } label: {
-                    Text("Install")
-                }
-
-                Button {
-                    self.updateHelper()
-                } label: {
-                    Text("Update")
-                }
-
-                Button {
-                    self.uninstallHelper()
-                } label: {
-                    Text("Uninstall")
-                }
-            }
-            
-            Divider()
-            
-            Text("Debug Only")
-                .font(.title2)
-                .bold()
-            
-            HStack {
-                Button {
-                    DiagnosticSigningInfo.printDiagnosticInfo()
-                } label: {
-                    Text("Print Diagnostic Info")
+        ScrollView(.vertical, showsIndicators: true) {
+            VStack {
+                Text("Helper Tool")
+                    .font(.title2)
+                    .bold()
+                
+                Text(self.helperToolTopQuote)
+                
+                HStack {
+                    Text("Installed: \(self.helperMonitor.helperToolExists ? "Yes" : "No")")
+                    Text("Version: \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "N/A")")
                 }
                 
-                Button {
-                    self.testRun()
-                } label: {
-                    Text("Test Connection")
+                HStack(spacing: 8) {
+                    Button {
+                        self.installHelper()
+                    } label: {
+                        Text("Install")
+                    }
+
+                    Button {
+                        self.updateHelper()
+                    } label: {
+                        Text("Update")
+                    }
+
+                    Button {
+                        self.uninstallHelper()
+                    } label: {
+                        Text("Uninstall")
+                    }
                 }
                 
-                Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
+                Divider()
+                
+                #if DEBUG
+                Text("Debug Only")
+                    .font(.title2)
+                    .bold()
+                
+                HStack {
+                    Button {
+                        DiagnosticSigningInfo.printDiagnosticInfo()
+                    } label: {
+                        Text("Print Diagnostic Info")
+                    }
+                    
+                    Button {
+                        self.testRun()
+                    } label: {
+                        Text("Test Connection")
+                    }
+                    
+                    Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
+                }
+                #endif
             }
         }.onAppear {
             self.helperMonitor.determineStatus()

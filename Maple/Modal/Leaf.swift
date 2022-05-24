@@ -7,7 +7,7 @@
 
 import AppKit
 
-class Leaf: Identifiable, Codable, Equatable {
+class Leaf: Identifiable, Codable, Equatable, Hashable {
     
     var enabled: Bool = false
     var name: String? = nil
@@ -61,9 +61,8 @@ class Leaf: Identifiable, Codable, Equatable {
             self.enabled = false
         } else {
             self.enabled = true
-            print(self)
-            MapleController.shared.updateLocallyStoredLeaves()
         }
+        MapleController.shared.updateLocallyStoredLeaves()
     }
     
     /// Checks if a given Leaf is valid, eg. has enough information to run
@@ -73,6 +72,10 @@ class Leaf: Identifiable, Codable, Equatable {
             libraryName != nil && targetBundleID != nil && leafID != nil &&
             name != "" && description != "" && author != "" &&
             targetBundleID != [] && leafID != ""  
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.leafID)
     }
     
     static func == (lhs: Leaf, rhs: Leaf) -> Bool {
