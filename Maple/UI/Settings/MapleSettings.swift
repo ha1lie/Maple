@@ -12,6 +12,8 @@ struct MapleSettings: View {
     @State var injectionPermission: Bool = true
     @State var enableAtLogin: Bool = false
     
+    @ObservedObject var preferencesController: MaplePreferencesController = .shared
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading) {
@@ -22,7 +24,7 @@ struct MapleSettings: View {
                     Text("Allowed to Inject")
                         .bold()
                 }
-                Text("If disabled, Maple will not be able to inject into running processes to enable Leaves")
+                Text("**DNW** If disabled, Maple will not be able to inject into running processes to enable Leaves")
                     .font(.caption)
                     .padding(.leading, 16)
                 
@@ -33,11 +35,33 @@ struct MapleSettings: View {
                     Text("Launch At Login")
                         .bold()
                 }
-                Text("When enabled, Maple will launch at Login, and automatically start injecting after a reboot or login")
+                Text("**DNW** When enabled, Maple will launch at Login, and automatically start injecting after a reboot or login")
                     .font(.caption)
                     .padding(.leading, 16)
                 
+                HStack(spacing: 4) {
+                    Toggle(isOn: self.$preferencesController.developmentEnabled, label: {})
+                        .toggleStyle(SwitchToggleStyle())
+                        .tint(.green)
+                    Text("Development Mode Enabled")
+                        .bold()
+                }
+                Text("If enabled, this will allow you to work on developing your own Leaves to customize your device. You will need Xcode installed as well.")
+                
                 Divider()
+                
+                if self.preferencesController.developmentEnabled {
+                    VStack(alignment: .center, spacing: 8) {
+                        Text("Development")
+                            .font(.title2)
+                            .bold()
+                        Text("Will show development options here such as seurity, etc.")
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 14))
+                        
+                        Divider()
+                    }
+                }
                 
                 VStack(alignment: .center, spacing: 8) {
                     Text("About")

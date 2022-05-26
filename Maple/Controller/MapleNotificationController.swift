@@ -8,6 +8,7 @@
 import Foundation
 import AppKit
 import UserNotifications
+import SwiftUI
 
 /// Shows notifications and alert dialogues to the user
 class MapleNotificationController {

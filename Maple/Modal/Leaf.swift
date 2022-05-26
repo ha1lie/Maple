@@ -7,19 +7,21 @@
 
 import AppKit
 
-class Leaf: Identifiable, Codable, Equatable, Hashable {
+class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
     
-    var enabled: Bool = false
-    var name: String? = nil
-    var description: String? = nil
-    var imageName: String? = nil
-    var author: String? = nil
-    var authorEmail: String? = nil
-    var authorDiscord: String? = nil
-    var tweakWebsite: String? = nil
-    var libraryName: String? = nil
-    var targetBundleID: [String]? = nil
-    var leafID: String? = nil
+    @Published var enabled: Bool = false
+    @Published var name: String? = nil
+    @Published var description: String? = nil
+    @Published var imageName: String? = nil
+    @Published var author: String? = nil
+    @Published var authorEmail: String? = nil
+    @Published var authorDiscord: String? = nil
+    @Published var tweakWebsite: String? = nil
+    @Published var libraryName: String? = nil
+    @Published var targetBundleID: [String]? = nil
+    @Published var leafID: String? = nil
+    
+    init() { }
     
     /// Add a value to the initialized leaf
     /// - Parameter field: Line from Sap file
@@ -63,6 +65,7 @@ class Leaf: Identifiable, Codable, Equatable, Hashable {
             self.enabled = true
         }
         MapleController.shared.updateLocallyStoredLeaves()
+        MapleController.shared.reloadInjection()
     }
     
     /// Checks if a given Leaf is valid, eg. has enough information to run
@@ -80,6 +83,36 @@ class Leaf: Identifiable, Codable, Equatable, Hashable {
     
     static func == (lhs: Leaf, rhs: Leaf) -> Bool {
         return lhs.leafID == rhs.leafID
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(enabled, forKey: .enabled)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(imageName, forKey: .imageName)
+        try container.encode(author, forKey: .author)
+        try container.encode(authorEmail, forKey: .authorEmail)
+        try container.encode(authorDiscord, forKey: .authorDiscord)
+        try container.encode(tweakWebsite, forKey: .tweakWebsite)
+        try container.encode(libraryName, forKey: .libraryName)
+        try container.encode(targetBundleID, forKey: .targetBundleID)
+        try container.encode(leafID, forKey: .leafID)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.name = try container.decode(String?.self, forKey: .name)
+        self.description = try container.decode(String?.self, forKey: .description)
+        self.imageName = try container.decode(String?.self, forKey: .imageName)
+        self.author = try container.decode(String?.self, forKey: .author)
+        self.authorEmail = try container.decode(String?.self, forKey: .authorEmail)
+        self.authorDiscord = try container.decode(String?.self, forKey: .authorDiscord)
+        self.tweakWebsite = try container.decode(String?.self, forKey: .tweakWebsite)
+        self.libraryName = try container.decode(String?.self, forKey: .libraryName)
+        self.targetBundleID = try container.decode([String]?.self, forKey: .targetBundleID)
+        self.leafID = try container.decode(String?.self, forKey: .leafID)
     }
     
     enum CodingKeys: String, CodingKey {

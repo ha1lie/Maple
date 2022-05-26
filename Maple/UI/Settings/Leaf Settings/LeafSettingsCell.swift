@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LeafSettingsCell: View {
-    @State var leaf: Leaf
+    @ObservedObject var leaf: Leaf
     @Binding var selected: Leaf?
     
     init(_ leaf: Leaf, selected: Binding<Leaf?> = .constant(nil)) {

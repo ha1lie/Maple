@@ -12,33 +12,33 @@ import SecureXPC
 
 /// Controls all Leafs, and their running status
 class MapleController: ObservableObject {
-    /// Shared MapleController singleton
+    
     static let shared: MapleController = MapleController()
+    
+    private static let installedLeavesKey: String = "installedLeaves"
+    private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
+    private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
+    private static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
+    
+    private let xpcService: XPCClient
+    private let sharedConstants: SharedConstants
+    private let bundledLocation: URL
     
     final private let fManager: FileManager = .default
     final private let uDefaults: UserDefaults = .standard
     
-    //MARK: Public state management
-    @Published var installedLeaves: [Leaf] = []
-    @Published var canCurrentlyInject: Bool = false
-    
-    //MARK: Private state management
     private var installerWindow: NSWindow? = nil
     private var injecting: Bool = false
-    private let xpcService: XPCClient
-    private let sharedConstants: SharedConstants
-    private let bundledLocation: URL
-    private static let installedLeavesKey: String = "installedLeaves"
-    
     private var runningLeaves: [Leaf] {
         get {
             return installedLeaves.filter({ $0.enabled && $0.isValid() })
         }
     }
     
-    private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
-    private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
-    private static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
+    @Published var installedLeaves: [Leaf] = []
+    @Published var canCurrentlyInject: Bool = false
+    
+    //MARK: General
     
     init() {
         guard let tsc = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
@@ -64,7 +64,13 @@ class MapleController: ObservableObject {
         try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
         try? self.fManager.createDirectory(at: MapleController.installedDir, withIntermediateDirectories: true)
         try? self.fManager.createDirectory(at: MapleController.preferencesDir, withIntermediateDirectories: true)
+        
+        if MaplePreferencesController.shared.developmentEnabled {
+            MapleDevelopmentHelper.shared.configure()
+        }
     }
+    
+    //MARK: Maple Injector Management
     
     /// Create contents of the listen file
     /// - Parameter pieces: Pieces of the listen file to pass in
@@ -79,6 +85,11 @@ class MapleController: ObservableObject {
             contents += "\n"
         }
         return contents
+    }
+    
+    public func reloadInjection() {
+        self.stopInjectingEnabledLeaves()
+        self.startInjectingEnabledLeaves()
     }
     
     /// Begins injecting all enabled leaves
@@ -125,36 +136,6 @@ class MapleController: ObservableObject {
         try? self.killProcesses(withBIDs: bids)
     }
     
-    /// Kills multiple processes
-    /// - Parameter bids: BIDs of desired processes to end
-    private func killProcesses(withBIDs bids: [String]) throws {
-        for running in NSWorkspace.shared.runningApplications {
-            if running.bundleIdentifier != nil && bids.contains(running.bundleIdentifier!) {
-                let kp = Process()
-                kp.launchPath = "/bin/kill"
-                print("\(running.processIdentifier)")
-                kp.arguments = ["-9", "\(running.processIdentifier)"]
-                kp.launch()
-                kp.waitUntilExit()
-            }
-        }
-    }
-    
-    /// Kills a given process if it's currently running
-    /// - Parameter bid: Bundle ID of a process you would like to kill
-    func killProcess(withBID bid: String) throws {
-        for running in NSWorkspace.shared.runningApplications {
-            if running.bundleIdentifier == bid {
-                let kp = Process()
-                kp.launchPath = "/bin/kill"
-                print("\(running.processIdentifier)")
-                kp.arguments = ["-9", "\(running.processIdentifier)"]
-                kp.launch()
-                kp.waitUntilExit()
-            }
-        }
-    }
-    
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
         let sema = DispatchSemaphore(value: 1)
@@ -197,13 +178,52 @@ class MapleController: ObservableObject {
         self.startMapleInjector()
     }
     
+    //MARK: Process Management
+    
+    /// Kills multiple processes
+    /// - Parameter bids: BIDs of desired processes to end
+    private func killProcesses(withBIDs bids: [String]) throws {
+        for running in NSWorkspace.shared.runningApplications {
+            if running.bundleIdentifier != nil && bids.contains(running.bundleIdentifier!) {
+                let kp = Process()
+                kp.launchPath = "/bin/kill"
+                print("\(running.processIdentifier)")
+                kp.arguments = ["-9", "\(running.processIdentifier)"]
+                kp.launch()
+                kp.waitUntilExit()
+            }
+        }
+    }
+    
+    /// Kills a given process if it's currently running
+    /// - Parameter bid: Bundle ID of a process you would like to kill
+    func killProcess(withBID bid: String) throws {
+        for running in NSWorkspace.shared.runningApplications {
+            if running.bundleIdentifier == bid {
+                let kp = Process()
+                kp.launchPath = "/bin/kill"
+                print("\(running.processIdentifier)")
+                kp.arguments = ["-9", "\(running.processIdentifier)"]
+                kp.launch()
+                kp.waitUntilExit()
+            }
+        }
+    }
+    
+    //MARK: Leaf Management
+    
     /// Creates a Leaf object from a file
     /// - Parameter file: URL of the file, wherever it is stored on disk
     /// - Returns: Optional Leaf object, if no errors are thrown
     func installFile(_ file: URL) throws -> Leaf? {
+        let internalLoc: URL = MapleController.installedDir.appendingPathComponent("tmpInstallable.zip")
+        let unzippedPackageURL: URL = MapleController.installedDir.appendingPathComponent("installing", isDirectory: true)
         
-        //Move it to internal storage
-        let internalLoc: URL = MapleController.installedDir.appendingPathComponent("tmpInstallLeaf2.zip")
+        defer {
+            // Clean up!
+            try? self.fManager.removeItem(at: internalLoc)
+            try? self.fManager.removeItem(at: unzippedPackageURL)
+        }
         
         do {
             try self.fManager.copyItem(at: file , to: internalLoc)
@@ -211,8 +231,6 @@ class MapleController: ObservableObject {
             throw InstallError.fileDidntExist
         }
         
-        //Decompress .mapleleaf file to a folder containing .sap and .dylib
-        let unzippedPackageURL: URL = MapleController.installedDir.appendingPathComponent("installing", isDirectory: true)
         do {
             try Zip.unzipFile(internalLoc, destination: unzippedPackageURL, overwrite: true, password: nil)
         } catch {
@@ -264,12 +282,6 @@ class MapleController: ObservableObject {
         }
         
         // TODO: Create a script which can read into the dylib to parse which methods are hooked!
-        
-        // Clean up!
-        try? self.fManager.removeItem(at: internalLoc)
-        try? self.fManager.removeItem(at: unzippedPackageURL)
-        
-        // Return the Leaf object which holds all this information
         return resultLeaf
     }
     
@@ -312,6 +324,8 @@ class MapleController: ObservableObject {
         }
         return []
     }
+    
+    //MARK: App Management
     
     /// Opens a seperate window which hosts the installer program
     /// - Used to install a new Leaf
