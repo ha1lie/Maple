@@ -61,15 +61,16 @@ class DevelopmentMonitor {
                 print("File path: \(MapleDevelopmentHelper.devFolderString + "/" + file)")
                 let fileAddition = MapleDevelopmentHelper.devFolderURL.appendingPathComponent(file)
                 if fileAddition.isFileURL && fileAddition.pathExtension == "zip" { //TODO: Make this actually a mapleleaf file
-                    var leaf: Leaf? = nil
                     do {
-                        leaf = try MapleController.shared.installFile(fileAddition)
+                        try MapleDevelopmentHelper.shared.installDevLeaf(fileAddition)
                     } catch {
-                        print("We failed to make a leaf")
+                        print("The file put there was not a leaf... deleting")
+                        try? FileManager.default.removeItem(at: fileAddition)
                         return
                     }
-                    guard let _ = leaf else { print("Failed to make a leaf object"); return }
-                    print("Successfully made a leaf from the file you added")
+                } else {
+                    print("File is either a directory or not a leaf")
+                    try? FileManager.default.removeItem(at: fileAddition)
                 }
             }
         }

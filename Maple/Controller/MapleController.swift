@@ -31,11 +31,11 @@ class MapleController: ObservableObject {
     private var injecting: Bool = false
     private var runningLeaves: [Leaf] {
         get {
-            return installedLeaves.filter({ $0.enabled && $0.isValid() })
+            return installedLeaves.filter({ $0.enabled })
         }
     }
     
-    @Published var installedLeaves: [Leaf] = []
+    var installedLeaves: [Leaf] = []
     @Published var canCurrentlyInject: Bool = false
     
     //MARK: General
@@ -101,9 +101,9 @@ class MapleController: ObservableObject {
         for leaf in self.runningLeaves {
             for i in 0..<leaf.targetBundleID!.count {
                 if let _ = listenFile[leaf.targetBundleID![i]] {
-                    listenFile[leaf.targetBundleID![i]]!.append("\(leaf.leafID!)/\(leaf.libraryName!)")
+                    listenFile[leaf.targetBundleID![i]]!.append("\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)")
                 } else {
-                    listenFile[leaf.targetBundleID![i]] = ["\(leaf.leafID!)/\(leaf.libraryName!)"]
+                    listenFile[leaf.targetBundleID![i]] = ["\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)"]
                 }
             }
             procs.append(contentsOf: leaf.targetBundleID!)
@@ -148,7 +148,7 @@ class MapleController: ObservableObject {
                     print("Errored while beginning injection: \(response!)")
                 }
             } catch {
-                print("Failed to begin injection: \(error.localizedDescription)")
+                print("Failed to begin injection: \(error)")
             }
             sema.signal()
         }
@@ -269,7 +269,7 @@ class MapleController: ObservableObject {
             do {
                 try self.fManager.copyItem(at: internalLoc, to: MapleController.installedDir.appendingPathComponent("/\(resultLeaf!.leafID ?? "").mapleleaf"))
             } catch {
-                print("Could not copy to installed directory")
+                throw InstallError.fileCopyError
             }
             
             do {
@@ -278,7 +278,10 @@ class MapleController: ObservableObject {
             } catch {
                 // Could not copy dylib to runnables directory
                 print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+                throw InstallError.fileCopyError
             }
+        } else {
+            throw InstallError.invalidSap
         }
         
         // TODO: Create a script which can read into the dylib to parse which methods are hooked!
@@ -289,20 +292,28 @@ class MapleController: ObservableObject {
     /// Saves the data to on device storage(permanent)
     /// Adds to an observable list
     /// - Parameter leaf: Leaf object to install
-    func installLeaf(_ leaf: Leaf) {
+    func installLeaf(_ leaf: Leaf) throws {
         if self.installedLeaves.contains(where: { leaf.leafID == $0.leafID }) {
-            print("You can't install two of the same tweaks")
-            return
+            if leaf.development {
+                // Stop injecting the old one, then start this one
+                //TODO: This
+            } else {
+                throw InstallError.alreadyInstalled
+            }
         }
         
         // Add this to the live list
-        self.installedLeaves.append(leaf)
+        DispatchQueue.main.sync {
+            self.installedLeaves.append(leaf)
+        }
+        
         self.updateLocallyStoredLeaves()
+        self.reloadInjection()
     }
     
     /// Save self.installedLeaves to UserDefaults
     func updateLocallyStoredLeaves() {
-        let encodedData = try? JSONEncoder().encode(self.installedLeaves)
+        let encodedData = try? JSONEncoder().encode(self.installedLeaves.filter({ !$0.development }))
         
         guard let _ = encodedData else { print("Could not encode self.installedLeaves"); return }
         

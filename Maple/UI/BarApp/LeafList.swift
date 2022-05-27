@@ -10,6 +10,7 @@ import SwiftUI
 /// A list displaying all installed leaves
 struct LeafList: View {
     @ObservedObject var mapleController: MapleController = .shared
+    @ObservedObject var developmentHelper: MapleDevelopmentHelper = .shared
     @Binding var selectedLeaf: Leaf?
     
     var body: some View {
@@ -44,6 +45,20 @@ struct LeafList: View {
                         }.buttonStyle(PlainButtonStyle())
                     }
                     
+                    if let devLeaf = self.developmentHelper.injectingDevelopmentLeaf {
+                        Button {
+                            print("STOP INJECTING DEV LEAF")
+                        } label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .frame(height: 40)
+                                    .foregroundColor(.red)
+                                Text("Stop Injecting \(devLeaf)")
+                                    .foregroundColor(.white)
+                            }
+                        }.buttonStyle(PlainButtonStyle())
+                    }
+                    
                     if self.mapleController.installedLeaves.count == 0 {
                         Text("You don't have any Leaves installed currently")
                     } else {
@@ -56,33 +71,35 @@ struct LeafList: View {
                         print("RUNNING START FOR YOU")
                         MapleController.shared.startInjectingEnabledLeaves()
                     }, title: "BEGIN INJECTION")
-                }
+                    
+                    Spacer()
+                    
+                    if self.mapleController.canCurrentlyInject {
+                        // Icon
+                        Text("Configured Properly")
+                            .foregroundColor(.gray)
+                    } else {
+                        Button {
+                            print("PLEASE SHOW A WINDOW TO BE ABLE TO CONFIGURE THINGS PROPERLY")
+                        } label: {
+                            HStack {
+                                Image(systemName: "exclamationmark.circle.fill")
+                                    .foregroundColor(.red)
+                                    .font(.system(size: 12))
+                                
+                                Text("Error with configuration")
+                                    .foregroundColor(.red)
+                                
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.red)
+                                    .font(.system(size: 12))
+                            }
+                        }.buttonStyle(PlainButtonStyle())
+                    }
+                }.padding()
                 
-                Spacer()
                 
-                if self.mapleController.canCurrentlyInject {
-                    // Icon
-                    Text("Configured Properly")
-                        .foregroundColor(.gray)
-                } else {
-                    Button {
-                        print("PLEASE SHOW A WINDOW TO BE ABLE TO CONFIGURE THINGS PROPERLY")
-                    } label: {
-                        HStack {
-                            Image(systemName: "exclamationmark.circle.fill")
-                                .foregroundColor(.red)
-                                .font(.system(size: 12))
-                            
-                            Text("Error with configuration")
-                                .foregroundColor(.red)
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.red)
-                                .font(.system(size: 12))
-                        }
-                    }.buttonStyle(PlainButtonStyle())
-                }
-            }.padding()
+            }
         }
     }
 }

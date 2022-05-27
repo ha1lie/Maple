@@ -20,7 +20,7 @@ struct InstallStartView: View {
             HStack(spacing: 8) {
                 MapleButton(action: {
                     guard let _ = self.leaf else { return }
-                    MapleController.shared.installLeaf(self.leaf!)
+                    try? MapleController.shared.installLeaf(self.leaf!)
                     self.complete = true
                 }, title: "INSTALL AND START")
                 MapleButton(action: {

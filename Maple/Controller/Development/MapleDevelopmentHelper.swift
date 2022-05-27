@@ -8,7 +8,7 @@
 import Foundation
 import Zip
 
-class MapleDevelopmentHelper {
+class MapleDevelopmentHelper: ObservableObject {
     static let shared: MapleDevelopmentHelper = MapleDevelopmentHelper()
     
     static let devFolderURL: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Development", isDirectory: true)
@@ -20,25 +20,30 @@ class MapleDevelopmentHelper {
     
     private var developmentMonitor: DevelopmentMonitor? = nil
     
+    @Published var injectingDevelopmentLeaf: String? = nil
+    
     public func configure() {
+        if let _ = self.developmentMonitor {
+            self.disconfigure()
+        }
+        
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devRunnablesFolderURL, withIntermediateDirectories: true)
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devInstalledFolderURL, withIntermediateDirectories: true)
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devPreferencesFolderURL, withIntermediateDirectories: true)
         
-        if let _ = self.developmentMonitor {
-            self.disconfigure()
-        }
         self.developmentMonitor = DevelopmentMonitor()
         self.developmentMonitor?.startMonitoring()
     }
     
     public func disconfigure() {
+        guard let _ = self.developmentMonitor else { return }
         self.developmentMonitor?.stop()
         self.developmentMonitor = nil
         
         try? FileManager.default.removeItem(at: MapleDevelopmentHelper.devRunnablesFolderURL)
         try? FileManager.default.removeItem(at: MapleDevelopmentHelper.devInstalledFolderURL)
         try? FileManager.default.removeItem(at: MapleDevelopmentHelper.devPreferencesFolderURL)
+        try? FileManager.default.removeItem(at: MapleDevelopmentHelper.devFolderURL)
     }
     
     public func installDevLeaf(_ file: URL) throws {
@@ -63,7 +68,6 @@ class MapleDevelopmentHelper {
             throw InstallError.compressionError
         }
         
-        
         let items: [String] = MapleFileHelper.shared.contentsOf(Directory: unzippedPackageURL)
         
         var containingFolder: String? = nil
@@ -86,30 +90,53 @@ class MapleDevelopmentHelper {
         let sapInfo: [String] = sapRes!.components(separatedBy: "\n")
         
         // Create a Leaf object
-        let resultLeaf: Leaf? = Leaf()
+        let resultLeaf: Leaf = Leaf()
         
         // Process the .sap file to get all information about it
         for line in sapInfo {
-            try resultLeaf?.add(field: line)
+            try resultLeaf.add(field: line)
         }
         
-        if resultLeaf?.isValid() ?? false {
+        if resultLeaf.isValid() {
             do {
-                try FileManager.default.copyItem(at: internalLoc, to: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("/\(resultLeaf!.leafID ?? "").mapleleaf"))
+                try FileManager.default.copyItem(at: internalLoc, to: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf"))
             } catch {
-                print("Could not copy to installed directory")
+                throw InstallError.fileCopyError
             }
             
             do {
-                try FileManager.default.createDirectory(at: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("/\(resultLeaf!.leafID!)"), withIntermediateDirectories: true)
-                try FileManager.default.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf!.libraryName!)"), to: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("/\(resultLeaf!.leafID!)/\(resultLeaf!.libraryName!)"))
+                try FileManager.default.createDirectory(at: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("/\(resultLeaf.leafID!)"), withIntermediateDirectories: true)
+                try FileManager.default.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("/\(resultLeaf.leafID!)/\(resultLeaf.libraryName!)"))
             } catch {
                 // Could not copy dylib to runnables directory
                 print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+                throw InstallError.fileCopyError
             }
+        } else {
+            throw InstallError.invalidSap
         }
         
         //Now we have resultLeaf
+        MapleNotificationController.shared.sendLocalNotification(withTitle: "Development Leaf Detected", body: "We will now start injecting \(resultLeaf.name ?? "") onto your machine")
         
+        DispatchQueue.main.async {
+            self.injectingDevelopmentLeaf = resultLeaf.name
+        }
+        //TODO: Make this actually begin injection
+        resultLeaf.development = true
+        resultLeaf.enabled = true
+        
+        do {
+            try MapleController.shared.installLeaf(resultLeaf)
+        } catch {
+            print("Failed to install the development leaf")
+        }
+    }
+    
+    public func stopInjectingDevLeaf() {
+        DispatchQueue.main.async {
+            self.injectingDevelopmentLeaf = nil
+        }
+        //TODO: Make this actually stop injecting it
     }
 }

@@ -20,6 +20,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
     @Published var libraryName: String? = nil
     @Published var targetBundleID: [String]? = nil
     @Published var leafID: String? = nil
+    @Published var development: Bool = false
     
     init() { }
     
@@ -98,6 +99,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         try container.encode(libraryName, forKey: .libraryName)
         try container.encode(targetBundleID, forKey: .targetBundleID)
         try container.encode(leafID, forKey: .leafID)
+        try container.encode(development, forKey: .development)
     }
     
     required init(from decoder: Decoder) throws {
@@ -113,6 +115,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         self.libraryName = try container.decode(String?.self, forKey: .libraryName)
         self.targetBundleID = try container.decode([String]?.self, forKey: .targetBundleID)
         self.leafID = try container.decode(String?.self, forKey: .leafID)
+        self.development = try container.decode(Bool.self, forKey: .development)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -127,5 +130,6 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         case libraryName = "library-name"
         case targetBundleID = "target-bid"
         case leafID = "leaf-id"
+        case development = "development"
     }
 }

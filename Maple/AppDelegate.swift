@@ -50,6 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let bl = self.sharedConstants.bundledLocation else { return }
         
         if self.helperMonitor.helperToolBundleVersion == nil || (try! HelperToolInfoPropertyList(from: bl).version) > self.helperMonitor.helperToolBundleVersion! {
+            print("Trying to update it")
             DispatchQueue.main.async {
                 let xpcService: XPCClient = XPCClient.forMachService(named: self.sharedConstants.machServiceName)
                 xpcService.sendMessage(bl, to: SharedConstants.updateRoute) { response in
@@ -63,6 +64,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             }
+        } else if !self.helperMonitor.registeredWithLaunchd {
+            print("Helper is not installed at appdidlaunch")
         }
         
         self.helperMonitor.determineStatus()

@@ -13,6 +13,8 @@ enum InstallError: Error, CustomStringConvertible {
     case invalidSap
     case invalidDirectories
     case unknown
+    case alreadyInstalled
+    case fileCopyError
     
     var description: String {
         switch self {
@@ -26,6 +28,10 @@ enum InstallError: Error, CustomStringConvertible {
             return "Invalid .sap file. Ensure all words and encoding"
         case .unknown:
             return "Unknown error. Contact developer"
+        case .alreadyInstalled:
+            return "This leaf is already installed. Please uninstall it first"
+        case .fileCopyError:
+            return "Could not copy an important file. Please ensure correct file names"
         }
     }
 }
