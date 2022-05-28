@@ -28,11 +28,19 @@ class MapleFileHelper {
     /// - Parameter loc: Location of file to read
     /// - Returns: String representation of the file contents
     public func readFile(atLocation loc: URL) -> String? {
+        print("Reading at: \(loc.absoluteString)")
         do {
             let result = String(data: try Data(contentsOf: loc), encoding: .utf8)
             return result
         } catch {
-            return ""
+            do {
+                print("Trying again with ascii")
+                let result = String(data: try Data(contentsOf: loc), encoding: .ascii)
+                return result
+            } catch {
+                print("Still couldnt")
+                return ""
+            }
         }
     }
     

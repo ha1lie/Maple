@@ -23,7 +23,7 @@ struct LeafSettingsSection: View {
                     .font(.title3)
                     .bold()
                 
-                Text(self.leaf.description ?? "Description")
+                Text(self.leaf.leafDescription ?? "Description")
             }.padding(.horizontal)
             
             Divider()

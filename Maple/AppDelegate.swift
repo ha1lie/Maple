@@ -77,6 +77,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
         MapleController.shared.stopInjectingEnabledLeaves()
+        if MaplePreferencesController.shared.developmentEnabled {
+            MapleDevelopmentHelper.shared.disconfigure()
+        }
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {

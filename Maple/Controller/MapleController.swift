@@ -262,7 +262,7 @@ class MapleController: ObservableObject {
         
         // Process the .sap file to get all information about it
         for line in sapInfo {
-            try resultLeaf?.add(field: line)
+            resultLeaf?.add(field: line)
         }
         
         if resultLeaf?.isValid() ?? false {
@@ -295,8 +295,8 @@ class MapleController: ObservableObject {
     func installLeaf(_ leaf: Leaf) throws {
         if self.installedLeaves.contains(where: { leaf.leafID == $0.leafID }) {
             if leaf.development {
-                // Stop injecting the old one, then start this one
-                //TODO: This
+                print("Trying to install a new iteration of a dev leaf")
+                MapleDevelopmentHelper.shared.uninstallDevLeaf(leaf)
             } else {
                 throw InstallError.alreadyInstalled
             }
@@ -309,6 +309,27 @@ class MapleController: ObservableObject {
         
         self.updateLocallyStoredLeaves()
         self.reloadInjection()
+    }
+    
+    func uninstallLeaf(_ leaf: Leaf) {
+        // Remove it from memory
+        DispatchQueue.main.sync {
+            self.installedLeaves.removeAll(where: { $0.leafID == leaf.leafID })
+        }
+        
+        try? self.killProcesses(withBIDs: leaf.targetBundleID!)
+        
+        if !leaf.development {
+            do {
+                // Remove the stored files
+                try FileManager.default.removeItem(at: MapleController.installedDir.appendingPathComponent("\(leaf.leafID!).mapleleaf"))
+                try FileManager.default.removeItem(at: MapleController.runnablesDir.appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
+            } catch {
+                print("Unable to delete files from installed leaves")
+            }
+            
+            self.updateLocallyStoredLeaves()
+        }
     }
     
     /// Save self.installedLeaves to UserDefaults

@@ -37,7 +37,7 @@ struct LeafCell: View {
                 VStack(alignment: .leading) {
                     Text(self.leaf.name ?? "LEAF NAME")
                         .bold()
-                    Text(self.leaf.description ?? "LEAF DESCRIPTION")
+                    Text(self.leaf.leafDescription ?? "LEAF DESCRIPTION")
                 }
                 
                 Spacer()

@@ -54,6 +54,7 @@ class MapleDevelopmentHelper: ObservableObject {
             // Clean up!
             try? FileManager.default.removeItem(at: internalLoc)
             try? FileManager.default.removeItem(at: unzippedPackageURL)
+            try? FileManager.default.removeItem(at: file)
         }
         
         do {
@@ -88,19 +89,40 @@ class MapleDevelopmentHelper: ObservableObject {
         guard let _ = sapRes else { throw InstallError.invalidSap }
         
         let sapInfo: [String] = sapRes!.components(separatedBy: "\n")
-        
+        print("Sap Res: \(sapRes!)")
+        print("Sap info: \(sapInfo)")
         // Create a Leaf object
         let resultLeaf: Leaf = Leaf()
         
         // Process the .sap file to get all information about it
         for line in sapInfo {
-            try resultLeaf.add(field: line)
+            resultLeaf.add(field: line)
         }
         
         if resultLeaf.isValid() {
+            
+            //Now we have resultLeaf
+            MapleNotificationController.shared.sendLocalNotification(withTitle: "Development Leaf Detected", body: "We will now start injecting \(resultLeaf.name ?? "") onto your machine")
+            
+            DispatchQueue.main.async {
+                self.injectingDevelopmentLeaf = resultLeaf.name
+            }
+            //TODO: Make this actually begin injection
+            resultLeaf.development = true
+            resultLeaf.enabled = true
+            
             do {
-                try FileManager.default.copyItem(at: internalLoc, to: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf"))
+                try MapleController.shared.installLeaf(resultLeaf)
             } catch {
+                print("Failed to install the development leaf")
+            }
+            
+            // Copy the files in
+            
+            do {
+                try FileManager.default.copyItem(at: internalLoc, to: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("\(resultLeaf.leafID ?? "").mapleleaf"))
+            } catch {
+                print("Couldn't remove the installed mapleleaf")
                 throw InstallError.fileCopyError
             }
             
@@ -113,30 +135,19 @@ class MapleDevelopmentHelper: ObservableObject {
                 throw InstallError.fileCopyError
             }
         } else {
+            print("This is the invalid leaf: \(resultLeaf)")
             throw InstallError.invalidSap
-        }
-        
-        //Now we have resultLeaf
-        MapleNotificationController.shared.sendLocalNotification(withTitle: "Development Leaf Detected", body: "We will now start injecting \(resultLeaf.name ?? "") onto your machine")
-        
-        DispatchQueue.main.async {
-            self.injectingDevelopmentLeaf = resultLeaf.name
-        }
-        //TODO: Make this actually begin injection
-        resultLeaf.development = true
-        resultLeaf.enabled = true
-        
-        do {
-            try MapleController.shared.installLeaf(resultLeaf)
-        } catch {
-            print("Failed to install the development leaf")
         }
     }
     
-    public func stopInjectingDevLeaf() {
-        DispatchQueue.main.async {
-            self.injectingDevelopmentLeaf = nil
+    public func uninstallDevLeaf(_ leaf: Leaf) {
+        MapleController.shared.stopInjectingEnabledLeaves()
+        MapleController.shared.uninstallLeaf(leaf)
+        do {
+            try FileManager.default.removeItem(at: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("\(leaf.leafID!).mapleleaf"))
+            try FileManager.default.removeItem(at: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
+        } catch {
+            print("Unable to delete files from installed dev leaf")
         }
-        //TODO: Make this actually stop injecting it
     }
 }

@@ -7,11 +7,15 @@
 
 import AppKit
 
-class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
+class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, CustomStringConvertible {
+    var description: String {
+        return "Leaf(enabled: \(self.enabled), name:\(self.name ?? ""), description: \(self.leafDescription ?? ""), author: \(self.author ?? ""), libraryName: \(self.libraryName ?? ""), targetBundleID: \(self.targetBundleID ?? [""]), leafID: \(self.leafID ?? ""), development: \(self.development))"
+    }
+    
     
     @Published var enabled: Bool = false
     @Published var name: String? = nil
-    @Published var description: String? = nil
+    @Published var leafDescription: String? = nil
     @Published var imageName: String? = nil
     @Published var author: String? = nil
     @Published var authorEmail: String? = nil
@@ -26,7 +30,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
     
     /// Add a value to the initialized leaf
     /// - Parameter field: Line from Sap file
-    public func add(field: String) throws {
+    public func add(field: String) {
         let split: [String] = field.components(separatedBy: ": ")
         if split.count < 2 {
             return
@@ -43,7 +47,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         case "tweak-website":
             self.tweakWebsite = split[1]
         case "description":
-            self.description = split[1]
+            self.leafDescription = split[1]
         case "image":
             self.imageName = split[1]
         case "lib-name":
@@ -72,9 +76,9 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
     /// Checks if a given Leaf is valid, eg. has enough information to run
     /// - Returns: true if valid
     public func isValid() -> Bool {
-        return name != nil && description != nil && author != nil &&
+        return name != nil && leafDescription != nil && author != nil &&
             libraryName != nil && targetBundleID != nil && leafID != nil &&
-            name != "" && description != "" && author != "" &&
+            name != "" && leafDescription != "" && author != "" &&
             targetBundleID != [] && leafID != ""  
     }
     
@@ -90,7 +94,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(enabled, forKey: .enabled)
         try container.encode(name, forKey: .name)
-        try container.encode(description, forKey: .description)
+        try container.encode(leafDescription, forKey: .description)
         try container.encode(imageName, forKey: .imageName)
         try container.encode(author, forKey: .author)
         try container.encode(authorEmail, forKey: .authorEmail)
@@ -106,7 +110,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
         self.name = try container.decode(String?.self, forKey: .name)
-        self.description = try container.decode(String?.self, forKey: .description)
+        self.leafDescription = try container.decode(String?.self, forKey: .description)
         self.imageName = try container.decode(String?.self, forKey: .imageName)
         self.author = try container.decode(String?.self, forKey: .author)
         self.authorEmail = try container.decode(String?.self, forKey: .authorEmail)

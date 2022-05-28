@@ -58,23 +58,24 @@ class DevelopmentMonitor {
         for file in newContents {
             if self.currentContents.firstIndex(of: file) == nil {
                 // Check if we can make a valid file object, and get the file ending from it!
-                print("File path: \(MapleDevelopmentHelper.devFolderString + "/" + file)")
                 let fileAddition = MapleDevelopmentHelper.devFolderURL.appendingPathComponent(file)
                 if fileAddition.isFileURL && fileAddition.pathExtension == "zip" { //TODO: Make this actually a mapleleaf file
                     do {
+                        print("Attempting to install a dev leaf")
                         try MapleDevelopmentHelper.shared.installDevLeaf(fileAddition)
                     } catch {
-                        print("The file put there was not a leaf... deleting")
+                        print("Failed to install a dev leaf \(error)")
                         try? FileManager.default.removeItem(at: fileAddition)
                         return
                     }
+                } else if file.first != nil && file.first! == "." {
+                    // Just a dot file
+                    return
                 } else {
-                    print("File is either a directory or not a leaf")
                     try? FileManager.default.removeItem(at: fileAddition)
                 }
             }
         }
         self.currentContents = newContents
     }
-    
 }

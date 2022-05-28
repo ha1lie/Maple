@@ -39,7 +39,7 @@ struct LeafSettingsCell: View {
                         .bold()
                         .lineLimit(1)
                     
-                    Text(self.leaf.description ?? "DESCRIPTION")
+                    Text(self.leaf.leafDescription ?? "DESCRIPTION")
                         .lineLimit(2)
                 }
                 
