@@ -35,7 +35,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         let contentView = HomeScreen()
-        
         self.popover.contentViewController = NSHostingController(rootView: contentView)
         self.popover.contentSize = NSSize(width: 360, height: 300)
         

@@ -303,10 +303,7 @@ class MapleController: ObservableObject {
         }
         
         // Add this to the live list
-        DispatchQueue.main.sync {
-            self.installedLeaves.append(leaf)
-        }
-        
+        self.installedLeaves.append(leaf)
         self.updateLocallyStoredLeaves()
         self.reloadInjection()
     }

@@ -23,7 +23,7 @@ class MapleNotificationController {
         nContent.title = t
         nContent.body = body
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: nContent, trigger: trigger)
         

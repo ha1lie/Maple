@@ -26,6 +26,14 @@
 		26303F98283C6D57000A0CEC /* LeafSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */; };
 		26303F9A283D0F71000A0CEC /* DevelopmentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */; };
 		26303F9C283D3B40000A0CEC /* MapleDialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F9B283D3B40000A0CEC /* MapleDialogue.swift */; };
+		267AE1FB2847B9460079CAC4 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FA2847B9460079CAC4 /* Preference.swift */; };
+		267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */; };
+		267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FF2847E8370079CAC4 /* PreferencesGroupView.swift */; };
+		267AE2022847E83E0079CAC4 /* PreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE2012847E83E0079CAC4 /* PreferenceView.swift */; };
+		267AE2042847E86B0079CAC4 /* StringPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE2032847E86B0079CAC4 /* StringPreferenceView.swift */; };
+		267AE2062847E8740079CAC4 /* BooleanPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE2052847E8740079CAC4 /* BooleanPreferenceView.swift */; };
+		267AE2082847E87C0079CAC4 /* ColorPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE2072847E87C0079CAC4 /* ColorPreferenceView.swift */; };
+		267AE20A2847E8870079CAC4 /* NumberPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE2092847E8870079CAC4 /* NumberPreferenceView.swift */; };
 		268047682807637900FD60D2 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 268047672807637900FD60D2 /* Zip */; };
 		268047852809CE5A00FD60D2 /* MapleNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268047842809CE5A00FD60D2 /* MapleNotificationController.swift */; };
 		268B0D3A281F70180049F090 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268B0D39281F70180049F090 /* SettingsView.swift */; };
@@ -49,6 +57,10 @@
 		26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BBE27FA8A7700BD4B2B /* Leaf.swift */; };
 		26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC027FA8A7700BD4B2B /* MapleController.swift */; };
 		26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C35BC327FB734900BD4B2B /* MapleButton.swift */; };
+		26C5DE12284E30C900FCF717 /* MapleColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5DE11284E30C900FCF717 /* MapleColorPicker.swift */; };
+		26C5DE14284E30D000FCF717 /* MapleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5DE13284E30D000FCF717 /* MapleTextField.swift */; };
+		26C5DE17284E35DD00FCF717 /* DefaultColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5DE16284E35DD00FCF717 /* DefaultColors.swift */; };
+		26C5DE19284E366400FCF717 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5DE18284E366400FCF717 /* ColorCell.swift */; };
 		26D3421C283E8CD20073C07B /* MapleDevelopmentHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D3421B283E8CD20073C07B /* MapleDevelopmentHelper.swift */; };
 		26D3421F283FD5BB0073C07B /* MaplePreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D3421E283FD5BB0073C07B /* MaplePreferencesController.swift */; };
 		26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */; };
@@ -110,6 +122,14 @@
 		26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentMonitor.swift; sourceTree = "<group>"; };
 		26303F9B283D3B40000A0CEC /* MapleDialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleDialogue.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		267AE1FA2847B9460079CAC4 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
+		267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		267AE1FF2847E8370079CAC4 /* PreferencesGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesGroupView.swift; sourceTree = "<group>"; };
+		267AE2012847E83E0079CAC4 /* PreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceView.swift; sourceTree = "<group>"; };
+		267AE2032847E86B0079CAC4 /* StringPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringPreferenceView.swift; sourceTree = "<group>"; };
+		267AE2052847E8740079CAC4 /* BooleanPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooleanPreferenceView.swift; sourceTree = "<group>"; };
+		267AE2072847E87C0079CAC4 /* ColorPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPreferenceView.swift; sourceTree = "<group>"; };
+		267AE2092847E8870079CAC4 /* NumberPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPreferenceView.swift; sourceTree = "<group>"; };
 		268047842809CE5A00FD60D2 /* MapleNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleNotificationController.swift; sourceTree = "<group>"; };
 		268B0D39281F70180049F090 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		268B0D3B281F71B90049F090 /* HelperSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperSettings.swift; sourceTree = "<group>"; };
@@ -133,6 +153,10 @@
 		26C35BBE27FA8A7700BD4B2B /* Leaf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leaf.swift; sourceTree = "<group>"; };
 		26C35BC027FA8A7700BD4B2B /* MapleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapleController.swift; sourceTree = "<group>"; };
 		26C35BC327FB734900BD4B2B /* MapleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleButton.swift; sourceTree = "<group>"; };
+		26C5DE11284E30C900FCF717 /* MapleColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleColorPicker.swift; sourceTree = "<group>"; };
+		26C5DE13284E30D000FCF717 /* MapleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleTextField.swift; sourceTree = "<group>"; };
+		26C5DE16284E35DD00FCF717 /* DefaultColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultColors.swift; sourceTree = "<group>"; };
+		26C5DE18284E366400FCF717 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		26D3421B283E8CD20073C07B /* MapleDevelopmentHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleDevelopmentHelper.swift; sourceTree = "<group>"; };
 		26D3421E283FD5BB0073C07B /* MaplePreferencesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaplePreferencesController.swift; sourceTree = "<group>"; };
 		26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleFileHelper.swift; sourceTree = "<group>"; };
@@ -188,6 +212,36 @@
 			path = "Leaf Settings";
 			sourceTree = "<group>";
 		};
+		267AE1FC2847C8B50079CAC4 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */,
+				267AE1FF2847E8370079CAC4 /* PreferencesGroupView.swift */,
+				267AE2012847E83E0079CAC4 /* PreferenceView.swift */,
+				267AE20C2847E9420079CAC4 /* Preference Cells */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		267AE20C2847E9420079CAC4 /* Preference Cells */ = {
+			isa = PBXGroup;
+			children = (
+				267AE2032847E86B0079CAC4 /* StringPreferenceView.swift */,
+				267AE2052847E8740079CAC4 /* BooleanPreferenceView.swift */,
+				267AE2072847E87C0079CAC4 /* ColorPreferenceView.swift */,
+				267AE2092847E8870079CAC4 /* NumberPreferenceView.swift */,
+			);
+			path = "Preference Cells";
+			sourceTree = "<group>";
+		};
+		267AE21028480D560079CAC4 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				26D3421E283FD5BB0073C07B /* MaplePreferencesController.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
 		268B0D38281F700E0049F090 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +249,7 @@
 				268B0D3B281F71B90049F090 /* HelperSettings.swift */,
 				26303F912835703B000A0CEC /* MapleSettings.swift */,
 				26303F8A283568DA000A0CEC /* Leaf Settings */,
+				267AE1FC2847C8B50079CAC4 /* Preferences */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -304,6 +359,7 @@
 				26C35BBE27FA8A7700BD4B2B /* Leaf.swift */,
 				26303F8828347619000A0CEC /* InstallError.swift */,
 				26303F8D28356B19000A0CEC /* FileError.swift */,
+				267AE1FA2847B9460079CAC4 /* Preference.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -314,8 +370,8 @@
 				26C35BC027FA8A7700BD4B2B /* MapleController.swift */,
 				268047842809CE5A00FD60D2 /* MapleNotificationController.swift */,
 				26EC67D4280BA87A000181B3 /* MapleFileHelper.swift */,
-				26D3421E283FD5BB0073C07B /* MaplePreferencesController.swift */,
 				26D3421D283E8CD90073C07B /* Development */,
+				267AE21028480D560079CAC4 /* Preferences */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -327,8 +383,20 @@
 				26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */,
 				26BC6CCD2809E8A0004617C2 /* Maple+View.swift */,
 				26303F9B283D3B40000A0CEC /* MapleDialogue.swift */,
+				26C5DE13284E30D000FCF717 /* MapleTextField.swift */,
+				26C5DE11284E30C900FCF717 /* MapleColorPicker.swift */,
+				26C5DE15284E35CC00FCF717 /* Color Picker Views */,
 			);
 			path = Essentials;
+			sourceTree = "<group>";
+		};
+		26C5DE15284E35CC00FCF717 /* Color Picker Views */ = {
+			isa = PBXGroup;
+			children = (
+				26C5DE18284E366400FCF717 /* ColorCell.swift */,
+				26C5DE16284E35DD00FCF717 /* DefaultColors.swift */,
+			);
+			path = "Color Picker Views";
 			sourceTree = "<group>";
 		};
 		26D3421D283E8CD90073C07B /* Development */ = {
@@ -576,7 +644,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26C5DE14284E30D000FCF717 /* MapleTextField.swift in Sources */,
 				2617AC292833239600E40CE8 /* HelperToolMonitor.swift in Sources */,
+				267AE2062847E8740079CAC4 /* BooleanPreferenceView.swift in Sources */,
 				26D3421C283E8CD20073C07B /* MapleDevelopmentHelper.swift in Sources */,
 				268B0D3A281F70180049F090 /* SettingsView.swift in Sources */,
 				26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */,
@@ -593,29 +663,39 @@
 				26C35BBA27FA8A2000BD4B2B /* HomeScreen.swift in Sources */,
 				26303F922835703B000A0CEC /* MapleSettings.swift in Sources */,
 				26C35BA927FA8A1F00BD4B2B /* InstallVerifyView.swift in Sources */,
+				267AE20A2847E8870079CAC4 /* NumberPreferenceView.swift in Sources */,
 				26C35BA827FA8A1F00BD4B2B /* InstallWelcomeView.swift in Sources */,
 				2617AC26282F3C0900E40CE8 /* InjectionError.swift in Sources */,
 				26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */,
 				26303F962839D534000A0CEC /* LeafSettingsCell.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
+				267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */,
+				267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
+				26C5DE12284E30C900FCF717 /* MapleColorPicker.swift in Sources */,
+				26C5DE17284E35DD00FCF717 /* DefaultColors.swift in Sources */,
 				26F686FE28232D660010D28A /* HelperToolLaunchdPropertyList.swift in Sources */,
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
 				26303F8E28356B19000A0CEC /* FileError.swift in Sources */,
 				26303F9C283D3B40000A0CEC /* MapleDialogue.swift in Sources */,
 				26303F902835701A000A0CEC /* LeafSettings.swift in Sources */,
+				267AE1FB2847B9460079CAC4 /* Preference.swift in Sources */,
 				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
+				267AE2022847E83E0079CAC4 /* PreferenceView.swift in Sources */,
 				26F6870128232D7D0010D28A /* CodeInfo.swift in Sources */,
 				26C35BBC27FA8A2000BD4B2B /* EventMonitor.swift in Sources */,
 				26C35B7E27FA89E800BD4B2B /* ViewController.swift in Sources */,
 				26C35BC127FA8A7700BD4B2B /* Leaf.swift in Sources */,
 				268B0D3C281F71B90049F090 /* HelperSettings.swift in Sources */,
+				267AE2042847E86B0079CAC4 /* StringPreferenceView.swift in Sources */,
 				2617AC23282F360E00E40CE8 /* TerminalResponse.swift in Sources */,
 				26BC6CCA2809E5A2004617C2 /* LeafList.swift in Sources */,
 				26C35BAA27FA8A1F00BD4B2B /* InstallSelectView.swift in Sources */,
 				26D3421F283FD5BB0073C07B /* MaplePreferencesController.swift in Sources */,
 				26C35B7C27FA89E800BD4B2B /* AppDelegate.swift in Sources */,
+				267AE2082847E87C0079CAC4 /* ColorPreferenceView.swift in Sources */,
 				26303F98283C6D57000A0CEC /* LeafSettingsSection.swift in Sources */,
+				26C5DE19284E366400FCF717 /* ColorCell.swift in Sources */,
 				26303F8C28356905000A0CEC /* LeafSettingsList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

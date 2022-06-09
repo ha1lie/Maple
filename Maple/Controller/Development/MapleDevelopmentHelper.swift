@@ -89,8 +89,6 @@ class MapleDevelopmentHelper: ObservableObject {
         guard let _ = sapRes else { throw InstallError.invalidSap }
         
         let sapInfo: [String] = sapRes!.components(separatedBy: "\n")
-        print("Sap Res: \(sapRes!)")
-        print("Sap info: \(sapInfo)")
         // Create a Leaf object
         let resultLeaf: Leaf = Leaf()
         

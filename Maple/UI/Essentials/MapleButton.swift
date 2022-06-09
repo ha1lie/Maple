@@ -23,6 +23,7 @@ struct MapleButton: View {
                     .foregroundColor(.blue)
                 Text(self.title.uppercased())
                     .padding(.horizontal)
+                    .foregroundColor(.white)
             }.frame(height: 40).fixedSize()
         }.buttonStyle(PlainButtonStyle())
     }

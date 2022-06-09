@@ -31,18 +31,9 @@ struct LeafList: View {
                                 .font(.system(size: 14))
                         }.buttonStyle(PlainButtonStyle())
 
-                        
-                        Button {
+                        MapleButton(action: {
                             self.mapleController.openWindowToInstallLeaf()
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width: 60, height: 30)
-                                    .foregroundColor(.gray)
-                                Text("NEW")
-                                    .bold()
-                            }
-                        }.buttonStyle(PlainButtonStyle())
+                        }, title: "New")
                     }
                     
                     if let devLeaf = self.developmentHelper.injectingDevelopmentLeaf {

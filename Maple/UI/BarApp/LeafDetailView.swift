@@ -18,7 +18,8 @@ struct LeafDetailView: View {
                     Button {
                         self.selectedLeaf = nil
                     } label: {
-                        Text("Go back!")
+                        // Image here
+                        Text("BACK")
                     }
                     
                     Spacer()

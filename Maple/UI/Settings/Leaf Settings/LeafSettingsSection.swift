@@ -37,19 +37,33 @@ struct LeafSettingsSection: View {
                     Toggle(isOn: self.$selectedEnabled) {}
                         .toggleStyle(SwitchToggleStyle())
                         .tint(.purple)
+                        .rotationEffect(Angle(degrees: 270))
                     Text("Enabled")
                         .bold()
                 }
             }.padding(.horizontal)
             
-            Divider()
-            
-            Group { // Specific
-                Text("\(self.leaf.name ?? "") Specific")
-                    .font(.title2)
-                    .bold()
-                //TODO: Make this section display stuff the developer shipped with the leaf
-            }.padding(.horizontal)
+            if self.leaf.hasPreferences {
+                Divider()
+                if let prefs = self.leaf.preferences {
+                    Group {
+                        Text("\(self.leaf.name ?? "") Specific")
+                            .font(.title2)
+                            .bold()
+                        PreferencesView(preferences: prefs)
+                    }.padding(.horizontal)
+                    
+                } else {
+                    Group { // Display an error message
+                        Text("Uh oh!")
+                            .font(.system(size: 30))
+                            .bold()
+                            .foregroundColor(.gray)
+                        Text("We've had a problem trying to get to your settings! I'm so sorry! Please try again, or quit the app to reload")
+                    }.padding(.horizontal)
+                    
+                }
+            }
         }.onAppear {
             self.selectedEnabled = self.leaf.enabled
         }

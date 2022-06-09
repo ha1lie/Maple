@@ -9,6 +9,7 @@ import SwiftUI
 import AppKit
 
 struct MapleSegmentPicker: View {
+    @Environment(\.colorScheme) var colorScheme
     let options: [String]
     
     @Binding var value: Int
@@ -24,8 +25,8 @@ struct MapleSegmentPicker: View {
         if !isInitialized { return AnyView(EmptyView()) }
         
         return AnyView(RoundedRectangle(cornerRadius: 12)
-            .foregroundColor(Color(.darkGray))
-            .shadow(color: .black.opacity(0.2), radius: 4)
+            .foregroundColor(self.colorScheme == .dark ? .black : .white)
+            .shadow(color: .primary.opacity(0.2), radius: 4)
             .frame(width: self.segmentSize.width, height: self.segmentSize.height)
             .offset(x: self.computeActiveSegmentOffset(), y: 0)
             .animation(.easeInOut(duration: 0.2), value: self.value))
@@ -40,7 +41,7 @@ struct MapleSegmentPicker: View {
                 }
             }
         }.padding(4)
-        .background(Color(.darkGray).opacity(0.2))
+            .background(.primary.opacity(0.2))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     
