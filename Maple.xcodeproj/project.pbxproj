@@ -26,6 +26,7 @@
 		26303F98283C6D57000A0CEC /* LeafSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */; };
 		26303F9A283D0F71000A0CEC /* DevelopmentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */; };
 		26303F9C283D3B40000A0CEC /* MapleDialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F9B283D3B40000A0CEC /* MapleDialogue.swift */; };
+		264FBD7E2852D77500141978 /* UnknownPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264FBD7D2852D77500141978 /* UnknownPreferenceView.swift */; };
 		267AE1FB2847B9460079CAC4 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FA2847B9460079CAC4 /* Preference.swift */; };
 		267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */; };
 		267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FF2847E8370079CAC4 /* PreferencesGroupView.swift */; };
@@ -121,6 +122,7 @@
 		26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeafSettingsSection.swift; sourceTree = "<group>"; };
 		26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentMonitor.swift; sourceTree = "<group>"; };
 		26303F9B283D3B40000A0CEC /* MapleDialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleDialogue.swift; sourceTree = "<group>"; };
+		264FBD7D2852D77500141978 /* UnknownPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownPreferenceView.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		267AE1FA2847B9460079CAC4 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				267AE2052847E8740079CAC4 /* BooleanPreferenceView.swift */,
 				267AE2072847E87C0079CAC4 /* ColorPreferenceView.swift */,
 				267AE2092847E8870079CAC4 /* NumberPreferenceView.swift */,
+				264FBD7D2852D77500141978 /* UnknownPreferenceView.swift */,
 			);
 			path = "Preference Cells";
 			sourceTree = "<group>";
@@ -571,6 +574,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		262B490F2829CD1E00DF1C03 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -605,6 +609,7 @@
 		};
 		26F68712282330C80010D28A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -668,6 +673,7 @@
 				2617AC26282F3C0900E40CE8 /* InjectionError.swift in Sources */,
 				26C35BC427FB734900BD4B2B /* MapleButton.swift in Sources */,
 				26303F962839D534000A0CEC /* LeafSettingsCell.swift in Sources */,
+				264FBD7E2852D77500141978 /* UnknownPreferenceView.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */,
 				267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */,

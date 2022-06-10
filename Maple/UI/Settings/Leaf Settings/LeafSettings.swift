@@ -25,6 +25,6 @@ struct LeafSettings: View {
                     }
                 }
             }
-        }
+        }.padding()
     }
 }

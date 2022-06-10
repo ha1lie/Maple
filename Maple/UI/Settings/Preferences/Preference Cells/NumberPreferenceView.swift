@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct NumberPreferenceView: View {
+    let preference: NumberPreference
+    
     var body: some View {
         VStack {
             Text("Number preference view")
-        }
+        }.padding(.bottom)
     }
 }

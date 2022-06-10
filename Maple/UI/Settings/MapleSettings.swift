@@ -17,38 +17,42 @@ struct MapleSettings: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             VStack(alignment: .leading) {
-                HStack(spacing: 4) {
-                    Toggle(isOn: self.$injectionPermission, label: {})
-                        .toggleStyle(SwitchToggleStyle())
-                        .tint(.purple)
-                    Text("Allowed to Inject")
-                        .bold()
-                }
-                Text("**DNW** If disabled, Maple will not be able to inject into running processes to enable Leaves")
-                    .font(.caption)
-                    .padding(.leading, 16)
                 
-                HStack(spacing: 4) {
-                    Toggle(isOn: self.$enableAtLogin, label: {})
-                        .toggleStyle(SwitchToggleStyle())
-                        .tint(.purple)
-                    Text("Launch At Login")
-                        .bold()
-                }
-                Text("**DNW** When enabled, Maple will launch at Login, and automatically start injecting after a reboot or login")
-                    .font(.caption)
-                    .padding(.leading, 16)
-                
-                HStack(spacing: 4) {
-                    Toggle(isOn: self.$preferencesController.developmentEnabled, label: {})
-                        .toggleStyle(SwitchToggleStyle())
-                        .tint(.green)
-                    Text("Development Mode Enabled")
-                        .bold()
-                }
-                Text("If enabled, this will allow you to work on developing your own Leaves to customize your device. You will need Xcode installed as well.")
-                
+                PreferencesView(preferences: Preferences.mapleAppPreferences)
                 Divider()
+                
+//                HStack(spacing: 4) {
+//                    Toggle(isOn: self.$injectionPermission, label: {})
+//                        .toggleStyle(SwitchToggleStyle())
+//                        .tint(.purple)
+//                    Text("Allowed to Inject")
+//                        .bold()
+//                }
+//                Text("**DNW** If disabled, Maple will not be able to inject into running processes to enable Leaves")
+//                    .font(.caption)
+//                    .padding(.leading, 16)
+//
+//                HStack(spacing: 4) {
+//                    Toggle(isOn: self.$enableAtLogin, label: {})
+//                        .toggleStyle(SwitchToggleStyle())
+//                        .tint(.purple)
+//                    Text("Launch At Login")
+//                        .bold()
+//                }
+//                Text("**DNW** When enabled, Maple will launch at Login, and automatically start injecting after a reboot or login")
+//                    .font(.caption)
+//                    .padding(.leading, 16)
+//
+//                HStack(spacing: 4) {
+//                    Toggle(isOn: self.$preferencesController.developmentEnabled, label: {})
+//                        .toggleStyle(SwitchToggleStyle())
+//                        .tint(.green)
+//                    Text("Development Mode Enabled")
+//                        .bold()
+//                }
+//                Text("If enabled, this will allow you to work on developing your own Leaves to customize your device. You will need Xcode installed as well.")
+//
+//                Divider()
                 
                 if self.preferencesController.developmentEnabled {
                     VStack(alignment: .center, spacing: 8) {
@@ -77,7 +81,7 @@ struct MapleSettings: View {
                     
                     Text("Copyright 2022 Hallie")
                 }
-            }
+            }.padding()
         }
     }
 }

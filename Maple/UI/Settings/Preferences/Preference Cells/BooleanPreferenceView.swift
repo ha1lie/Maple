@@ -8,27 +8,28 @@
 import SwiftUI
 
 struct BooleanPreferenceView: View {
-    let preference: Preference
+    let preference: BoolPreference
+    @State var enabled: Bool = false
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            if self.preference.valueType == .boolean {
-                HStack {
-                    Toggle(isOn: .constant(true), label: {})
-                        .toggleStyle(SwitchToggleStyle())
-                        .rotationEffect(Angle(degrees: 270))
-                    VStack(alignment: .leading) {
-                        Text(self.preference.name)
-                            .font(.system(size: 14, weight: .medium))
-                        if let description = self.preference.description {
-                            Text(description)
-                        }
-                    }
+        HStack {
+            VStack(alignment: .leading) {
+                Text(self.preference.name)
+                    .font(.system(size: 14, weight: .bold))
+                if let description = self.preference.description {
+                    Text(description)
                 }
-            } else {
-                Text("Error Parsing Preference")
-                    .foregroundColor(.red)
-                    .bold()
             }
+            
+            Spacer()
+            
+            Toggle(isOn: self.$enabled, label: {})
+                .toggleStyle(SwitchToggleStyle())
+        }.padding(.bottom)
+        .onAppear {
+            self.enabled = self.preference.value
+        }.onChange(of: self.enabled) { newValue in
+            self.preference.setValue(newValue)
         }
     }
 }

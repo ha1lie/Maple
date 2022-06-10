@@ -41,11 +41,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
     }
     
     static private func getPreferences(forLeafID id: String) -> Preferences? {
-        //TODO: Make sure we're getting the real thing
-        if id == "dev.halz.modernhud" {
-            return Preferences(generalPreferences: [Preference(preferenceKey: "showOnSide", name: "Show On Side", description: "If enabled, ModernHUD will display the volume HUD on the left side of the screen", valueType: .boolean, value: "false")], preferenceGroups: [PreferenceGroup(preferences: [Preference(preferenceKey: "backColor", name: "Background Color", description: "The color shown in unfilled areas on the HUD", valueType: .color, value: "nope"), Preference(preferenceKey: "foreColor", name: "Foreground Color", description: "The color shown in filled areas of the HUD", valueType: .color, value: "nope2"), Preference(preferenceKey: "iconColor", name: "Icon Color", description: "The color of the icon on the HUD", valueType: .color, value: "nope3")], name: "Colors", description: "Customize the colors of your volume hud"), PreferenceGroup(preferences: [Preference(preferenceKey: "accessString", name: "Accessibility String", description: "Display a string describing the changes made", valueType: .boolean, value: "hi"), Preference(preferenceKey: "funString", name: "Fun String", description: "A string to display on the HUD", valueType: .string, value: "imagine")], name: "Assorted", description: "Assorted preferences for ModernHUD")])
-        }
-        return nil
+        return Preferences.fromBID(id)
     }
     
     init() { }

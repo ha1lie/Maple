@@ -99,7 +99,7 @@ struct HelperSettings: View {
                     Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
                 }
                 #endif
-            }
+            }.padding()
         }.onAppear {
             self.helperMonitor.determineStatus()
         }

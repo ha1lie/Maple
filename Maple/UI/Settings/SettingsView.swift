@@ -18,6 +18,7 @@ struct SettingsView: View {
                 .bold()
             
             MapleSegmentPicker(withOptions: ["Maple App", "Helper Tool", "Leaves"], andValue: self.$section)
+                .padding(.horizontal)
             
             Group {
                 if self.section == 0 {
@@ -28,6 +29,6 @@ struct SettingsView: View {
                     LeafSettings()
                 }
             }
-        }.padding()
+        }.padding([.top])
     }
 }

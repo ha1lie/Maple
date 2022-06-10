@@ -8,28 +8,23 @@
 import SwiftUI
 
 struct ColorPreferenceView: View {
-    let preference: Preference
+    let preference: ColorPreference
     
     @State var selectedColor: Color = .blue
     
     var body: some View {
-        VStack {
-            if self.preference.valueType == .color {
-                HStack {
-                    MapleColorPicker(selectedColor: self.$selectedColor)
-                    VStack(alignment: .leading) {
-                        Text(self.preference.name)
-                            .font(.system(size: 14, weight: .medium))
-                        if let description = self.preference.description {
-                            Text(description)
-                        }
-                    }
+        HStack {
+            VStack(alignment: .leading) {
+                Text(self.preference.name)
+                    .font(.system(size: 14, weight: .bold))
+                if let description = self.preference.description {
+                    Text(description)
                 }
-            } else {
-                Text("Error Parsing Preference")
-                    .foregroundColor(.red)
-                    .bold()
             }
-        }
+            
+            Spacer()
+            
+            MapleColorPicker(selectedColor: self.$selectedColor)
+        }.padding(.bottom)
     }
 }

@@ -14,8 +14,8 @@ struct PreferencesView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let assorted = self.preferences.generalPreferences {
-                ForEach(assorted, id: \.self) { preference in
-                    PreferenceView(preference: preference)
+                ForEach(0..<assorted.count, id: \.self) { i in
+                    PreferenceView(preference: assorted[i])
                 }
             }
             

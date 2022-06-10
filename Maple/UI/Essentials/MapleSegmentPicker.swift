@@ -25,7 +25,7 @@ struct MapleSegmentPicker: View {
         if !isInitialized { return AnyView(EmptyView()) }
         
         return AnyView(RoundedRectangle(cornerRadius: 12)
-            .foregroundColor(self.colorScheme == .dark ? .black : .white)
+            .foregroundColor(self.colorScheme == .dark ? Color(nsColor: .darkGray) : .white)
             .shadow(color: .primary.opacity(0.2), radius: 4)
             .frame(width: self.segmentSize.width, height: self.segmentSize.height)
             .offset(x: self.computeActiveSegmentOffset(), y: 0)
@@ -41,7 +41,7 @@ struct MapleSegmentPicker: View {
                 }
             }
         }.padding(4)
-            .background(.primary.opacity(0.2))
+        .background(Color.primary.opacity(0.2))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     

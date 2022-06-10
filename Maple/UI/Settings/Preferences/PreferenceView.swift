@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct PreferenceView: View {
-    let preference: Preference
+    let preference: any Preference
     
     var body: some View {
         VStack {
-            switch self.preference.valueType {
-            case .string:
-                StringPreferenceView(preference: self.preference)
-            case .boolean:
-                BooleanPreferenceView(preference: self.preference)
-            case .color:
-                ColorPreferenceView(preference: self.preference)
-            case .number:
-                NumberPreferenceView()
+            if let pref = self.preference as? BoolPreference {
+                BooleanPreferenceView(preference: pref)
+            } else if let pref = self.preference as? StringPreference {
+                StringPreferenceView(preference: pref)
+            } else if let pref = self.preference as? ColorPreference {
+                ColorPreferenceView(preference: pref)
+            } else if let pref = self.preference as? NumberPreference {
+                NumberPreferenceView(preference: pref)
+            } else {
+                UnknownPreferenceView(preference: self.preference)
             }
         }
     }

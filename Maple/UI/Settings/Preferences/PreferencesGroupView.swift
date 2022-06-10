@@ -13,13 +13,19 @@ struct PreferencesGroupView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(self.group.name)
-                .font(.system(size: 16, weight: .medium))
+                .font(.title)
+                .bold()
+            if let _ = self.group.description {
+                Text(self.group.description!)
+                    .font(.headline)
+//                    .font(.system(size: 14))
+                
+            }
             
-            Text(self.group.description)
-                .font(.system(size: 14))
-            
-            ForEach(self.group.preferences, id: \.self) { preference in
-                PreferenceView(preference: preference)
+            if let _ = self.group.preferences {
+                ForEach(0..<self.group.preferences!.count, id: \.self) { i in
+                    PreferenceView(preference: self.group.preferences![i])
+                }
             }
         }
     }

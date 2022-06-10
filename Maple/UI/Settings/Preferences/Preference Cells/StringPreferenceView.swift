@@ -8,23 +8,21 @@
 import SwiftUI
 
 struct StringPreferenceView: View {
-    let preference: Preference
+    let preference: StringPreference
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            if self.preference.valueType == .string {
-                HStack {
-                    Text(self.preference.name)
-                        .bold()
-                    MapleTextField(title: self.preference.name, value: .constant(""))
-                }
+        HStack {
+            VStack(alignment: .leading) {
+                Text(self.preference.name)
+                    .font(.system(size: 14, weight: .bold))
+                
                 if let description = self.preference.description {
                     Text(description)
                 }
-            } else {
-                Text("Error Parsing Preference")
-                    .foregroundColor(.red)
-                    .bold()
             }
-        }
+            Spacer()
+            MapleTextField(title: self.preference.name, value: .constant(""))
+                .frame(maxWidth: 200)
+        }.padding(.bottom)
     }
 }
