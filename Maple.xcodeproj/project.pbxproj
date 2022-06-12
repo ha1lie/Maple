@@ -27,6 +27,8 @@
 		26303F9A283D0F71000A0CEC /* DevelopmentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */; };
 		26303F9C283D3B40000A0CEC /* MapleDialogue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26303F9B283D3B40000A0CEC /* MapleDialogue.swift */; };
 		264FBD7E2852D77500141978 /* UnknownPreferenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264FBD7D2852D77500141978 /* UnknownPreferenceView.swift */; };
+		264FBD802854005000141978 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264FBD7F2854005000141978 /* Preferences.swift */; };
+		264FBD822854005800141978 /* PreferenceGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264FBD812854005800141978 /* PreferenceGroup.swift */; };
 		267AE1FB2847B9460079CAC4 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FA2847B9460079CAC4 /* Preference.swift */; };
 		267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */; };
 		267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267AE1FF2847E8370079CAC4 /* PreferencesGroupView.swift */; };
@@ -123,6 +125,8 @@
 		26303F99283D0F71000A0CEC /* DevelopmentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentMonitor.swift; sourceTree = "<group>"; };
 		26303F9B283D3B40000A0CEC /* MapleDialogue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleDialogue.swift; sourceTree = "<group>"; };
 		264FBD7D2852D77500141978 /* UnknownPreferenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownPreferenceView.swift; sourceTree = "<group>"; };
+		264FBD7F2854005000141978 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		264FBD812854005800141978 /* PreferenceGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceGroup.swift; sourceTree = "<group>"; };
 		266AF4A22803ABDF0090447B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		267AE1FA2847B9460079CAC4 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		267AE1FD2847C8C00079CAC4 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -212,6 +216,16 @@
 				26303F97283C6D57000A0CEC /* LeafSettingsSection.swift */,
 			);
 			path = "Leaf Settings";
+			sourceTree = "<group>";
+		};
+		264FBD832854005D00141978 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				267AE1FA2847B9460079CAC4 /* Preference.swift */,
+				264FBD7F2854005000141978 /* Preferences.swift */,
+				264FBD812854005800141978 /* PreferenceGroup.swift */,
+			);
+			path = Preferences;
 			sourceTree = "<group>";
 		};
 		267AE1FC2847C8B50079CAC4 /* Preferences */ = {
@@ -362,7 +376,7 @@
 				26C35BBE27FA8A7700BD4B2B /* Leaf.swift */,
 				26303F8828347619000A0CEC /* InstallError.swift */,
 				26303F8D28356B19000A0CEC /* FileError.swift */,
-				267AE1FA2847B9460079CAC4 /* Preference.swift */,
+				264FBD832854005D00141978 /* Preferences */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -592,6 +606,7 @@
 		};
 		262B49102829CD3700DF1C03 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -627,6 +642,7 @@
 		};
 		26F687152823314D0010D28A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -656,6 +672,7 @@
 				268B0D3A281F70180049F090 /* SettingsView.swift in Sources */,
 				26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */,
 				26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */,
+				264FBD802854005000141978 /* Preferences.swift in Sources */,
 				26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */,
 				26303F94283570B3000A0CEC /* MapleSegmentPicker.swift in Sources */,
 				26F686FB28232D3C0010D28A /* HelperToolInfoPropertyList.swift in Sources */,
@@ -676,6 +693,7 @@
 				264FBD7E2852D77500141978 /* UnknownPreferenceView.swift in Sources */,
 				26C35BC227FA8A7700BD4B2B /* MapleController.swift in Sources */,
 				267AE1FE2847C8C00079CAC4 /* PreferencesView.swift in Sources */,
+				264FBD822854005800141978 /* PreferenceGroup.swift in Sources */,
 				267AE2002847E8370079CAC4 /* PreferencesGroupView.swift in Sources */,
 				26C35BBB27FA8A2000BD4B2B /* StatusBarController.swift in Sources */,
 				26C5DE12284E30C900FCF717 /* MapleColorPicker.swift in Sources */,
