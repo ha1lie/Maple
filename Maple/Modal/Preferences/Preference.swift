@@ -26,13 +26,11 @@ struct ColorPreference: Preference {
     }
     
     func setValue(_ val: Color) {
-        print("SETTING COLOR TO UD")
         UserDefaults(suiteName: containerName)?.removeObject(forKey: id)
         UserDefaults(suiteName: containerName)?.setColor(val, forKey: id)
     }
 
     func getValue() -> Color? {
-        print("GETTING COLOR FROM UD")
         return UserDefaults(suiteName: containerName)?.color(forKey: id)
     }
 }
@@ -88,7 +86,6 @@ struct BoolPreference: Preference {
         self.containerName = container
         self.value = value
         ValueOfPreference(self, assignTo: &self.value)
-        print("Id: \(self.id) with value \(self.value)")
     }
 }
 
@@ -128,76 +125,38 @@ func ValueOfPreference<T>(_ pref: any Preference, assignTo val: inout T) {
     if T.self == Color.self {
         if let newValue = UserDefaults(suiteName: pref.containerName)?.color(forKey: pref.id) {
             val = newValue as! T
-            print("SUCCESSFULLY GOT COLOR FROM USERDEFAULTS")
         }
     } else {
         if let newValue = UserDefaults(suiteName: pref.containerName)?.value(forKey: pref.id) as? T {
             val = newValue
-            print("Successfully got an existing value for \(pref.id) is \(newValue)")
         }
     }
 }
 
 extension Color {
-
-    /// Explicitly extracted Core Graphics color
-    /// for the purpose of reconstruction and persistance.
+    /// CGColor created coercively without SwiftUI slipping up
     var cgColor_: CGColor {
         NSColor(self).cgColor
     }
 }
 
 extension UserDefaults {
+    /// Save value of a Color to UserDefaults
+    /// - Parameters:
+    ///   - color: Color to save
+    ///   - key: Key to save Color value to
     func setColor(_ color: Color, forKey key: String) {
         let cgColor = color.cgColor_
         let array = cgColor.components ?? []
         set(array, forKey: key)
     }
-
-    func color(forKey key: String) -> Color {
-        guard let array = object(forKey: key) as? [CGFloat] else { return .accentColor }
+    
+    /// Get Color value in UserDefaults
+    /// - Parameter key: Key color value is stored at
+    /// - Returns: Color, if previously stored
+    func color(forKey key: String) -> Color? {
+        guard let array = object(forKey: key) as? [CGFloat] else { return nil }
         let color = CGColor(colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!, components: array)!
         return Color(color)
     }
 }
-
-//extension Color {
-//
-//    var components: [CGFloat] {
-//        get {
-//
-//            if let comps = self.cgColor?.components {
-//                return comps
-//            } else {
-//                print("COULDNT GET THE EASY COMPONENTS")
-//            }
-//
-//            var red: CGFloat = 0.0
-//            var green: CGFloat = 0.0
-//            var blue: CGFloat = 0.0
-//            var alpha: CGFloat = 0.0
-//
-//            NSColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-//
-//            return [red, green, blue, alpha]
-//        }
-//    }
-//
-//    public func toString() -> String {
-//        return "\(self.components[0])|\(self.components[1])|\(self.components[2])|\(self.components[3])"
-//    }
-//
-//    init(from val: String) {
-//        let parts = val.components(separatedBy: "|")
-//        if parts.count == 4 {
-//            print("Making color from parts: \(parts)")
-//            let red: Double = Double(parts[0]) ?? 1.0
-//            let green: Double = Double(parts[1]) ?? 1.0
-//            let blue: Double = Double(parts[2]) ?? 1.0
-//            let alpha: Double = Double(parts[3]) ?? 1.0
-//            self.init(red: red, green: green, blue: blue, opacity: alpha)
-//        } else {
-//            self.init(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)
-//        }
-//    }
-//}

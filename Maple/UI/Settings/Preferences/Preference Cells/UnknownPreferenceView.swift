@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MaplePreferences
 
 struct UnknownPreferenceView: View {
     let preference: any Preference

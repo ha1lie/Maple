@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import MaplePreferences
 
 class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, CustomStringConvertible {
     var description: String {
@@ -25,7 +26,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
     @Published var targetBundleID: [String]? = nil
     @Published var leafID: String? = nil
     @Published var development: Bool = false
-    var hasPreferences: Bool {
+    var hasPreferences: Bool { //TODO: Get rid of this lol
         get {
             return self.leafID == "dev.halz.modernhud"
         }

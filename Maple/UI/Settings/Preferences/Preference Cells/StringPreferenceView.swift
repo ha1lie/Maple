@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MaplePreferences
 
 struct StringPreferenceView: View {
     let preference: StringPreference

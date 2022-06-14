@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MaplePreferences
 
 struct PreferencesGroupView: View {
     let group: PreferenceGroup
