@@ -9,19 +9,20 @@ import SwiftUI
 import MaplePreferences
 
 struct PreferenceView: View {
-    let preference: any Preference
+    let preference: Preference
     
     var body: some View {
         VStack {
-            if let pref = self.preference as? BoolPreference {
-                BooleanPreferenceView(preference: pref)
-            } else if let pref = self.preference as? StringPreference {
-                StringPreferenceView(preference: pref)
-            } else if let pref = self.preference as? ColorPreference {
-                ColorPreferenceView(preference: pref)
-            } else if let pref = self.preference as? NumberPreference {
-                NumberPreferenceView(preference: pref)
-            } else {
+            switch self.preference.preferenceType {
+            case .string:
+                StringPreferenceView(preference: self.preference)
+            case .bool:
+                BooleanPreferenceView(preference: self.preference)
+            case .number:
+                NumberPreferenceView(preference: self.preference)
+            case .color:
+                ColorPreferenceView(preference: self.preference)
+            case .unknown:
                 UnknownPreferenceView(preference: self.preference)
             }
         }

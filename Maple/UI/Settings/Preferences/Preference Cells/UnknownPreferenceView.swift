@@ -8,8 +8,8 @@
 import SwiftUI
 import MaplePreferences
 
-struct UnknownPreferenceView: View {
-    let preference: any Preference
+struct UnknownPreferenceView<P: Preference>: View {
+    let preference: P
     
     var body: some View {
         HStack {

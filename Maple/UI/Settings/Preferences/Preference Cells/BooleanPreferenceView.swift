@@ -9,7 +9,7 @@ import SwiftUI
 import MaplePreferences
 
 struct BooleanPreferenceView: View {
-    let preference: BoolPreference
+    let preference: Preference
     @State var enabled: Bool = false
     
     var body: some View {
@@ -28,7 +28,16 @@ struct BooleanPreferenceView: View {
                 .toggleStyle(SwitchToggleStyle())
         }.padding(.bottom)
         .onAppear {
-            self.enabled = self.preference.value
+            if let result: PreferenceValue = self.preference.getValue() {
+                switch result {
+                case .bool(let value):
+                    if let value = value {
+                        self.enabled = value
+                    }
+                default:
+                    return
+                }
+            }
         }.onChange(of: self.enabled) { newValue in
             self.preference.setValue(newValue)
         }

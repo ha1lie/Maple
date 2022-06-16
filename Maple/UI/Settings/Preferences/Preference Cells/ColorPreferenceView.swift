@@ -9,14 +9,9 @@ import SwiftUI
 import MaplePreferences
 
 struct ColorPreferenceView: View {
-    let preference: ColorPreference
+    let preference: Preference
     
-    @State var selectedColor: Color
-    
-    init(preference: ColorPreference) {
-        self.preference = preference
-        self.selectedColor = preference.value
-    }
+    @State var selectedColor: Color = .blue
     
     var body: some View {
         HStack {
@@ -32,9 +27,18 @@ struct ColorPreferenceView: View {
             
             MapleColorPicker(selectedColor: self.$selectedColor)
         }.padding(.bottom)
-//        .onAppear {
-//            self.selectedColor = self.preference.value
-        .onChange(of: self.selectedColor) { newValue in
+        .onAppear {
+            if let result = self.preference.getValue() {
+                switch result {
+                case .color(let colorValue):
+                    if let colorValue = colorValue {
+                        self.selectedColor = colorValue
+                    }
+                default:
+                    return
+                }
+            }
+        }.onChange(of: self.selectedColor) { newValue in
             self.preference.setValue(newValue)
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 import MaplePreferences
 
 struct NumberPreferenceView: View {
-    let preference: NumberPreference
+    let preference: Preference
     
     var body: some View {
         VStack {

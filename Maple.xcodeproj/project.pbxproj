@@ -11,6 +11,9 @@
 		261265792858E75600C138DF /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 261265782858E75600C138DF /* SecureXPC */; };
 		2612657C2858E76600C138DF /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 2612657B2858E76600C138DF /* EmbeddedPropertyList */; };
 		2612657F2858E77500C138DF /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 2612657E2858E77500C138DF /* Zip */; };
+		261265812858ED3400C138DF /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 261265802858ED3400C138DF /* SecureXPC */; };
+		261265832858ED3E00C138DF /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 261265822858ED3E00C138DF /* EmbeddedPropertyList */; };
+		261265852858ED4200C138DF /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 261265842858ED4200C138DF /* Blessed */; };
 		261713E22858B54600105916 /* MaplePreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 261713E12858B54600105916 /* MaplePreferences */; };
 		2617AC21282DB39B00E40CE8 /* MapleInjectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */; };
 		2617AC23282F360E00E40CE8 /* TerminalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC22282F360E00E40CE8 /* TerminalResponse.swift */; };
@@ -194,6 +197,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261265852858ED4200C138DF /* Blessed in Frameworks */,
+				261265812858ED3400C138DF /* SecureXPC in Frameworks */,
+				261265832858ED3E00C138DF /* EmbeddedPropertyList in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +511,9 @@
 			);
 			name = helper;
 			packageProductDependencies = (
+				261265802858ED3400C138DF /* SecureXPC */,
+				261265822858ED3E00C138DF /* EmbeddedPropertyList */,
+				261265842858ED4200C138DF /* Blessed */,
 			);
 			productName = helper;
 			productReference = 26F686EF28232CCC0010D28A /* dev.halz.Maple.helper */;
@@ -1022,6 +1031,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2612657D2858E77500C138DF /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
+		};
+		261265802858ED3400C138DF /* SecureXPC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 261265772858E75600C138DF /* XCRemoteSwiftPackageReference "SecureXPC" */;
+			productName = SecureXPC;
+		};
+		261265822858ED3E00C138DF /* EmbeddedPropertyList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2612657A2858E76600C138DF /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */;
+			productName = EmbeddedPropertyList;
+		};
+		261265842858ED4200C138DF /* Blessed */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 261265742858E74400C138DF /* XCRemoteSwiftPackageReference "Blessed" */;
+			productName = Blessed;
 		};
 		261713E12858B54600105916 /* MaplePreferences */ = {
 			isa = XCSwiftPackageProductDependency;

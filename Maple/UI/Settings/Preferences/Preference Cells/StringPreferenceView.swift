@@ -9,7 +9,7 @@ import SwiftUI
 import MaplePreferences
 
 struct StringPreferenceView: View {
-    let preference: StringPreference
+    let preference: Preference
     @State var value: String = ""
     var body: some View {
         HStack {
@@ -26,7 +26,16 @@ struct StringPreferenceView: View {
                 .frame(maxWidth: 200)
         }.padding(.bottom)
         .onAppear {
-            self.value = self.preference.value
+            if let result: PreferenceValue = self.preference.getValue() {
+                switch result {
+                case .string(let stringValue):
+                    if let stringValue = stringValue {
+                        self.value = stringValue
+                    }
+                default:
+                    return
+                }
+            }
         }.onChange(of: self.value) { newValue in
             self.preference.setValue(newValue)
         }

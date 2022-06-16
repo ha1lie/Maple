@@ -14,21 +14,21 @@ extension Preferences {
             .withGroup { containerName in
                 PreferenceGroup(withName: "General", description: "General pickings and choosings", andIdentifier: "dev.halz.Maple.prefs.general", forContainer: containerName)
                     .withPreference { groupContainer in
-                        BoolPreference(withTitle: "Enable At Login", description: "Allow Maple to launch at login and enable your leaves without doing anything", defaultValue: false, andIdentifier: "dev.halz.Maple.prefs.general.loginEnabled", forContainer: groupContainer)
+                        Preference(withTitle: "Enable at Login", description: "Allow Maple to launch at login and enable your leaves without doing anything", withType: .bool, andIdentifier: "dev.halz.Maple.prefs.general.loginEnabled", forContainer: groupContainer)
                     }.withPreference { groupContainer in
-                        BoolPreference(withTitle: "Enable Injection", defaultValue: true, andIdentifier: "dev.halz.Maple.prefs.general.enabledInjection", forContainer: groupContainer)
+                        Preference(withTitle: "Enable Injection", withType: .bool, andIdentifier: "dev.halz.Maple.prefs.general.enabledInjection", forContainer: groupContainer)
                     }.withPreference { groupContainer in
-                        ColorPreference(withTitle: "Themed Color", defaultValue: .red, andIdentifier: "dev.halz.Maple.prefs.general.themeColor", forContainer: groupContainer)
+                        Preference(withTitle: "Themed Color", withType: .color, andIdentifier: "dev.halz.Maple.prefs.general.themeColor", forContainer: groupContainer)
                     }
             }.withGroup { containerName in
                 PreferenceGroup(withName: "Development", andIdentifier: "dev.halz.Maple.prefs.development", forContainer: containerName)
                     .withPreference { groupContainer in
-                        BoolPreference(withTitle: "Development Mode", description: "When enabled, developoment mode is active, allowing for detailed logs, faster rebuilds, and a better more secure development experience", defaultValue: false, andIdentifier: "dev.halz.Maple.prefs.general.enableDevelopment", forContainer: groupContainer)
+                        Preference(withTitle: "Development Mode", description: "When enabled, development mode is active, allowing for detailed logs, faster rebuilds, and a better more secure development experience", withType: .bool, andIdentifier: "dev.halz.Maple.prefs.general.enableDevelopment", forContainer: groupContainer)
                     }
-            }
+            } as! Self
     }
     
-    public static func fromBID(_ bid: String) -> Preferences? {
+    public static func fromBID(_ bid: String) -> Self? {
         return nil
     }
 }

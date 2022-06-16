@@ -9,6 +9,7 @@ import Foundation
 import Zip
 import SwiftUI
 import SecureXPC
+import MaplePreferences
 
 /// Controls all Leafs, and their running status
 class MapleController: ObservableObject {
