@@ -34,15 +34,15 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
     var preferences: Preferences? {
         get {
             if self.hasPreferences && self.leafID != nil {
-                return Leaf.getPreferences(forLeafID: self.leafID!)
+                return Leaf.getPreferences(forLeaf: self)
             } else {
                 return nil
             }
         }
     }
     
-    static private func getPreferences(forLeafID id: String) -> Preferences? {
-        return Preferences.fromBID(id)
+    static private func getPreferences(forLeaf leaf: Leaf) -> Preferences? {
+        return Preferences.fromLeaf(leaf)
     }
     
     init() { }

@@ -27,7 +27,6 @@ class DevelopmentMonitor {
         })
         
         self.devFolderMonitorSource?.setCancelHandler(handler: {
-            print("DevelopmentMonitor cancelling it's handler")
             close(self.devFolderFileDescriptor)
             self.devFolderFileDescriptor = -1
             self.devFolderMonitorSource = nil

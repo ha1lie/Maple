@@ -13,7 +13,7 @@ struct MapleSettings: View {
     @State var injectionPermission: Bool = true
     @State var enableAtLogin: Bool = false
     
-    @ObservedObject var preferencesController: MaplePreferencesController = .shared
+    @ObservedObject var prefsController: MaplePreferencesController = .shared
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
@@ -22,7 +22,7 @@ struct MapleSettings: View {
                 PreferencesView(preferences: Preferences.mapleAppPreferences)
                 Divider()
                 
-                if self.preferencesController.developmentEnabled {
+                if self.prefsController.developmentEnabled { //MARK: Transfer this to be built by the preferences library
                     VStack(alignment: .center, spacing: 8) {
                         Text("Development")
                             .font(.title2)

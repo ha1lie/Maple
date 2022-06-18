@@ -10,7 +10,7 @@ import MaplePreferences
 
 struct ColorPreferenceView: View {
     let preference: Preference
-    
+    @State var ignore: Bool = true
     @State var selectedColor: Color = .blue
     
     var body: some View {
@@ -28,18 +28,20 @@ struct ColorPreferenceView: View {
             MapleColorPicker(selectedColor: self.$selectedColor)
         }.padding(.bottom)
         .onAppear {
-            if let result = self.preference.getValue() {
-                switch result {
-                case .color(let colorValue):
-                    if let colorValue = colorValue {
-                        self.selectedColor = colorValue
-                    }
-                default:
-                    return
+            switch self.preference.getValue() {
+            case .color(let colorValue):
+                if let colorValue = colorValue {
+                    self.selectedColor = colorValue
                 }
+            default:
+                self.ignore = false
+                return
             }
+            self.ignore = false
         }.onChange(of: self.selectedColor) { newValue in
-            self.preference.setValue(newValue)
+            if !self.ignore {
+                self.preference.setValue(newValue)
+            }
         }
     }
 }

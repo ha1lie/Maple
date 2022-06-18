@@ -9,24 +9,26 @@ import SwiftUI
 import MaplePreferences
 
 struct PreferencesGroupView: View {
-    let group: PreferenceGroup
+    @ObservedObject var group: PreferenceGroup
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(self.group.name)
-                .font(.title)
-                .bold()
-            if let _ = self.group.description {
-                Text(self.group.description!)
-                    .font(.headline)
-//                    .font(.system(size: 14))
-                
-            }
-            
-            if let _ = self.group.preferences {
-                ForEach(0..<self.group.preferences!.count, id: \.self) { i in
-                    PreferenceView(preference: self.group.preferences![i])
+            if self.group.canShow {
+                Text(self.group.name)
+                    .font(.title)
+                    .bold()
+                if let _ = self.group.description {
+                    Text(self.group.description!)
+                        .font(.headline)
                 }
+                
+                if let _ = self.group.preferences {
+                    ForEach(0..<self.group.preferences!.count, id: \.self) { i in
+                        PreferenceView(preference: self.group.preferences![i])
+                    }
+                }
+            } else {
+                EmptyView()
             }
         }
     }

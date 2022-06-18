@@ -10,6 +10,7 @@ import MaplePreferences
 
 struct BooleanPreferenceView: View {
     let preference: Preference
+    @State var ignore: Bool = true
     @State var enabled: Bool = false
     
     var body: some View {
@@ -28,18 +29,20 @@ struct BooleanPreferenceView: View {
                 .toggleStyle(SwitchToggleStyle())
         }.padding(.bottom)
         .onAppear {
-            if let result: PreferenceValue = self.preference.getValue() {
-                switch result {
-                case .bool(let value):
-                    if let value = value {
-                        self.enabled = value
-                    }
-                default:
-                    return
+            switch self.preference.getValue() {
+            case .bool(let value):
+                if let value = value {
+                    self.enabled = value
                 }
+            default:
+                self.ignore = false
+                return
             }
+            self.ignore = false
         }.onChange(of: self.enabled) { newValue in
-            self.preference.setValue(newValue)
+            if !self.ignore {
+                self.preference.setValue(newValue)
+            }
         }
     }
 }

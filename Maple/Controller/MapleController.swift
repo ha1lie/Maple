@@ -17,9 +17,9 @@ class MapleController: ObservableObject {
     static let shared: MapleController = MapleController()
     
     private static let installedLeavesKey: String = "installedLeaves"
-    private static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
-    private static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
-    private static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
+    static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
+    static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
+    static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
     
     private let xpcService: XPCClient
     private let sharedConstants: SharedConstants
@@ -139,26 +139,29 @@ class MapleController: ObservableObject {
     
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
-        let sema = DispatchSemaphore(value: 1)
-        Task {
-            do {
-                let response = try await self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection)
-                if response == nil {
-                    print("Successfully began injection")
-                } else {
-                    print("Errored while beginning injection: \(response!)")
+        if MaplePreferencesController.shared.injectionEnabled {
+            let sema = DispatchSemaphore(value: 1)
+            Task {
+                do {
+                    let response = try await self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection)
+                    if response == nil {
+                        print("Successfully began injection")
+                    } else {
+                        print("Errored while beginning injection: \(response!)")
+                    }
+                } catch {
+                    print("Failed to begin injection: \(error)")
                 }
-            } catch {
-                print("Failed to begin injection: \(error)")
+                sema.signal()
             }
-            sema.signal()
+            sema.wait()
+            self.injecting = true
         }
-        sema.wait()
-        self.injecting = true
     }
     
     /// Stops Maple-LibInjector from injecting
     private func stopMapleInjector() {
+        guard self.injecting == true else { return }
         let sema = DispatchSemaphore(value: 0)
         Task {
             do {
@@ -174,7 +177,7 @@ class MapleController: ObservableObject {
     }
     
     /// Reloads Maple-LibInjector after changing a listen file
-    private func reloadMapleInjector() {
+    public func reloadMapleInjector() {
         self.stopMapleInjector()
         self.startMapleInjector()
     }
@@ -216,14 +219,22 @@ class MapleController: ObservableObject {
     /// Creates a Leaf object from a file
     /// - Parameter file: URL of the file, wherever it is stored on disk
     /// - Returns: Optional Leaf object, if no errors are thrown
-    func installFile(_ file: URL) throws -> Leaf? {
-        let internalLoc: URL = MapleController.installedDir.appendingPathComponent("tmpInstallable.zip")
-        let unzippedPackageURL: URL = MapleController.installedDir.appendingPathComponent("installing", isDirectory: true)
+    func installFile(_ file: URL, fromDevelopment dev: Bool = false) throws -> Leaf? {
+        let internalLoc: URL = dev ?
+            MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("tmpInstallable.zip") :
+            MapleController.installedDir.appendingPathComponent("tmpInstallable.zip")
+        
+        let unzippedPackageURL: URL = dev ?
+            MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("installing") :
+            MapleController.installedDir.appendingPathComponent("installing", isDirectory: true)
         
         defer {
             // Clean up!
             try? self.fManager.removeItem(at: internalLoc)
             try? self.fManager.removeItem(at: unzippedPackageURL)
+            if dev {
+                try? self.fManager.removeItem(at: file)
+            }
         }
         
         do {
@@ -251,6 +262,11 @@ class MapleController: ObservableObject {
         
         guard let _ = containingFolder else { throw InstallError.invalidDirectories }
         
+        if dev {
+            //TODO: Verify that this leaf has a secure signature
+            //Right now, there is nothing stopping any other process from inputting a malicious leaf into this folder and having it install, need to prevent this using some sort of passphrase?
+        }
+        
         // Sap file is located at unzipped + folder-name + "info.sap"
         let sapRes: String? = MapleFileHelper.shared.readFile(atLocation: unzippedPackageURL.appendingPathComponent(containingFolder! + "/info.sap"))
         
@@ -259,23 +275,43 @@ class MapleController: ObservableObject {
         let sapInfo: [String] = sapRes!.components(separatedBy: "\n")
         
         // Create a Leaf object
-        let resultLeaf: Leaf? = Leaf()
+        let resultLeaf: Leaf = Leaf()
         
         // Process the .sap file to get all information about it
         for line in sapInfo {
-            resultLeaf?.add(field: line)
+            resultLeaf.add(field: line)
         }
         
-        if resultLeaf?.isValid() ?? false {
+        if resultLeaf.isValid() {
+            
+            if dev {
+                if MaplePreferencesController.shared.developmentNotify {
+                    MapleNotificationController.shared.sendLocalNotification(withTitle: "Development Leaf Detected", body: "We will now start injecting \(resultLeaf.name ?? "") onto your Mac")
+                }
+                
+                DispatchQueue.main.async {
+                    MapleDevelopmentHelper.shared.injectingDevelopmentLeaf = resultLeaf.name
+                }
+                
+                resultLeaf.development = true
+                resultLeaf.enabled = true
+                
+                do {
+                    try MapleController.shared.installLeaf(resultLeaf)
+                } catch {
+                    print("Failed to install the development leaf")
+                }
+            }
+            
             do {
-                try self.fManager.copyItem(at: internalLoc, to: MapleController.installedDir.appendingPathComponent("/\(resultLeaf!.leafID ?? "").mapleleaf"))
+                try self.fManager.copyItem(at: internalLoc, to: (dev ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf"))
             } catch {
                 throw InstallError.fileCopyError
             }
             
             do {
-                try self.fManager.createDirectory(at: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)"), withIntermediateDirectories: true)
-                try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf!.libraryName!)"), to: MapleController.runnablesDir.appendingPathComponent("/\(resultLeaf!.leafID!)/\(resultLeaf!.libraryName!)"))
+                try self.fManager.createDirectory(at: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)"), withIntermediateDirectories: true)
+                try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)/\(resultLeaf.libraryName!)"))
             } catch {
                 // Could not copy dylib to runnables directory
                 print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")

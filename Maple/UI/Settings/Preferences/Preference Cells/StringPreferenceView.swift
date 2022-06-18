@@ -10,6 +10,9 @@ import MaplePreferences
 
 struct StringPreferenceView: View {
     let preference: Preference
+    
+    @State var ignore: Bool = true
+    
     @State var value: String = ""
     var body: some View {
         HStack {
@@ -26,18 +29,20 @@ struct StringPreferenceView: View {
                 .frame(maxWidth: 200)
         }.padding(.bottom)
         .onAppear {
-            if let result: PreferenceValue = self.preference.getValue() {
-                switch result {
-                case .string(let stringValue):
-                    if let stringValue = stringValue {
-                        self.value = stringValue
-                    }
-                default:
-                    return
+            switch self.preference.getValue() {
+            case .string(let stringValue):
+                if let stringValue = stringValue {
+                    self.value = stringValue
                 }
+            default:
+                self.ignore = false
+                return
             }
+            self.ignore = false
         }.onChange(of: self.value) { newValue in
-            self.preference.setValue(newValue)
+            if !self.ignore {
+                self.preference.setValue(newValue)
+            }
         }
     }
 }
