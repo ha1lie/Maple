@@ -35,6 +35,7 @@ class DevelopmentMonitor {
         self.devFolderMonitorSource?.resume()
         
         self.currentContents = self.getContentsOfDevFolder()
+        print("Beginning to monitor the development folder")
     }
     
     public func stop() {

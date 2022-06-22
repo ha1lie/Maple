@@ -40,7 +40,7 @@ struct ColorPreferenceView: View {
             self.ignore = false
         }.onChange(of: self.selectedColor) { newValue in
             if !self.ignore {
-                self.preference.setValue(newValue)
+                self.preference.setValue(.color(newValue))
             }
         }
     }

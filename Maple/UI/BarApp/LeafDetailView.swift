@@ -16,7 +16,9 @@ struct LeafDetailView: View {
             VStack {
                 HStack {
                     Button {
-                        self.selectedLeaf = nil
+                        withAnimation {
+                            self.selectedLeaf = nil
+                        }
                     } label: {
                         // Image here
                         Text("BACK")

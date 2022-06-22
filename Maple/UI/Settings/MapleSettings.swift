@@ -22,19 +22,6 @@ struct MapleSettings: View {
                 PreferencesView(preferences: Preferences.mapleAppPreferences)
                 Divider()
                 
-                if self.prefsController.developmentEnabled { //MARK: Transfer this to be built by the preferences library
-                    VStack(alignment: .center, spacing: 8) {
-                        Text("Development")
-                            .font(.title2)
-                            .bold()
-                        Text("Will show development options here such as seurity, etc.")
-                            .multilineTextAlignment(.center)
-                            .font(.system(size: 14))
-                        
-                        Divider()
-                    }
-                }
-                
                 VStack(alignment: .center, spacing: 8) {
                     Text("About")
                         .font(.title2)

@@ -10,6 +10,23 @@ import SwiftUI
 struct LeafSettingsCell: View {
     @ObservedObject var leaf: Leaf
     @Binding var selected: Leaf?
+    @Environment(\.colorScheme) var colorScheme
+    
+    var backgroundOpacity: CGFloat {
+        if self.leaf == self.selected {
+            if self.colorScheme == .dark {
+                return 0.2
+            } else {
+                return 0.05
+            }
+        } else {
+            if self.colorScheme == .dark {
+                return 0.5
+            } else {
+                return 0.3
+            }
+        }
+    }
     
     init(_ leaf: Leaf, selected: Binding<Leaf?> = .constant(nil)) {
         self.leaf = leaf
@@ -20,7 +37,7 @@ struct LeafSettingsCell: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(Color(.darkGray).opacity(self.leaf == self.selected ? 0.2 : 0.5))
-                .frame(height: 60)
+                .frame(height: self.leaf.development ? 75 : 60)
                 .animation(.easeInOut(duration: 0.1), value: self.selected)
             
             HStack(spacing: 2) {
@@ -35,6 +52,12 @@ struct LeafSettingsCell: View {
                     .frame(width: 30)
                 
                 VStack(alignment: .leading) {
+                    if self.leaf.development {
+                        Text("DEVELOPMENT")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                            .bold()
+                    }
                     Text(self.leaf.name ?? "LEAF NAME")
                         .bold()
                         .lineLimit(1)
@@ -46,10 +69,12 @@ struct LeafSettingsCell: View {
                 Spacer()
             }.padding(4)
         }.onTapGesture {
-            if self.selected != self.leaf {
-                self.selected = self.leaf
-            } else {
-                self.selected = nil
+            withAnimation {
+                if self.selected != self.leaf {
+                    self.selected = self.leaf
+                } else {
+                    self.selected = nil
+                }
             }
         }
     }

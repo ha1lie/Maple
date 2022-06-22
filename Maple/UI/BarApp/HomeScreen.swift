@@ -17,7 +17,7 @@ struct HomeScreen: View {
                 .animation(.easeInOut, value: self.selectedLeaf)
                 .if(self.selectedLeaf != nil) { v in
                     v.frame(width: 0)
-                        .opacity(0)
+                     .opacity(0)
                 }
             LeafDetailView(selectedLeaf: self.$selectedLeaf)
                 .animation(.easeInOut, value: self.selectedLeaf)

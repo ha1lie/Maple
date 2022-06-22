@@ -69,6 +69,14 @@ class MapleController: ObservableObject {
         if MaplePreferencesController.shared.developmentEnabled {
             MapleDevelopmentHelper.shared.configure()
         }
+        
+        DistributedNotificationCenter.default().addObserver(self, selector: #selector(injectorCrashHandler(notification:)), name: Notification.Name("maple.injector.crash"), object: nil)
+    }
+    
+    /// Restarts Maple-LibInjector if it is to crash for any reason
+    @objc func injectorCrashHandler(notification: Notification) {
+        print("Maple injection crashed... restarting")
+        self.reloadMapleInjector()
     }
     
     //MARK: Maple Injector Management
@@ -284,13 +292,46 @@ class MapleController: ObservableObject {
         
         if resultLeaf.isValid() {
             
+            do {
+                let destination = (dev ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf")
+                if self.fManager.fileExists(atPath: destination.path) {
+                    try? self.fManager.removeItem(at: destination)
+                }
+                try self.fManager.copyItem(at: internalLoc, to: destination)
+            } catch {
+                throw InstallError.fileCopyError
+            }
+            
+            do {
+                let destTwo = (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)/\(resultLeaf.libraryName!)")
+                try self.fManager.createDirectory(at: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)"), withIntermediateDirectories: true)
+                if self.fManager.fileExists(atPath: destTwo.path) {
+                    try? self.fManager.removeItem(at: destTwo)
+                }
+                try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: destTwo)
+            } catch {
+                // Could not copy dylib to runnables directory
+                print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+                throw InstallError.fileCopyError
+            }
+            
+            if self.fManager.fileExists(atPath: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/prefs.json").path) {
+                // Should copy the preference file to the respective preferences folder
+                let prefsDest = (dev ? MapleDevelopmentHelper.devPreferencesFolderURL : MapleController.preferencesDir).appendingPathComponent("\(resultLeaf.leafID!).json")
+                if self.fManager.fileExists(atPath: prefsDest.path) {
+                    try? self.fManager.removeItem(at: prefsDest)
+                }
+                do {
+                    try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/prefs.json"), to: prefsDest)
+                } catch {
+                    print("Failed to copy the preferences to their proper location!")
+                }
+                resultLeaf.hasPreferences = true
+            }
+            
             if dev {
                 if MaplePreferencesController.shared.developmentNotify {
                     MapleNotificationController.shared.sendLocalNotification(withTitle: "Development Leaf Detected", body: "We will now start injecting \(resultLeaf.name ?? "") onto your Mac")
-                }
-                
-                DispatchQueue.main.async {
-                    MapleDevelopmentHelper.shared.injectingDevelopmentLeaf = resultLeaf.name
                 }
                 
                 resultLeaf.development = true
@@ -301,21 +342,6 @@ class MapleController: ObservableObject {
                 } catch {
                     print("Failed to install the development leaf")
                 }
-            }
-            
-            do {
-                try self.fManager.copyItem(at: internalLoc, to: (dev ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf"))
-            } catch {
-                throw InstallError.fileCopyError
-            }
-            
-            do {
-                try self.fManager.createDirectory(at: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)"), withIntermediateDirectories: true)
-                try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)/\(resultLeaf.libraryName!)"))
-            } catch {
-                // Could not copy dylib to runnables directory
-                print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
-                throw InstallError.fileCopyError
             }
         } else {
             throw InstallError.invalidSap
@@ -331,17 +357,16 @@ class MapleController: ObservableObject {
     /// - Parameter leaf: Leaf object to install
     func installLeaf(_ leaf: Leaf) throws {
         if self.installedLeaves.contains(where: { leaf.leafID == $0.leafID }) {
-            if leaf.development {
-                print("Trying to install a new iteration of a dev leaf")
-                MapleDevelopmentHelper.shared.uninstallDevLeaf(leaf)
-            } else {
+            if !leaf.development {
                 throw InstallError.alreadyInstalled
             }
         }
         
         // Add this to the live list
         self.installedLeaves.append(leaf)
-        self.updateLocallyStoredLeaves()
+        if !leaf.development {
+            self.updateLocallyStoredLeaves()
+        }
         self.reloadInjection()
     }
     

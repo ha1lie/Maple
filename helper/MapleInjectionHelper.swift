@@ -13,7 +13,7 @@ struct MapleInjectionHelper {
     static private var injectionProcess: Process? = nil
     static private var outputPipe: Pipe? = nil
     static private var errorPipe: Pipe? = nil
-    
+    static private var purposelyEnded: Bool = false
     /// Test if the helper tool is able to communicate with the main app
     /// - Returns: True
     static func testConnection() -> Bool {
@@ -35,6 +35,12 @@ struct MapleInjectionHelper {
         MapleInjectionHelper.injectionProcess!.qualityOfService = QualityOfService.userInitiated
         MapleInjectionHelper.injectionProcess!.standardOutput = MapleInjectionHelper.outputPipe!
         MapleInjectionHelper.injectionProcess!.standardError = MapleInjectionHelper.errorPipe!
+        MapleInjectionHelper.purposelyEnded = false
+        MapleInjectionHelper.injectionProcess?.terminationHandler = { proc in
+            if !MapleInjectionHelper.purposelyEnded {
+                DistributedNotificationCenter.default().post(name: Notification.Name("maple.injector.crash"), object: nil)
+            }
+        }
         try? MapleInjectionHelper.injectionProcess!.run()
         
         if MapleInjectionHelper.injectionProcess!.isRunning {
@@ -48,12 +54,15 @@ struct MapleInjectionHelper {
     /// - Returns: TerminalResponse with appropriate output from the process
     static func endInjection() -> TerminalResponse? {
         guard let _ = MapleInjectionHelper.injectionProcess else { return TerminalResponse(exitCode: -1, output: nil, error: "Injection process not running") } // Ensure you're not trying to stop a non-existant process
-        
+        MapleInjectionHelper.purposelyEnded = true
         MapleInjectionHelper.injectionProcess?.terminate()
+        
+        let res = TerminalResponse(exitCode: Int(MapleInjectionHelper.injectionProcess?.terminationStatus ?? 0), output: String(data: MapleInjectionHelper.outputPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8), error: String(data: MapleInjectionHelper.errorPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8))
+        
         MapleInjectionHelper.injectionProcess = nil
         MapleInjectionHelper.outputPipe = nil
         MapleInjectionHelper.errorPipe = nil
-//        let res = TerminalResponse(exitCode: Int(MapleInjectionHelper.injectionProcess?.terminationStatus ?? 0), output: String(data: MapleInjectionHelper.outputPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8), error: String(data: MapleInjectionHelper.errorPipe?.fileHandleForReading.availableData ?? Data(), encoding: .utf8))
-        return nil
+        
+        return res
     }
 }

@@ -13,9 +13,8 @@ import EmbeddedPropertyList
 /// Settings section to display information on the helper
 struct HelperSettings: View {
     
-    @State var helperToolVersionString: String = "Unknown"
-    @State var helperToolInstalledState: String = "Unknown"
     @State var helperToolTopQuote: String = ""
+    @State var quoteShown: Bool = false
     @State var connectionTestResult: String = ""
     
     let xpcService: XPCClient
@@ -44,36 +43,54 @@ struct HelperSettings: View {
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
-            VStack {
-                Text("Helper Tool")
+            VStack(alignment: .leading) {
+                Text("Maple's Helper")
                     .font(.title2)
                     .bold()
                 
-                Text(self.helperToolTopQuote)
-                
-                HStack {
-                    Text("Installed: \(self.helperMonitor.helperToolExists ? "Yes" : "No")")
-                    Text("Version: \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "N/A")")
+                if self.quoteShown {
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 4)
+                            .foregroundColor(Color(nsColor: .darkGray))
+                        Text(self.helperToolTopQuote)
+                            .foregroundColor(self.helperToolTopQuote.contains("Fail") ? .red : .white)
+                            .fontWeight(.medium)
+                            .padding(6)
+                    }
+                    .transition(.move(edge: .top))
+                    .animation(.easeInOut(duration: 0.5), value: self.quoteShown)
                 }
                 
+                if self.helperMonitor.helperToolExists {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("Maple's helper \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? ", with an unknown version,") is installed")
+                            .fontWeight(.medium)
+                    }.foregroundColor(.green)
+                    .padding(.vertical, 6)
+                } else {
+                    HStack {
+                        Image(systemName: "exclamationmark.circle.fill")
+                        Text("Maple's helper is not installed. Click install")
+                            .fontWeight(.medium)
+                    }.foregroundColor(.red)
+                    .padding(.vertical, 6)
+                }
+                
+                //TODO: Show here if it needs an update
+                
                 HStack(spacing: 8) {
-                    Button {
+                    MapleButton(action: {
                         self.installHelper()
-                    } label: {
-                        Text("Install")
-                    }
+                    }, title: "Install", andSize: .small)
 
-                    Button {
+                    MapleButton(action: {
                         self.updateHelper()
-                    } label: {
-                        Text("Update")
-                    }
+                    }, title: "Update", andSize: .small)
 
-                    Button {
+                    MapleButton(action: {
                         self.uninstallHelper()
-                    } label: {
-                        Text("Uninstall")
-                    }
+                    }, title: "Uninstall", withColor: .red, andSize: .small)
                 }
                 
                 Divider()
@@ -84,23 +101,26 @@ struct HelperSettings: View {
                     .bold()
                 
                 HStack {
-                    Button {
+                    MapleButton(action: {
                         DiagnosticSigningInfo.printDiagnosticInfo()
-                    } label: {
-                        Text("Print Diagnostic Info")
-                    }
+                    }, title: "Print Diagnostics", andSize: .small)
                     
-                    Button {
+                    MapleButton(action: {
                         self.testRun()
-                    } label: {
-                        Text("Test Connection")
-                    }
-                    
-                    Text("Connection: \(self.connectionTestResult == "" ? (self.helperMonitor.connectionValid ? "Connected" : "Failure") : self.connectionTestResult)")
+                    }, title: "Test Connection", andSize: .small)
                 }
                 #endif
             }.padding()
-        }.onAppear {
+        }.onChange(of: self.helperToolTopQuote, perform: { newValue in
+            withAnimation {
+                self.quoteShown = newValue != ""
+            }
+            if newValue != "" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.helperToolTopQuote = ""
+                }
+            }
+        }).onAppear {
             self.helperMonitor.determineStatus()
         }
     }
@@ -110,11 +130,12 @@ struct HelperSettings: View {
         do {
             try LaunchdManager.authorizeAndBless(message: "Do you want to install the sample helper tool?")
         } catch AuthorizationError.canceled {
+            self.helperToolTopQuote = "Cancelled install of Maple's helper tool"
         } catch {
-            self.helperToolTopQuote = "Helper Tool Install Failed"
+            self.helperToolTopQuote = "Failed to install Maple's helper tool"
             return
         }
-        self.helperToolTopQuote = "Helper Tool Install Succeeded"
+        self.helperToolTopQuote = "Succeeded to install Maple's helper tool"
     }
     
     /// Call the helper to uninstall itself
@@ -123,10 +144,11 @@ struct HelperSettings: View {
             if case .failure(let error) = response {
                 switch error {
                 case .connectionInterrupted:
+                    self.helperToolTopQuote = "Succeeded to uninstall Maple's helper tool"
                     return
                 default:
                     print("Uninstall error: \(error.localizedDescription)")
-                    self.helperToolTopQuote = "Helper Tool Uninstall Failed"
+                    self.helperToolTopQuote = "Failed to uninstall Maple's helper tool"
                 }
             }
         }
@@ -153,9 +175,9 @@ struct HelperSettings: View {
             switch result {
             case .success(let reply):
                 print("Reply: \(reply)")
-                self.connectionTestResult = "Connected"
+                self.helperToolTopQuote = "Maple's helper is connected"
             case .failure(let error):
-                self.connectionTestResult = "Failure"
+                self.helperToolTopQuote = "Maple's helper could not establish a connection"
                 print("Failed to connect: \(error.localizedDescription)")
             }
         }

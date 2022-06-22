@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MaplePreferences
 
 struct LeafSettingsSection: View {
     let leaf: Leaf
@@ -28,40 +29,24 @@ struct LeafSettingsSection: View {
             
             Divider()
             
-            Group { // General
-                Text("General")
-                    .font(.title2)
-                    .bold()
-                
-                HStack(spacing: 4) {
-                    Toggle(isOn: self.$selectedEnabled) {}
-                        .toggleStyle(SwitchToggleStyle())
-                        .tint(.purple)
-                        .rotationEffect(Angle(degrees: 270))
-                    Text("Enabled")
-                        .bold()
+            //TODO: This enablability toggle's only purpose is to control if it's enabled or not. Need to add some way to have an initial value for the preferences!
+            BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, andIdentifier: "unnessecary.identifier.for.identifiable", forContainer: self.leaf.leafID ?? "useless container", toRunOnSet: { newValue in
+                if let value = newValue as? Bool {
+                    if self.leaf.enabled != value {
+                        self.leaf.toggleEnable()
+                    }
                 }
-            }.padding(.horizontal)
+            })).padding(.horizontal)
+            
             Group {
                 if self.leaf.hasPreferences {
                     Divider()
                     if let prefs = self.leaf.preferences {
-                        Group {
-                            Text("\(self.leaf.name ?? "") Specific")
-                                .font(.title2)
-                                .bold()
-                            PreferencesView(preferences: prefs)
-                        }.padding(.horizontal)
-                        
+                        PreferencesView(preferences: prefs)
+                            .padding(.horizontal)
                     } else {
-                        Group { // Display an error message
-                            Text("Uh oh!")
-                                .font(.system(size: 30))
-                                .bold()
-                                .foregroundColor(.gray)
-                            Text("We've had a problem trying to get to your settings! I'm so sorry! Please try again, or quit the app to reload")
-                        }.padding(.horizontal)
-                        
+                        Text("Error!")
+                            .foregroundColor(.red)
                     }
                 }
             }

@@ -13,17 +13,15 @@ class MaplePreferencesController: ObservableObject {
     
     static let shared: MaplePreferencesController = MaplePreferencesController()
     
-    static let maplePreferences: Preferences = .mapleAppPreferences
-    
     public static let mapleAppBundle: String = "dev.halz.Maple.app"
     
+    //MARK: Preference Keys
     public static let injectionEnabledKey: String = "dev.halz.Maple.prefs.injectionEnabled"
     public static let launchAtLoginKey: String =  "dev.halz.Maple.prefs.launchAtLogin"
-    
     public static let developmentKey: String = "dev.halz.Maple.prefs.development"
-    
     public static let developmentNotifyKey: String = "dev.halz.Maple.prefs.development.notifyOnInstall"
     
+    /// Checks if development mode is enabled with app
     @Published var developmentEnabled: Bool {
         didSet {
             if self.developmentEnabled {
@@ -34,6 +32,7 @@ class MaplePreferencesController: ObservableObject {
         }
     }
     
+    /// Checks if the app should launch when user logs in
     @Published var launchAtLoginEnabled: Bool {
         didSet {
             if self.launchAtLoginEnabled {
@@ -44,6 +43,7 @@ class MaplePreferencesController: ObservableObject {
         }
     }
     
+    /// Checks if app should actually inject code into processes
     @Published var injectionEnabled: Bool {
         didSet {
             MapleController.shared.reloadInjection()
@@ -54,9 +54,36 @@ class MaplePreferencesController: ObservableObject {
     @Published var developmentNotify: Bool
     
     init() {
-        self.developmentEnabled = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.developmentKey) ?? false
-        self.launchAtLoginEnabled = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.launchAtLoginKey) ?? false
-        self.injectionEnabled = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.injectionEnabledKey) ?? false
-        self.developmentNotify = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.developmentNotifyKey) ?? false
+        var prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.developmentKey)
+        switch prefVal {
+        case .bool(let boolVal):
+            self.developmentEnabled = boolVal ?? false
+        default:
+            self.developmentEnabled = false
+        }
+        
+        prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.launchAtLoginKey)
+        switch prefVal {
+        case .bool(let boolVal):
+            self.launchAtLoginEnabled = boolVal ?? false
+        default:
+            self.launchAtLoginEnabled = false
+        }
+        
+        prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.injectionEnabledKey)
+        switch prefVal {
+        case .bool(let boolVal):
+            self.injectionEnabled = boolVal ?? false
+        default:
+            self.injectionEnabled = false
+        }
+        
+        prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.developmentNotifyKey)
+        switch prefVal {
+        case .bool(let boolVal):
+            self.developmentNotify = boolVal ?? false
+        default:
+            self.developmentNotify = false
+        }
     }
 }

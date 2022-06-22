@@ -41,7 +41,7 @@ struct StringPreferenceView: View {
             self.ignore = false
         }.onChange(of: self.value) { newValue in
             if !self.ignore {
-                self.preference.setValue(newValue)
+                self.preference.setValue(.string(newValue))
             }
         }
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Zip
+import MaplePreferences
 
 class MapleDevelopmentHelper: ObservableObject {
     static let shared: MapleDevelopmentHelper = MapleDevelopmentHelper()
@@ -20,8 +21,6 @@ class MapleDevelopmentHelper: ObservableObject {
     
     private var developmentMonitor: DevelopmentMonitor? = nil
     
-    @Published var injectingDevelopmentLeaf: String? = nil
-    
     public func configure() {
         if let _ = self.developmentMonitor {
             self.disconfigure()
@@ -33,6 +32,36 @@ class MapleDevelopmentHelper: ObservableObject {
         
         self.developmentMonitor = DevelopmentMonitor()
         self.developmentMonitor?.startMonitoring()
+        
+        DistributedNotificationCenter.default().addObserver(self, selector: #selector(logObserver(notification:)), name: NSNotification.Name(rawValue: "maple.log"), object: nil)
+        
+        DistributedNotificationCenter.default().addObserver(self, selector: #selector(valueRequestHandler(notification:)), name: NSNotification.Name("maple.valueRequest"), object: nil)
+    }
+    
+    @objc private func valueRequestHandler(notification: Notification) {
+        print("Got a preference value request")
+        if let request = notification.object as? String {
+            let pieces = request.components(separatedBy: "::")
+            if pieces.count == 2 {
+                if let value = Preferences.valueForKey(pieces[0], inContainer: pieces[1]) {
+                    print("Is sending a response!")
+                    DistributedNotificationCenter.default().post(name: Notification.Name("maple.valueRequestResponse"), object: value.toString())
+                }
+            }
+        }
+    }
+    
+    @objc private func logObserver(notification: Notification) {
+        if let stuff = notification.object as? String {
+            let parts = stuff.components(separatedBy: "+++")
+            if parts.count == 2 {
+                print("[\(parts[0])] - \(parts[1])")
+            } else {
+                print("Log with wrong number of parts")
+            }
+        } else {
+            print("Notification object can't be string")
+        }
     }
     
     public func disconfigure() {

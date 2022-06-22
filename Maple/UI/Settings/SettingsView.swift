@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Window to display the app's settings
 struct SettingsView: View {
-    @State var section: Int = 2
+    @State var section: Int = 0
     
     var body: some View {
         VStack {

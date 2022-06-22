@@ -54,7 +54,7 @@ extension Preferences {
         return Preferences.privateMapleAppPreferences!
     }
     
-    static func fromLeaf(_ leaf: Leaf) -> Self? {
+    static func fromLeaf(_ leaf: Leaf) -> Preferences? {
         guard let _ = leaf.leafID else { fatalError("Leaf should have bundle identifier") }
         // Check for "BID".json in the preferences directory
         var prefsContainer: URL = MapleController.preferencesDir
@@ -65,12 +65,10 @@ extension Preferences {
         let prefsURL = prefsContainer.appendingPathComponent(leaf.leafID! + ".json")
         if FileManager.default.fileExists(atPath: prefsURL.path) {
             // The preference file has been found
-            print("Found the preference file!")
-        } else {
-            print("DID NOT FIND THE PREFERENCE FILE")
-            return nil
+            if let prefData = try? Data(contentsOf: prefsURL) {
+                return try? JSONDecoder().decode(Preferences.self, from: prefData)
+            }
         }
-        
         return nil
     }
 }

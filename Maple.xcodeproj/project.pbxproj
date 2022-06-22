@@ -14,6 +14,7 @@
 		261265812858ED3400C138DF /* SecureXPC in Frameworks */ = {isa = PBXBuildFile; productRef = 261265802858ED3400C138DF /* SecureXPC */; };
 		261265832858ED3E00C138DF /* EmbeddedPropertyList in Frameworks */ = {isa = PBXBuildFile; productRef = 261265822858ED3E00C138DF /* EmbeddedPropertyList */; };
 		261265852858ED4200C138DF /* Blessed in Frameworks */ = {isa = PBXBuildFile; productRef = 261265842858ED4200C138DF /* Blessed */; };
+		2615485E2862A37E003AFD53 /* MapleHoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2615485D2862A37E003AFD53 /* MapleHoverButton.swift */; };
 		261713E22858B54600105916 /* MaplePreferences in Frameworks */ = {isa = PBXBuildFile; productRef = 261713E12858B54600105916 /* MaplePreferences */; };
 		2617AC21282DB39B00E40CE8 /* MapleInjectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */; };
 		2617AC23282F360E00E40CE8 /* TerminalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC22282F360E00E40CE8 /* TerminalResponse.swift */; };
@@ -109,6 +110,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2615485D2862A37E003AFD53 /* MapleHoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleHoverButton.swift; sourceTree = "<group>"; };
 		261713DE2858B23300105916 /* MaplePreferences */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MaplePreferences; path = ../../Desktop/MaplePreferences; sourceTree = "<group>"; };
 		2617AC20282DB39B00E40CE8 /* MapleInjectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleInjectionHelper.swift; sourceTree = "<group>"; };
 		2617AC22282F360E00E40CE8 /* TerminalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalResponse.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				26C35BC327FB734900BD4B2B /* MapleButton.swift */,
+				2615485D2862A37E003AFD53 /* MapleHoverButton.swift */,
 				26303F93283570B3000A0CEC /* MapleSegmentPicker.swift */,
 				26BC6CCD2809E8A0004617C2 /* Maple+View.swift */,
 				26303F9B283D3B40000A0CEC /* MapleDialogue.swift */,
@@ -691,6 +694,7 @@
 				26C35BB927FA8A2000BD4B2B /* LeafCell.swift in Sources */,
 				26303F8E28356B19000A0CEC /* FileError.swift in Sources */,
 				26303F9C283D3B40000A0CEC /* MapleDialogue.swift in Sources */,
+				2615485E2862A37E003AFD53 /* MapleHoverButton.swift in Sources */,
 				26303F902835701A000A0CEC /* LeafSettings.swift in Sources */,
 				26EC67D5280BA87A000181B3 /* MapleFileHelper.swift in Sources */,
 				267AE2022847E83E0079CAC4 /* PreferenceView.swift in Sources */,

@@ -70,7 +70,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.helperMonitor.determineStatus()
         
         MapleController.shared.configure()
-        MapleController.shared.openSettingsWindow()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

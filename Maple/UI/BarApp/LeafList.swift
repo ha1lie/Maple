@@ -13,84 +13,44 @@ struct LeafList: View {
     @ObservedObject var developmentHelper: MapleDevelopmentHelper = .shared
     @Binding var selectedLeaf: Leaf?
     
+    @State var showOtherOptions: Bool = false
+    
     var body: some View {
         VStack {
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack {
-                    HStack {
-                        Text("Maple")
-                            .font(.title)
-                            .bold()
-                        Spacer()
-                        
-                        Button {
-                            print("Open settings window")
-                            self.mapleController.openSettingsWindow()
-                        } label: {
-                            Image(systemName: "gear")
-                                .font(.system(size: 14))
-                        }.buttonStyle(PlainButtonStyle())
+            HStack {
+                Text("Maple")
+                    .font(.title)
+                    .bold()
+                Spacer()
 
-                        MapleButton(action: {
-                            self.mapleController.openWindowToInstallLeaf()
-                        }, title: "New")
-                    }
-                    
-                    if let devLeaf = self.developmentHelper.injectingDevelopmentLeaf {
-                        Button {
-                            print("STOP INJECTING DEV LEAF")
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .frame(height: 40)
-                                    .foregroundColor(.red)
-                                Text("Stop Injecting \(devLeaf)")
-                                    .foregroundColor(.white)
-                            }
-                        }.buttonStyle(PlainButtonStyle())
-                    }
-                    
-                    if self.mapleController.installedLeaves.count == 0 {
-                        Text("You don't have any Leaves installed currently")
-                    } else {
-                        ForEach(self.mapleController.installedLeaves) { leaf in
-                            LeafCell(leaf, withSelected: self.$selectedLeaf)
+                Image(systemName: "ellipsis")
+                    .onHover { hovered in
+                        self.showOtherOptions = true
+                    }.popover(isPresented: self.$showOtherOptions) {
+                        VStack {
+                            MapleHoverButton(action: {
+                                mapleController.openSettingsWindow()
+                            }, title: "Settings", imageName: "gear")
+                            
+                            MapleHoverButton(action: {
+                                NSApp.terminate(self)
+                            }, title: "Quit", imageName: "stop.circle.fill")
+                        }.frame(width: 200, height: 100)
+                        .onHover { hovered in
+                            self.showOtherOptions = hovered
                         }
                     }
-                    
-                    MapleButton(action: {
-                        print("RUNNING START FOR YOU")
-                        MapleController.shared.startInjectingEnabledLeaves()
-                    }, title: "BEGIN INJECTION")
-                    
-                    Spacer()
-                    
-                    if self.mapleController.canCurrentlyInject {
-                        // Icon
-                        Text("Configured Properly")
-                            .foregroundColor(.gray)
-                    } else {
-                        Button {
-                            print("PLEASE SHOW A WINDOW TO BE ABLE TO CONFIGURE THINGS PROPERLY")
-                        } label: {
-                            HStack {
-                                Image(systemName: "exclamationmark.circle.fill")
-                                    .foregroundColor(.red)
-                                    .font(.system(size: 12))
-                                
-                                Text("Error with configuration")
-                                    .foregroundColor(.red)
-                                
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.red)
-                                    .font(.system(size: 12))
-                            }
-                        }.buttonStyle(PlainButtonStyle())
-                    }
-                }.padding()
                 
-                
+                MapleButton(action: {
+                    self.mapleController.openWindowToInstallLeaf()
+                }, title: "New")
             }
-        }
+            
+            if self.mapleController.installedLeaves.count == 0 {
+                Text("You don't have any Leaves installed currently")
+            } else {
+                LeafSettingsList(selectedLeaf: self.$selectedLeaf)
+            }
+        }.padding()
     }
 }

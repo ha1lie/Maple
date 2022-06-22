@@ -26,16 +26,14 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
     @Published var targetBundleID: [String]? = nil
     @Published var leafID: String? = nil
     @Published var development: Bool = false
-    var hasPreferences: Bool { //TODO: Get rid of this lol
-        get {
-            return self.leafID == "dev.halz.modernhud"
-        }
-    }
+    var hasPreferences: Bool = false
+    
     var preferences: Preferences? {
         get {
             if self.hasPreferences && self.leafID != nil {
                 return Leaf.getPreferences(forLeaf: self)
             } else {
+                print("For some reason the preferences doesn't meat the requirements")
                 return nil
             }
         }
