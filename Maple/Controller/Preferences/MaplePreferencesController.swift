@@ -21,6 +21,49 @@ class MaplePreferencesController: ObservableObject {
     public static let developmentKey: String = "dev.halz.Maple.prefs.development"
     public static let developmentNotifyKey: String = "dev.halz.Maple.prefs.development.notifyOnInstall"
     
+    @Published var openedPanel: Int? = nil
+    @Published var openedLeafIndex: Int? = nil
+    
+    private var authenticatedRootSIPDisabled: Bool {
+        get {
+            // Check if sip is disabled
+            let sipNormal = Process()
+            let normalPipe = Pipe()
+            
+            sipNormal.standardOutput = normalPipe
+            sipNormal.standardError = normalPipe
+            sipNormal.arguments = ["-c", "csrutil authenticated-root status"]
+            sipNormal.launchPath = "/bin/zsh"
+            sipNormal.standardInput = nil
+            sipNormal.launch()
+            
+            let data = normalPipe.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: data, encoding: .utf8)!
+            
+            return output.contains("disabled")
+        }
+    }
+    
+    public var sipProperlyDisabled: Bool {
+        get {
+            // Check if sip is disabled
+            let sipNormal = Process()
+            let normalPipe = Pipe()
+            
+            sipNormal.standardOutput = normalPipe
+            sipNormal.standardError = normalPipe
+            sipNormal.arguments = ["-c", "csrutil status"]
+            sipNormal.launchPath = "/bin/zsh"
+            sipNormal.standardInput = nil
+            sipNormal.launch()
+            
+            let data = normalPipe.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: data, encoding: .utf8)!
+            
+            return output.contains("disabled") && self.authenticatedRootSIPDisabled
+        }
+    }
+    
     /// Checks if development mode is enabled with app
     @Published var developmentEnabled: Bool {
         didSet {

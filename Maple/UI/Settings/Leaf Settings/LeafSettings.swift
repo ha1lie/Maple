@@ -55,6 +55,15 @@ struct LeafSettings: View {
                     Spacer()
                 }
             }.padding([.vertical, .leading])
+            .onAppear {
+                if let openedLeafIndex = MaplePreferencesController.shared.openedLeafIndex {
+                    if self.mapleController.installedLeaves.count > openedLeafIndex {
+                        self.displayedLeaf = self.mapleController.installedLeaves[openedLeafIndex]
+                    }
+                    
+                    MaplePreferencesController.shared.openedLeafIndex = nil
+                }
+            }
         }
     }
 }

@@ -74,7 +74,7 @@ class HelperToolMonitor: ObservableObject {
                     self.connectionValid = true
                 case .failure(let error):
                     self.connectionValid = false
-                    print("Failed to connect: \(error.localizedDescription)")
+                    MapleLogController.shared.local(log: "ERROR Failed to connect to Maple's helper tool: \(error.localizedDescription)")
                 }
             }
         }

@@ -58,12 +58,12 @@ struct LeafSettingsCell: View {
                             .font(.caption)
                             .bold()
                     }
-                    Text(self.leaf.name ?? "LEAF NAME")
-                        .bold()
-                        .lineLimit(1)
                     
-                    Text(self.leaf.leafDescription ?? "DESCRIPTION")
-                        .lineLimit(2)
+                    if let name = self.leaf.name {
+                        Text(name)
+                            .bold()
+                            .lineLimit(1)
+                    }
                 }
                 
                 Spacer()
@@ -72,8 +72,6 @@ struct LeafSettingsCell: View {
             withAnimation {
                 if self.selected != self.leaf {
                     self.selected = self.leaf
-                } else {
-                    self.selected = nil
                 }
             }
         }

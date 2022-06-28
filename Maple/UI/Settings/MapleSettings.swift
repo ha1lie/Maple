@@ -14,6 +14,14 @@ struct MapleSettings: View {
     @State var enableAtLogin: Bool = false
     
     @ObservedObject var prefsController: MaplePreferencesController = .shared
+    @ObservedObject var helperMonitor: HelperToolMonitor
+    
+    init() {
+        guard let hm = (NSApplication.shared.delegate as? AppDelegate)?.helperMonitor else {
+            fatalError("Helper Monitor should be accessible")
+        }
+        self.helperMonitor = hm
+    }
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
@@ -22,19 +30,39 @@ struct MapleSettings: View {
                 PreferencesView(preferences: Preferences.mapleAppPreferences)
                 Divider()
                 
-                VStack(alignment: .center, spacing: 8) {
+                //SECTION: About Maple
+                
+                VStack(alignment: .leading, spacing: 8) {
                     Text("About")
                         .font(.title2)
                         .bold()
-                    Text("Maple is a MacOS customization and eventually security add-on to allow a user to take complete control over their device, for any purpose.")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 14))
+                    Text("Maple is a MacOS customization, injection runtime replacement utility. It allows a user to take complete control over their Mac.")
                     
-                    Text("Maple Version **1.2** installed on **MacOS 12.5.1 Monterey**, paired with helper tool version **1.0.0d96** for the perfect pair")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 14))
+                    Button {
+                        if let mapleWebsite = URL(string: "https://www.google.com") {
+                            NSWorkspace.shared.open(mapleWebsite)
+                        }
+                    } label: {
+                        HStack(alignment: .center) {
+                            Text("Read more online")
+                            
+                            Image(systemName: "arrow.right")
+                                .padding(.leading, -4)
+                        }.foregroundColor(.accentColor)
+                    }.buttonStyle(PlainButtonStyle())
+
                     
-                    Text("Copyright 2022 Hallie")
+                    Text("Installed Versions")
+                        .font(.title)
+                        .bold()
+                    
+                    Text("**Maple Version:** \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown Version")")
+                    
+                    Text("**Helper Version:** \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "Unknown Version")")
+                    
+                    Text("**MacOS Version:** \(ProcessInfo.processInfo.operatingSystemVersionString)")
+                    
+                    Text("**Copyright 2022 Hallie**")
                 }
             }.padding()
         }

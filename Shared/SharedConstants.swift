@@ -19,12 +19,6 @@ struct SharedConstants {
         case missingSMPrivilegedExecutables
     }
     
-    static let injectorFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
-    static let listenFile: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
-    
-    static let injectorFileString: String = "/Users/hallie/Library/Application Support/Maple/Runnables/Maple-LibInjector"
-    static let listenFileString: String = "/Users/hallie/Library/Application Support/Maple/Runnables/listen.txt"
-    
     /// XPC route to uninstall the helper tool.
     static let uninstallRoute = XPCRoute.named("uninstall")
     /// XPC route to update the helper tool.
@@ -37,6 +31,7 @@ struct SharedConstants {
     
     /// XPC Route to tell the helper tool to begin leaf injection
     static let mapleInjectionBeginInjection = XPCRoute.named("mapleBeginInjecting")
+                                                      .withMessageType([URL].self)
                                                       .withReplyType(Optional<TerminalResponse>.self)
     
     /// XPC Route to tell the helper tool to end leaf injection

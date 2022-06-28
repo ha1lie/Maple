@@ -17,9 +17,13 @@ class MapleController: ObservableObject {
     static let shared: MapleController = MapleController()
     
     private static let installedLeavesKey: String = "installedLeaves"
-    static let runnablesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Runnables", isDirectory: true)
-    static let installedDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Installed", isDirectory: true)
-    static let preferencesDir: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Preferences", isDirectory: true)
+    static let runnablesDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables", isDirectory: true)
+    static let installedDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Installed", isDirectory: true)
+    static let preferencesDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Preferences", isDirectory: true)
+    
+    static let injectorFile: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
+    
+    static let listenFile: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
     
     private let xpcService: XPCClient
     private let sharedConstants: SharedConstants
@@ -58,6 +62,8 @@ class MapleController: ObservableObject {
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
+        self.setLocationsInDefaults()
+        
         self.installedLeaves = self.fetchLocallyStoredLeaves()
         self.startInjectingEnabledLeaves()
         
@@ -73,9 +79,17 @@ class MapleController: ObservableObject {
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(injectorCrashHandler(notification:)), name: Notification.Name("maple.injector.crash"), object: nil)
     }
     
+    /// Store the nessecary file URLS into defaults so that the helper tool can get to them as well
+    private func setLocationsInDefaults() {
+        UserDefaults(suiteName: "dev.halz.Maple.app")?.set(FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false).path, forKey: "listenFileLocationAsString")
+        
+        UserDefaults(suiteName: "dev.halz.Maple.app")?.set(FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false).path, forKey: "injectionFileLocationAsString")
+    }
+    
     /// Restarts Maple-LibInjector if it is to crash for any reason
     @objc func injectorCrashHandler(notification: Notification) {
-        print("Maple injection crashed... restarting")
+        MapleLogController.shared.local(log: "Maple's injector crashed... restarting")
+        self.setLocationsInDefaults()
         self.reloadMapleInjector()
     }
     
@@ -89,7 +103,7 @@ class MapleController: ObservableObject {
         for piece in pieces.keys {
             contents += piece
             for lib in pieces[piece]! {
-                contents += " /Users/hallie/Library/Application Support/Maple/Runnables/\(lib)"
+                contents += " " + FileManager.default.homeDirectoryForCurrentUser.path + "/Library/Application Support/Maple/Runnables/\(lib)"
             }
             contents += "\n"
         }
@@ -119,7 +133,7 @@ class MapleController: ObservableObject {
         }
         
         // Write listen.txt file
-        MapleFileHelper.shared.writeFile(withContents: self.listenContents(for: listenFile), atLocation: SharedConstants.listenFile)
+        MapleFileHelper.shared.writeFile(withContents: self.listenContents(for: listenFile), atLocation: MapleController.listenFile)
         
         // Spin up an instance of Maple-LibInjector with above file
         self.startMapleInjector()
@@ -128,15 +142,14 @@ class MapleController: ObservableObject {
         do {
             try self.killProcesses(withBIDs: procs)
         } catch {
-            print("ERRORED while attempting to begin injection: \(error)")
+            MapleLogController.shared.local(log: "ERROR Failed to begin injection \(error)")
         }
-        
     }
 
     /// Stops all leaves from running
     public func stopInjectingEnabledLeaves() {
         self.stopMapleInjector()
-        try? self.fManager.removeItem(at: SharedConstants.listenFile)
+        try? self.fManager.removeItem(at: MapleController.listenFile)
         
         var bids: [String] = []
         for leaf in self.runningLeaves {
@@ -147,23 +160,25 @@ class MapleController: ObservableObject {
     
     /// Starts up Maple-LibInjector with default listen file
     private func startMapleInjector() {
-        if MaplePreferencesController.shared.injectionEnabled {
+        if MaplePreferencesController.shared.sipProperlyDisabled && MaplePreferencesController.shared.injectionEnabled {
             let sema = DispatchSemaphore(value: 1)
             Task {
                 do {
-                    let response = try await self.xpcService.send(to: SharedConstants.mapleInjectionBeginInjection)
+                    let response = try await self.xpcService.sendMessage([MapleController.injectorFile, MapleController.listenFile], to: SharedConstants.mapleInjectionBeginInjection)
                     if response == nil {
-                        print("Successfully began injection")
+                        MapleLogController.shared.local(log: "Successfully began injection")
                     } else {
-                        print("Errored while beginning injection: \(response!)")
+                        MapleLogController.shared.local(log: "ERROR Errored while beginning injection: \(response!)")
                     }
                 } catch {
-                    print("Failed to begin injection: \(error)")
+                    MapleLogController.shared.local(log: "ERROR Failed to begin injection: \(error)")
                 }
                 sema.signal()
             }
             sema.wait()
             self.injecting = true
+        } else {
+            MapleLogController.shared.local(log: "ERROR SIP is not disabled, cannot begin Maple's injector")
         }
     }
     
@@ -174,9 +189,9 @@ class MapleController: ObservableObject {
         Task {
             do {
                 let _ = try await self.xpcService.send(to: SharedConstants.mapleInjectionEndInjection)
-                print("Successfully ended injection")
+                MapleLogController.shared.local(log: "Successfully ended injection")
             } catch {
-                print("Errored when ending injection: \(error)")
+                MapleLogController.shared.local(log: "ERROR Errored when ending injection: \(error)")
             }
             sema.signal()
         }
@@ -311,7 +326,7 @@ class MapleController: ObservableObject {
                 try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: destTwo)
             } catch {
                 // Could not copy dylib to runnables directory
-                print("Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+                MapleLogController.shared.local(log: "ERROR Failed to copy dylib to runnables directory: \(error.localizedDescription)")
                 throw InstallError.fileCopyError
             }
             
@@ -324,7 +339,7 @@ class MapleController: ObservableObject {
                 do {
                     try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/prefs.json"), to: prefsDest)
                 } catch {
-                    print("Failed to copy the preferences to their proper location!")
+                    MapleLogController.shared.local(log: "ERROR Failed to copy the preferences to their proper location")
                 }
                 resultLeaf.hasPreferences = true
             }
@@ -340,7 +355,7 @@ class MapleController: ObservableObject {
                 do {
                     try MapleController.shared.installLeaf(resultLeaf)
                 } catch {
-                    print("Failed to install the development leaf")
+                    MapleLogController.shared.local(log: "ERROR Failed to install the development leaf")
                 }
             }
         } else {
@@ -384,7 +399,7 @@ class MapleController: ObservableObject {
                 try FileManager.default.removeItem(at: MapleController.installedDir.appendingPathComponent("\(leaf.leafID!).mapleleaf"))
                 try FileManager.default.removeItem(at: MapleController.runnablesDir.appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
             } catch {
-                print("Unable to delete files from installed leaves")
+                MapleLogController.shared.local(log: "ERROR Unable to delete files from installed leaves")
             }
             
             self.updateLocallyStoredLeaves()
@@ -398,7 +413,7 @@ class MapleController: ObservableObject {
         guard let _ = encodedData else { print("Could not encode self.installedLeaves"); return }
         
         if encodedData!.isEmpty {
-            print("Failed to properly convert leaves to Data")
+            MapleLogController.shared.local(log: "ERROR Failed to properly convert leaves to Data for storage")
             return
         }
         
@@ -453,6 +468,21 @@ class MapleController: ObservableObject {
         
         // Hide the menu bar app in case they overlap
         StatusBarController.shared?.hidePopover(self);
+    }
+    
+    /// Open a window to view development and app logs
+    public func openLogWindow() {
+        self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: LogWindowView()))
+        self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
+        self.installerWindow?.title = "Maple Logs"
+        self.installerWindow?.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        self.installerWindow?.minSize = NSSize(width: 600, height: 400)
+        self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
+        
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        self.installerWindow?.makeKey()
+        self.installerWindow?.orderFrontRegardless()
     }
     
     /// Close an open install window

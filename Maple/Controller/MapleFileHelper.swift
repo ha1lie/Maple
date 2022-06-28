@@ -34,11 +34,9 @@ class MapleFileHelper {
             return result
         } catch {
             do {
-                print("Trying again with ascii")
                 let result = String(data: try Data(contentsOf: loc), encoding: .ascii)
                 return result
             } catch {
-                print("Still couldnt")
                 return ""
             }
         }

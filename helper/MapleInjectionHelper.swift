@@ -7,6 +7,7 @@
 
 import Foundation
 import AppKit
+import MaplePreferences
 
 /// Helper class to run injection-focused functions
 struct MapleInjectionHelper {
@@ -22,7 +23,9 @@ struct MapleInjectionHelper {
     
     /// Begin the helper's injection process
     /// - Returns: TerminalResponse if there is an issue starting up the process
-    static func beginInjection() -> TerminalResponse? {
+    static func beginInjection(withFiles files: [URL]) -> TerminalResponse? {
+        guard files.count == 2 else { fatalError("Incorrect number of file locations provided to begin injection") }
+        
         if MapleInjectionHelper.injectionProcess != nil { let _ = MapleInjectionHelper.endInjection() } // Ensure no one is doing any double dipping
         
         MapleInjectionHelper.injectionProcess = Process()
@@ -30,8 +33,8 @@ struct MapleInjectionHelper {
         if MapleInjectionHelper.outputPipe == nil { MapleInjectionHelper.outputPipe = Pipe() }
         if MapleInjectionHelper.errorPipe == nil { MapleInjectionHelper.errorPipe = Pipe() }
         
-        MapleInjectionHelper.injectionProcess!.launchPath = SharedConstants.injectorFileString
-        MapleInjectionHelper.injectionProcess!.arguments = [SharedConstants.listenFileString]
+        MapleInjectionHelper.injectionProcess!.launchPath = files[0].path
+        MapleInjectionHelper.injectionProcess!.arguments = [files[1].path]
         MapleInjectionHelper.injectionProcess!.qualityOfService = QualityOfService.userInitiated
         MapleInjectionHelper.injectionProcess!.standardOutput = MapleInjectionHelper.outputPipe!
         MapleInjectionHelper.injectionProcess!.standardError = MapleInjectionHelper.errorPipe!

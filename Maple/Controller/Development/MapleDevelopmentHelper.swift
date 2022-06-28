@@ -12,12 +12,12 @@ import MaplePreferences
 class MapleDevelopmentHelper: ObservableObject {
     static let shared: MapleDevelopmentHelper = MapleDevelopmentHelper()
     
-    static let devFolderURL: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Development", isDirectory: true)
-    static let devRunnablesFolderURL: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Development/Runnables")
-    static let devPreferencesFolderURL: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Development/Preferences")
-    static let devInstalledFolderURL: URL = URL(fileURLWithPath: "/Users/hallie/Library/Application Support/Maple/Development/Installed")
+    static let devFolderURL: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Development", isDirectory: true)
+    static let devRunnablesFolderURL: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Development/Runnables", isDirectory: true)
+    static let devPreferencesFolderURL: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Development/Preferences", isDirectory: true)
+    static let devInstalledFolderURL: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Development/Installed", isDirectory: true)
     
-    static let devFolderString: String = "/Users/hallie/Library/Application Support/Maple/Development"
+    static let devFolderString: String = FileManager.default.homeDirectoryForCurrentUser.path + "/Library/Application Support/Maple/Development"
     
     private var developmentMonitor: DevelopmentMonitor? = nil
     
@@ -30,37 +30,27 @@ class MapleDevelopmentHelper: ObservableObject {
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devInstalledFolderURL, withIntermediateDirectories: true)
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devPreferencesFolderURL, withIntermediateDirectories: true)
         
+        if MapleDevelopmentHelper.devFolderString == "/Users/hallie/Library/Application Support/Maple/Development" {
+            print("Heyyo it got the right folder with it and everything")
+        } else {
+            print("Dev controller failed to actually make the right thing... hmm")
+            print(MapleDevelopmentHelper.devFolderString)
+        }
+        
         self.developmentMonitor = DevelopmentMonitor()
         self.developmentMonitor?.startMonitoring()
-        
-        DistributedNotificationCenter.default().addObserver(self, selector: #selector(logObserver(notification:)), name: NSNotification.Name(rawValue: "maple.log"), object: nil)
         
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(valueRequestHandler(notification:)), name: NSNotification.Name("maple.valueRequest"), object: nil)
     }
     
     @objc private func valueRequestHandler(notification: Notification) {
-        print("Got a preference value request")
         if let request = notification.object as? String {
             let pieces = request.components(separatedBy: "::")
             if pieces.count == 2 {
                 if let value = Preferences.valueForKey(pieces[0], inContainer: pieces[1]) {
-                    print("Is sending a response!")
                     DistributedNotificationCenter.default().post(name: Notification.Name("maple.valueRequestResponse"), object: value.toString())
                 }
             }
-        }
-    }
-    
-    @objc private func logObserver(notification: Notification) {
-        if let stuff = notification.object as? String {
-            let parts = stuff.components(separatedBy: "+++")
-            if parts.count == 2 {
-                print("[\(parts[0])] - \(parts[1])")
-            } else {
-                print("Log with wrong number of parts")
-            }
-        } else {
-            print("Notification object can't be string")
         }
     }
     
@@ -86,7 +76,7 @@ class MapleDevelopmentHelper: ObservableObject {
             try FileManager.default.removeItem(at: MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("\(leaf.leafID!).mapleleaf"))
             try FileManager.default.removeItem(at: MapleDevelopmentHelper.devRunnablesFolderURL.appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
         } catch {
-            print("Unable to delete files from installed dev leaf")
+            MapleLogController.shared.local(log: "WARNING Unable to delete files from installed dev leaf")
         }
     }
 }

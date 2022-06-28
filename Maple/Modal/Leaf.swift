@@ -33,7 +33,6 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
             if self.hasPreferences && self.leafID != nil {
                 return Leaf.getPreferences(forLeaf: self)
             } else {
-                print("For some reason the preferences doesn't meat the requirements")
                 return nil
             }
         }

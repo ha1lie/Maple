@@ -35,7 +35,7 @@ class DevelopmentMonitor {
         self.devFolderMonitorSource?.resume()
         
         self.currentContents = self.getContentsOfDevFolder()
-        print("Beginning to monitor the development folder")
+        MapleLogController.shared.local(log: "Beginning to monitor Development folder")
     }
     
     public func stop() {
@@ -47,7 +47,7 @@ class DevelopmentMonitor {
         do {
             return try FileManager.default.contentsOfDirectory(atPath: MapleDevelopmentHelper.devFolderString)
         } catch {
-            print("Failed to get contents")
+            MapleLogController.shared.local(log: "ERROR Failed to get contents of development folder")
         }
         return []
     }
@@ -61,7 +61,7 @@ class DevelopmentMonitor {
                 let fileAddition = MapleDevelopmentHelper.devFolderURL.appendingPathComponent(file)
                 if fileAddition.isFileURL && fileAddition.pathExtension == "zip" { //TODO: Make this actually a mapleleaf file
                     do {
-                        print("Attempting to install a dev leaf")
+                        MapleLogController.shared.local(log: "Attempting to install a development leaf")
                         try MapleDevelopmentHelper.shared.installDevLeaf(fileAddition)
                     } catch {
                         print("Failed to install a dev leaf \(error)")

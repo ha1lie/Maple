@@ -30,5 +30,14 @@ struct SettingsView: View {
                 }
             }
         }.padding([.top])
+        .onAppear {
+            if let openedPanel = MaplePreferencesController.shared.openedPanel {
+                if openedPanel < 3 {
+                    self.section = openedPanel
+                }
+                
+                MaplePreferencesController.shared.openedPanel = nil
+            }
+        }
     }
 }

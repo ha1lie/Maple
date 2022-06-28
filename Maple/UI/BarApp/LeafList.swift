@@ -29,13 +29,17 @@ struct LeafList: View {
                     }.popover(isPresented: self.$showOtherOptions) {
                         VStack {
                             MapleHoverButton(action: {
-                                mapleController.openSettingsWindow()
+                                self.mapleController.openSettingsWindow()
                             }, title: "Settings", imageName: "gear")
                             
                             MapleHoverButton(action: {
                                 NSApp.terminate(self)
                             }, title: "Quit", imageName: "stop.circle.fill")
-                        }.frame(width: 200, height: 100)
+                            
+                            MapleHoverButton(action: {
+                                self.mapleController.openLogWindow()
+                            }, title: "Logs", imageName: "newspaper.circle")
+                        }.frame(width: 200, height: 150)
                         .onHover { hovered in
                             self.showOtherOptions = hovered
                         }
