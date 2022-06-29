@@ -26,6 +26,7 @@ class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, Custom
     @Published var targetBundleID: [String]? = nil
     @Published var leafID: String? = nil
     @Published var development: Bool = false
+    @Published var killOnInject: Bool = true
     var hasPreferences: Bool = false
     
     var preferences: Preferences? {

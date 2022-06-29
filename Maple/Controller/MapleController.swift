@@ -20,6 +20,7 @@ class MapleController: ObservableObject {
     static let runnablesDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables", isDirectory: true)
     static let installedDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Installed", isDirectory: true)
     static let preferencesDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Preferences", isDirectory: true)
+    static let hiddenInstallingDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/.installing", isDirectory: true)
     
     static let injectorFile: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
     
@@ -62,8 +63,6 @@ class MapleController: ObservableObject {
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
-        self.setLocationsInDefaults()
-        
         self.installedLeaves = self.fetchLocallyStoredLeaves()
         self.startInjectingEnabledLeaves()
         
@@ -71,6 +70,9 @@ class MapleController: ObservableObject {
         try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
         try? self.fManager.createDirectory(at: MapleController.installedDir, withIntermediateDirectories: true)
         try? self.fManager.createDirectory(at: MapleController.preferencesDir, withIntermediateDirectories: true)
+        try? self.fManager.createDirectory(at: MapleController.hiddenInstallingDir, withIntermediateDirectories: true)
+        
+        //TODO: Make sure the injector is where it should be and that all is well :)
         
         if MaplePreferencesController.shared.developmentEnabled {
             MapleDevelopmentHelper.shared.configure()
@@ -79,17 +81,9 @@ class MapleController: ObservableObject {
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(injectorCrashHandler(notification:)), name: Notification.Name("maple.injector.crash"), object: nil)
     }
     
-    /// Store the nessecary file URLS into defaults so that the helper tool can get to them as well
-    private func setLocationsInDefaults() {
-        UserDefaults(suiteName: "dev.halz.Maple.app")?.set(FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false).path, forKey: "listenFileLocationAsString")
-        
-        UserDefaults(suiteName: "dev.halz.Maple.app")?.set(FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false).path, forKey: "injectionFileLocationAsString")
-    }
-    
     /// Restarts Maple-LibInjector if it is to crash for any reason
     @objc func injectorCrashHandler(notification: Notification) {
         MapleLogController.shared.local(log: "Maple's injector crashed... restarting")
-        self.setLocationsInDefaults()
         self.reloadMapleInjector()
     }
     
@@ -122,14 +116,16 @@ class MapleController: ObservableObject {
         // Create contents of listen.txt file
         var listenFile: [String : [String]] = [:]
         for leaf in self.runningLeaves {
-            for i in 0..<leaf.targetBundleID!.count {
-                if let _ = listenFile[leaf.targetBundleID![i]] {
-                    listenFile[leaf.targetBundleID![i]]!.append("\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)")
-                } else {
-                    listenFile[leaf.targetBundleID![i]] = ["\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)"]
+            if leaf.killOnInject {
+                for i in 0..<leaf.targetBundleID!.count {
+                    if let _ = listenFile[leaf.targetBundleID![i]] {
+                        listenFile[leaf.targetBundleID![i]]!.append("\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)")
+                    } else {
+                        listenFile[leaf.targetBundleID![i]] = ["\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)"]
+                    }
                 }
+                procs.append(contentsOf: leaf.targetBundleID!)
             }
-            procs.append(contentsOf: leaf.targetBundleID!)
         }
         
         // Write listen.txt file
@@ -240,9 +236,10 @@ class MapleController: ObservableObject {
     //MARK: Leaf Management
     
     /// Creates a Leaf object from a file
+    /// If this is a development leaf, it will take care of installing it as well
     /// - Parameter file: URL of the file, wherever it is stored on disk
     /// - Returns: Optional Leaf object, if no errors are thrown
-    func installFile(_ file: URL, fromDevelopment dev: Bool = false) throws -> Leaf? {
+    func createLeaf(_ file: URL, fromDevelopment dev: Bool = false) throws -> Leaf? {
         let internalLoc: URL = dev ?
             MapleDevelopmentHelper.devInstalledFolderURL.appendingPathComponent("tmpInstallable.zip") :
             MapleController.installedDir.appendingPathComponent("tmpInstallable.zip")
@@ -306,40 +303,40 @@ class MapleController: ObservableObject {
         }
         
         if resultLeaf.isValid() {
-            
+            //Move files to the hideen installing directory
             do {
-                let destination = (dev ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("/\(resultLeaf.leafID ?? "").mapleleaf")
+                let destination = MapleController.hiddenInstallingDir.appendingPathComponent("installing.mapleleaf")
                 if self.fManager.fileExists(atPath: destination.path) {
                     try? self.fManager.removeItem(at: destination)
                 }
                 try self.fManager.copyItem(at: internalLoc, to: destination)
             } catch {
+                MapleLogController.shared.local(log: "ERROR Failed to copy the whole mapleleaf file to the installing directory")
                 throw InstallError.fileCopyError
             }
             
             do {
-                let destTwo = (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)/\(resultLeaf.libraryName!)")
-                try self.fManager.createDirectory(at: (dev ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(resultLeaf.leafID!)"), withIntermediateDirectories: true)
+                let destTwo = MapleController.hiddenInstallingDir.appendingPathComponent("library")
                 if self.fManager.fileExists(atPath: destTwo.path) {
                     try? self.fManager.removeItem(at: destTwo)
                 }
                 try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/\(resultLeaf.libraryName!)"), to: destTwo)
             } catch {
                 // Could not copy dylib to runnables directory
-                MapleLogController.shared.local(log: "ERROR Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+                MapleLogController.shared.local(log: "ERROR Failed to copy library to installing directory: \(error.localizedDescription)")
                 throw InstallError.fileCopyError
             }
             
             if self.fManager.fileExists(atPath: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/prefs.json").path) {
                 // Should copy the preference file to the respective preferences folder
-                let prefsDest = (dev ? MapleDevelopmentHelper.devPreferencesFolderURL : MapleController.preferencesDir).appendingPathComponent("\(resultLeaf.leafID!).json")
+                let prefsDest = MapleController.hiddenInstallingDir.appendingPathComponent("prefs.json")
                 if self.fManager.fileExists(atPath: prefsDest.path) {
                     try? self.fManager.removeItem(at: prefsDest)
                 }
                 do {
                     try self.fManager.copyItem(at: unzippedPackageURL.appendingPathComponent("\(containingFolder!)/prefs.json"), to: prefsDest)
                 } catch {
-                    MapleLogController.shared.local(log: "ERROR Failed to copy the preferences to their proper location")
+                    MapleLogController.shared.local(log: "ERROR Failed to copy the preferences to the installing directory")
                 }
                 resultLeaf.hasPreferences = true
             }
@@ -367,14 +364,58 @@ class MapleController: ObservableObject {
     }
     
     /// Responsible for installing a Leaf
-    /// Saves the data to on device storage(permanent)
+    /// Saves the files to proper locations and begins injection
     /// Adds to an observable list
     /// - Parameter leaf: Leaf object to install
     func installLeaf(_ leaf: Leaf) throws {
+        guard leaf.isValid() else { throw InstallError.unknown }
         if self.installedLeaves.contains(where: { leaf.leafID == $0.leafID }) {
-            if !leaf.development {
-                throw InstallError.alreadyInstalled
+            print("INSTALLING A LEAF WHERE THE THINGY IS ALREADY IN HERE")
+            if let alreadyLeaf = self.installedLeaves.first(where: {$0.leafID == leaf.leafID }) {
+                
+                self.uninstallLeaf(alreadyLeaf) // Yoink
             }
+        }
+        
+        //Copy the files to where they should actually go
+        do {
+            let destination = (leaf.development ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("/\(leaf.leafID ?? "").mapleleaf")
+            if self.fManager.fileExists(atPath: destination.path) {
+                try? self.fManager.removeItem(at: destination)
+            }
+            try self.fManager.copyItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("installing.mapleleaf"), to: destination)
+            try? self.fManager.removeItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("installing.mapleleaf"))
+        } catch {
+            throw InstallError.fileCopyError
+        }
+        
+        do {
+            let destTwo = (leaf.development ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(leaf.leafID!)/\(leaf.libraryName!)")
+            try self.fManager.createDirectory(at: (leaf.development ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("/\(leaf.leafID!)"), withIntermediateDirectories: true)
+            if self.fManager.fileExists(atPath: destTwo.path) {
+                try? self.fManager.removeItem(at: destTwo)
+            }
+            try self.fManager.copyItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("library"), to: destTwo)
+            try? self.fManager.removeItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("library"))
+        } catch {
+            // Could not copy dylib to runnables directory
+            MapleLogController.shared.local(log: "ERROR Failed to copy dylib to runnables directory: \(error.localizedDescription)")
+            throw InstallError.fileCopyError
+        }
+        
+        if self.fManager.fileExists(atPath: MapleController.hiddenInstallingDir.appendingPathComponent("prefs.json").path) {
+            // Should copy the preference file to the respective preferences folder
+            let prefsDest = (leaf.development ? MapleDevelopmentHelper.devPreferencesFolderURL : MapleController.preferencesDir).appendingPathComponent("\(leaf.leafID!).json")
+            if self.fManager.fileExists(atPath: prefsDest.path) {
+                try? self.fManager.removeItem(at: prefsDest)
+            }
+            do {
+                try self.fManager.copyItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("prefs.json"), to: prefsDest)
+            } catch {
+                MapleLogController.shared.local(log: "ERROR Failed to copy the preferences to their proper location")
+            }
+            try? self.fManager.removeItem(at: MapleController.hiddenInstallingDir.appendingPathComponent("prefs.json"))
+            leaf.hasPreferences = true
         }
         
         // Add this to the live list
@@ -387,8 +428,9 @@ class MapleController: ObservableObject {
     
     func uninstallLeaf(_ leaf: Leaf) {
         // Remove it from memory
-        DispatchQueue.main.sync {
+        DispatchQueue.main.async {
             self.installedLeaves.removeAll(where: { $0.leafID == leaf.leafID })
+            self.updateLocallyStoredLeaves()
         }
         
         try? self.killProcesses(withBIDs: leaf.targetBundleID!)
@@ -396,8 +438,12 @@ class MapleController: ObservableObject {
         if !leaf.development {
             do {
                 // Remove the stored files
-                try FileManager.default.removeItem(at: MapleController.installedDir.appendingPathComponent("\(leaf.leafID!).mapleleaf"))
-                try FileManager.default.removeItem(at: MapleController.runnablesDir.appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
+                try FileManager.default.removeItem(at: (leaf.development ? MapleDevelopmentHelper.devInstalledFolderURL : MapleController.installedDir).appendingPathComponent("\(leaf.leafID!).mapleleaf"))
+                if leaf.hasPreferences {
+                    try FileManager.default.removeItem(at: (leaf.development ? MapleDevelopmentHelper.devPreferencesFolderURL : MapleController.preferencesDir).appendingPathComponent("\(leaf.leafID!).json"))
+                }
+                try FileManager.default.removeItem(at: (leaf.development ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("\(leaf.leafID!)/\(leaf.libraryName!)"))
+                try FileManager.default.removeItem(at: (leaf.development ? MapleDevelopmentHelper.devRunnablesFolderURL : MapleController.runnablesDir).appendingPathComponent("\(leaf.leafID!)"))
             } catch {
                 MapleLogController.shared.local(log: "ERROR Unable to delete files from installed leaves")
             }

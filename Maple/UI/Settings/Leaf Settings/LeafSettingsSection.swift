@@ -29,12 +29,17 @@ struct LeafSettingsSection: View {
             
             Divider()
             
-            //TODO: This enablability toggle's only purpose is to control if it's enabled or not. Need to add some way to have an initial value for the preferences!
-            BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, andIdentifier: "unnessecary.identifier.for.identifiable", forContainer: self.leaf.leafID ?? "useless container", toRunOnSet: { newValue in
+            BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, defaultValue: .bool(self.leaf.enabled), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
                 if let value = newValue as? Bool {
                     if self.leaf.enabled != value {
                         self.leaf.toggleEnable()
                     }
+                }
+            })).padding(.horizontal)
+            
+            BooleanPreferenceView(preference: Preference(withTitle: "Kill injected process on startup", description: "Will kill the affected process if currently running to ensure any changes are made", withType: .bool, defaultValue: .bool(self.leaf.killOnInject), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
+                if let value = newValue as? Bool {
+                    self.leaf.killOnInject = value
                 }
             })).padding(.horizontal)
             
@@ -50,6 +55,27 @@ struct LeafSettingsSection: View {
                     }
                 }
             }
+            
+            Divider()
+                .padding(.top, 50)
+            
+            Group {
+                Text("Danger Zone")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.red)
+                    .padding(.bottom, 6)
+                
+                Button {
+                    MapleController.shared.uninstallLeaf(self.leaf)
+                } label: {
+                    HStack {
+                        Text("Uninstall Leaf")
+                        Image(systemName: "trash")
+                            .font(.system(size: 14))
+                    }.foregroundColor(.red.opacity(0.7))
+                }.buttonStyle(PlainButtonStyle())
+            }.padding(.horizontal)
         }.onAppear {
             self.selectedEnabled = self.leaf.enabled
         }

@@ -46,7 +46,7 @@ struct LeafDetailView: View {
                     
                     Divider()
                     
-                    BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, andIdentifier: "unnessecary.identifier.for.identifiable", forContainer: leaf.leafID ?? "useless container", toRunOnSet: { newValue in
+                    BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, defaultValue: .bool(self.selectedLeaf?.enabled), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
                         if let value = newValue as? Bool {
                             if leaf.enabled != value {
                                 leaf.toggleEnable()
@@ -117,6 +117,17 @@ struct LeafDetailView: View {
                             Spacer()
                         }
                     }
+                    
+                    Button {
+                        if let _ = self.selectedLeaf {
+                            MapleController.shared.uninstallLeaf(self.selectedLeaf!)
+                            self.selectedLeaf = nil
+                        }
+                    } label: {
+                        Text("Uninstall leaf")
+                            .foregroundColor(.red)
+                    }.buttonStyle(PlainButtonStyle())
+
                 }.padding()
             } else {
                 EmptyView()

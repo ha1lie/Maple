@@ -66,7 +66,7 @@ class MapleDevelopmentHelper: ObservableObject {
     }
     
     public func installDevLeaf(_ file: URL) throws {
-        let _ = try MapleController.shared.installFile(file, fromDevelopment: true)
+        let _ = try MapleController.shared.createLeaf(file, fromDevelopment: true)
     }
     
     public func uninstallDevLeaf(_ leaf: Leaf) {

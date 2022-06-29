@@ -15,15 +15,18 @@ struct InstallerView: View {
     @State var leaf: Leaf? = nil
     @State var error: String? = nil
     @State var views: [AnyView] = [AnyView(EmptyView())]
+    @State var closed: Bool = false
     
     var body: some View {
-        VStack {
-            Text("Leaf Installer: Step #\(self.stepNum)")
+        VStack(alignment: .leading) {
+            Text("Install: Step \(self.stepNum + 1)")
                 .font(.title)
                 .bold()
             Text(self.currentTitle)
+                .font(.title2)
             
-            Spacer() // This is where the content of each step will go, gotta figure out the best way to do that first
+            Divider()
+                .padding(.horizontal)
             
             if let _ = self.error {
                 ScrollView {
@@ -38,25 +41,27 @@ struct InstallerView: View {
                 self.views[self.stepNum]
             }
             
-            Spacer()
+//            Spacer()
             
             HStack {
                 Spacer()
                 
-                MapleButton(action: {
-                    if (self.stepNum != 0) {
-                        self.stepNum -= 1
-                    }
-                }, title: "BACK").disabled(self.stepNum == 0)
-                
-                MapleButton(action: {
-                    if self.stepNum != 3 {
-                        self.stepNum += 1
-                    } else {
-                        // Close the window
-                        MapleController.shared.closeInstallWindow()
-                    }
-                }, title: self.stepNum != 3 && self.error == nil ? "NEXT" : "FINISH").disabled(!self.canContinue)
+                if self.stepNum != 3 {
+                    MapleButton(action: {
+                        if (self.stepNum != 0) {
+                            self.stepNum -= 1
+                        }
+                    }, title: "Back", andSize: .small).disabled(self.stepNum == 0)
+                    
+                    MapleButton(action: {
+                        if self.stepNum != 3 {
+                            self.stepNum += 1
+                        } else {
+                            // Close the window
+                            MapleController.shared.closeInstallWindow()
+                        }
+                    }, title: self.error == nil ? "Next" : "Cancel", andSize: .small).disabled(!self.canContinue)
+                }
             }
         }.padding()
         .onAppear {
@@ -64,8 +69,11 @@ struct InstallerView: View {
                 AnyView(InstallWelcomeView(completed: $canContinue, title: $currentTitle)),
                 AnyView(InstallSelectView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName)),
                 AnyView(InstallVerifyView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName, leaf: $leaf, foundError: self.$error)),
-                AnyView(InstallStartView(complete: $canContinue, title: $currentTitle, leaf: $leaf))
+                AnyView(InstallStartView(complete: $canContinue, title: $currentTitle, leaf: $leaf, finished: self.$closed))
             ]
+            self.stepNum = 1
+        }.onChange(of: self.closed) { newValue in
+            MapleController.shared.closeInstallWindow()
         }
     }
 }

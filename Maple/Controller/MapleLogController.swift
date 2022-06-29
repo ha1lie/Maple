@@ -11,6 +11,16 @@ class MapleLogController: ObservableObject {
     
     static let shared: MapleLogController = MapleLogController()
     
+    private static var formatter: DateFormatter {
+        if privateFormatter == nil {
+            privateFormatter = DateFormatter()
+            privateFormatter?.timeStyle = .medium
+        }
+        return privateFormatter!
+    }
+    
+    private static var privateFormatter: DateFormatter? = nil
+    
     @Published var logs: [Log]
     
     init() {
@@ -28,7 +38,7 @@ class MapleLogController: ObservableObject {
                 print("+TIME [\(parts[0]) - \(parts[1])")
                 #endif
                 DispatchQueue.main.async {
-                    self.logs.append(Log(parts[1], forBundle: parts[0], atTime: "TIME", withType: .normal)) //TODO: Make this parse correctly for type and time
+                    self.logs.append(Log(parts[1], forBundle: parts[0], atTime: MapleLogController.formatter.string(from: Date.now), withType: .normal)) //TODO: Make this parse correctly for type and time
                 }
             } else {
                 DispatchQueue.main.async {
@@ -58,8 +68,7 @@ class MapleLogController: ObservableObject {
             value = String(str.suffix(from: str.index(str.startIndex, offsetBy: 8)))
             type = .warning
         }
-        
-        return Log(value, forBundle: bundle, atTime: "TIME", withType: type)
+        return Log(value, forBundle: bundle, atTime: MapleLogController.formatter.string(from: Date.now), withType: type)
     }
     
     /// Adds a log from the app 

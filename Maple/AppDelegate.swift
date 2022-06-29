@@ -70,11 +70,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.helperMonitor.determineStatus()
         
         MapleController.shared.configure()
-        MapleController.shared.openLogWindow()
-        
-        MapleLogController.shared.local(log: "ERROR Failed to do something silly, isn't that funny?")
-        MapleLogController.shared.local(log: "WARNING Not sure if this thing functioned correctly!")
-        MapleLogController.shared.local(log: "Just a regular everyday log, trying to figure something out")
+//        MapleController.shared.openLogWindow()
+        MapleController.shared.openWindowToInstallLeaf()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
