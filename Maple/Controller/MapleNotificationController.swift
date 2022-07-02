@@ -28,7 +28,9 @@ class MapleNotificationController {
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: nContent, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { er in
-            MapleLogController.shared.local(log: "ERROR Failed to add notification request: \(er.debugDescription)")
+            if let er = er {
+                MapleLogController.shared.local(log: "ERROR Failed to add notification request: \(er.localizedDescription)")
+            }
         }
     }
     

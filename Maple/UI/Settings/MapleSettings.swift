@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MaplePreferences
+import LaunchAtLogin
 
 struct MapleSettings: View {
     
@@ -16,8 +17,11 @@ struct MapleSettings: View {
     @ObservedObject var prefsController: MaplePreferencesController = .shared
     @ObservedObject var helperMonitor: HelperToolMonitor
     
+    @ObservedObject var launch = LaunchAtLogin.observable
+    
     init() {
         guard let hm = (NSApplication.shared.delegate as? AppDelegate)?.helperMonitor else {
+            MapleLogController.shared.local(log: "ERROR Fatal Error Occured because Helper Monitor should always be accessible")
             fatalError("Helper Monitor should be accessible")
         }
         self.helperMonitor = hm
@@ -28,6 +32,7 @@ struct MapleSettings: View {
             VStack(alignment: .leading) {
                 
                 PreferencesView(preferences: Preferences.mapleAppPreferences)
+                
                 Divider()
                 
                 //SECTION: About Maple
@@ -51,18 +56,47 @@ struct MapleSettings: View {
                         }.foregroundColor(.accentColor)
                     }.buttonStyle(PlainButtonStyle())
 
-                    
-                    Text("Installed Versions")
-                        .font(.title)
-                        .bold()
-                    
-                    Text("**Maple Version:** \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown Version")")
-                    
-                    Text("**Helper Version:** \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "Unknown Version")")
-                    
-                    Text("**MacOS Version:** \(ProcessInfo.processInfo.operatingSystemVersionString)")
+                    Group {
+                        Text("Installed Versions")
+                            .font(.title)
+                            .bold()
+                        
+                        Text("**Maple Version:** \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown Version")")
+                        
+                        Text("**Helper Version:** \(self.helperMonitor.helperToolBundleVersion?.rawValue ?? "Unknown Version")")
+                        
+                        Text("**Injector Version:** v1.0")
+                        
+                        Button {
+                            if let injectorGithub = URL(string: "https://github.com/ha1lie/Maple-LibInjector") {
+                                NSWorkspace.shared.open(injectorGithub)
+                            }
+                        } label: {
+                            HStack(alignment: .center) {
+                                Text("View on Github")
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 14))
+                            }.foregroundColor(.accentColor)
+                        }.buttonStyle(PlainButtonStyle())
+                        
+                        Text("**MacOS Version:** \(ProcessInfo.processInfo.operatingSystemVersionString)")
+                    }
                     
                     Text("**Copyright 2022 Hallie**")
+                    
+                    Group {
+                        Divider()
+                            .padding(.horizontal)
+                        
+                        Text("Danger Zone")
+                            .font(.title2)
+                            .bold()
+                            .foregroundColor(.red)
+                        
+                        MapleButton(action: {
+                            MapleController.shared.uninstallInjector()
+                        }, title: "Remove Files from /Library", withColor: .red, andSize: .small)
+                    }
                 }
             }.padding()
         }

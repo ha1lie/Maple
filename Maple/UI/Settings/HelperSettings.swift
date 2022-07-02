@@ -147,7 +147,7 @@ struct HelperSettings: View {
                     self.helperToolTopQuote = "Succeeded to uninstall Maple's helper tool"
                     return
                 default:
-                    print("Uninstall error: \(error.localizedDescription)")
+                    MapleLogController.shared.local(log: "ERROR Failed to uninstall Maple's privileged helper tool \(error.localizedDescription)")
                     self.helperToolTopQuote = "Failed to uninstall Maple's helper tool"
                 }
             }
@@ -162,7 +162,7 @@ struct HelperSettings: View {
                 case .connectionInterrupted:
                     return
                 default:
-                    print("Update error: \(error.localizedDescription)")
+                    MapleLogController.shared.local(log: "ERROR Failed while updating Maple's helper tool \(error.localizedDescription)")
                     self.helperToolTopQuote = "Helper Tool Update Failed"
                 }
             }
@@ -173,12 +173,11 @@ struct HelperSettings: View {
     private func testRun() {
         self.xpcService.send(to: SharedConstants.mapleInjectionTestConnection) { result in
             switch result {
-            case .success(let reply):
-                print("Reply: \(reply)")
+            case .success(_):
                 self.helperToolTopQuote = "Maple's helper is connected"
             case .failure(let error):
                 self.helperToolTopQuote = "Maple's helper could not establish a connection"
-                print("Failed to connect: \(error.localizedDescription)")
+                MapleLogController.shared.local(log: "ERROR Failed to connect to Maple's helper tool \(error.localizedDescription)")
             }
         }
     }

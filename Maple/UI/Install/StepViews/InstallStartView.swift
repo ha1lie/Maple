@@ -42,16 +42,26 @@ struct InstallStartView: View {
                 }
                 
                 BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, defaultValue: .bool(true), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
-                    if let newBool = newValue as? Bool {
-                        self.leaf?.enabled = newBool
+                    switch newValue {
+                    case .bool(let boolValue):
+                        if let boolValue = boolValue {
+                            self.leaf?.enabled = boolValue
+                        }
+                    default:
+                        ()
                     }
                 })).onAppear {
                     self.leaf?.enabled = true
                 }
                 
                 BooleanPreferenceView(preference: Preference(withTitle: "Kill injected process on startup", description: "This will force whatever affected process to reload and inject new implementation", withType: .bool, defaultValue: .bool(true), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
-                    if let newBool = newValue as? Bool { // Grr
-                        self.leaf?.killOnInject = newBool
+                    switch newValue {
+                    case .bool(let boolValue):
+                        if let boolValue = boolValue {
+                            self.leaf?.killOnInject = boolValue
+                        }
+                    default:
+                        ()
                     }
                 })).onAppear {
                     self.leaf?.killOnInject = true

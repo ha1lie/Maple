@@ -22,8 +22,6 @@ class MapleController: ObservableObject {
     static let preferencesDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Preferences", isDirectory: true)
     static let hiddenInstallingDir: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/.installing", isDirectory: true)
     
-    static let injectorFile: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/Maple-LibInjector", isDirectory: false)
-    
     static let listenFile: URL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Maple/Runnables/listen.txt", isDirectory: false)
     
     private let xpcService: XPCClient
@@ -41,17 +39,19 @@ class MapleController: ObservableObject {
         }
     }
     
-    var installedLeaves: [Leaf] = []
+    @Published var installedLeaves: [Leaf] = []
     @Published var canCurrentlyInject: Bool = false
     
     //MARK: General
     
     init() {
         guard let tsc = (NSApplication.shared.delegate as? AppDelegate)?.sharedConstants else {
+            MapleLogController.shared.local(log: "ERROR AppDelegate did not contain SharedConstants")
             fatalError("Could not find AppDelegate's SharedConstants")
         }
         
         guard let bl = tsc.bundledLocation else {
+            MapleLogController.shared.local(log: "ERROR Helper tool's location did not exist within the bundle")
             fatalError("Helper Tool Location Shouldn't Not Exist")
         }
         
@@ -63,8 +63,11 @@ class MapleController: ObservableObject {
     /// Setup initial state for Maple Controller
     /// Also initialize injection for enabled Leaves
     public func configure() {
-        self.installedLeaves = self.fetchLocallyStoredLeaves()
-        self.startInjectingEnabledLeaves()
+        let fetched = self.fetchLocallyStoredLeaves()
+        DispatchQueue.main.async {
+            self.installedLeaves = fetched
+            self.startInjectingEnabledLeaves()
+        }
         
         // Make sure that the directories will exist when you need them... doesn't hurt to put them there now
         try? self.fManager.createDirectory(at: MapleController.runnablesDir, withIntermediateDirectories: true)
@@ -72,13 +75,37 @@ class MapleController: ObservableObject {
         try? self.fManager.createDirectory(at: MapleController.preferencesDir, withIntermediateDirectories: true)
         try? self.fManager.createDirectory(at: MapleController.hiddenInstallingDir, withIntermediateDirectories: true)
         
-        //TODO: Make sure the injector is where it should be and that all is well :)
-        
         if MaplePreferencesController.shared.developmentEnabled {
             MapleDevelopmentHelper.shared.configure()
         }
         
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(injectorCrashHandler(notification:)), name: Notification.Name("maple.injector.crash"), object: nil)
+    }
+    
+    /// Installs the injector to the shared location in /Library via the priv. tool
+    public func installInjector() {
+        self.xpcService.send(to: SharedConstants.installInjectorExecutable) { response in
+            switch response {
+            case .failure(let error):
+                MapleLogController.shared.local(log: error.localizedDescription)
+            case .success(let terminalResponse):
+                if let terminalResponse = terminalResponse {
+                    // There was actually an issue
+                    if let output = terminalResponse.output {
+                        MapleLogController.shared.local(log: "Injector installation output: \(output)")
+                    }
+                    if let error = terminalResponse.error {
+                        MapleLogController.shared.local(log: "ERROR Injector installation error: \(error)")
+                    }
+                } else {
+                    MapleLogController.shared.local(log: "Successfully installed Maple-LibInjector file")
+                }
+            }
+        }
+    }
+    
+    public func uninstallInjector() {
+        
     }
     
     /// Restarts Maple-LibInjector if it is to crash for any reason
@@ -116,14 +143,15 @@ class MapleController: ObservableObject {
         // Create contents of listen.txt file
         var listenFile: [String : [String]] = [:]
         for leaf in self.runningLeaves {
-            if leaf.killOnInject {
-                for i in 0..<leaf.targetBundleID!.count {
-                    if let _ = listenFile[leaf.targetBundleID![i]] {
-                        listenFile[leaf.targetBundleID![i]]!.append("\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)")
-                    } else {
-                        listenFile[leaf.targetBundleID![i]] = ["\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)"]
-                    }
+            for i in 0..<leaf.targetBundleID!.count {
+                if let _ = listenFile[leaf.targetBundleID![i]] {
+                    listenFile[leaf.targetBundleID![i]]!.append("\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)")
+                } else {
+                    listenFile[leaf.targetBundleID![i]] = ["\(leaf.development ? "../Development/Runnables/" : "")\(leaf.leafID!)/\(leaf.libraryName!)"]
                 }
+            }
+            
+            if leaf.killOnInject {
                 procs.append(contentsOf: leaf.targetBundleID!)
             }
         }
@@ -160,7 +188,7 @@ class MapleController: ObservableObject {
             let sema = DispatchSemaphore(value: 1)
             Task {
                 do {
-                    let response = try await self.xpcService.sendMessage([MapleController.injectorFile, MapleController.listenFile], to: SharedConstants.mapleInjectionBeginInjection)
+                    let response = try await self.xpcService.sendMessage([MapleController.listenFile], to: SharedConstants.mapleInjectionBeginInjection)
                     if response == nil {
                         MapleLogController.shared.local(log: "Successfully began injection")
                     } else {
@@ -210,7 +238,6 @@ class MapleController: ObservableObject {
             if running.bundleIdentifier != nil && bids.contains(running.bundleIdentifier!) {
                 let kp = Process()
                 kp.launchPath = "/bin/kill"
-                print("\(running.processIdentifier)")
                 kp.arguments = ["-9", "\(running.processIdentifier)"]
                 kp.launch()
                 kp.waitUntilExit()
@@ -221,16 +248,7 @@ class MapleController: ObservableObject {
     /// Kills a given process if it's currently running
     /// - Parameter bid: Bundle ID of a process you would like to kill
     func killProcess(withBID bid: String) throws {
-        for running in NSWorkspace.shared.runningApplications {
-            if running.bundleIdentifier == bid {
-                let kp = Process()
-                kp.launchPath = "/bin/kill"
-                print("\(running.processIdentifier)")
-                kp.arguments = ["-9", "\(running.processIdentifier)"]
-                kp.launch()
-                kp.waitUntilExit()
-            }
-        }
+        try self.killProcesses(withBIDs: [bid])
     }
     
     //MARK: Leaf Management
@@ -370,7 +388,6 @@ class MapleController: ObservableObject {
     func installLeaf(_ leaf: Leaf) throws {
         guard leaf.isValid() else { throw InstallError.unknown }
         if self.installedLeaves.contains(where: { leaf.leafID == $0.leafID }) {
-            print("INSTALLING A LEAF WHERE THE THINGY IS ALREADY IN HERE")
             if let alreadyLeaf = self.installedLeaves.first(where: {$0.leafID == leaf.leafID }) {
                 
                 self.uninstallLeaf(alreadyLeaf) // Yoink
@@ -419,7 +436,12 @@ class MapleController: ObservableObject {
         }
         
         // Add this to the live list
-        self.installedLeaves.append(leaf)
+        let sema = DispatchSemaphore(value: 1)
+        DispatchQueue.main.async {
+            self.installedLeaves.append(leaf)
+            sema.signal()
+        }
+        sema.wait()
         if !leaf.development {
             self.updateLocallyStoredLeaves()
         }
@@ -456,7 +478,7 @@ class MapleController: ObservableObject {
     func updateLocallyStoredLeaves() {
         let encodedData = try? JSONEncoder().encode(self.installedLeaves.filter({ !$0.development }))
         
-        guard let _ = encodedData else { print("Could not encode self.installedLeaves"); return }
+        guard let _ = encodedData else { MapleLogController.shared.local(log: "ERROR Failed to update a local list of installed Leaves"); return }
         
         if encodedData!.isEmpty {
             MapleLogController.shared.local(log: "ERROR Failed to properly convert leaves to Data for storage")

@@ -34,6 +34,9 @@ if CommandLine.arguments.count > 1 {
     
     server.registerRoute(SharedConstants.mapleInjectionTestConnection, handler: MapleInjectionHelper.testConnection)
     
+    server.registerRoute(SharedConstants.installInjectorExecutable, handler: MapleInjectionHelper.installInjector)
+    server.registerRoute(SharedConstants.uninstallInjectorExecutable, handler: MapleInjectionHelper.uninstallInjector)
+    
     server.registerRoute(SharedConstants.mapleInjectionBeginInjection, handler: MapleInjectionHelper.beginInjection(withFiles:))
     server.registerRoute(SharedConstants.mapleInjectionEndInjection, handler: MapleInjectionHelper.endInjection)
     

@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.sharedConstants = try SharedConstants(caller: .app)
             self.helperMonitor = HelperToolMonitor(constants: self.sharedConstants)
         } catch {
+            MapleLogController.shared.local(log: "ERROR PropertyList configuration errors exist. Please confirm all is properly configured. Exiting...")
             print("One or more property list configuration issues exist. Please check the PropertyListModifier.swift " +
                   "script is run as part of the build process for both the app and helper tool targets. This script " +
                   "will automatically create all of the necessary configurations.")
@@ -49,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let bl = self.sharedConstants.bundledLocation else { return }
         
         if self.helperMonitor.helperToolBundleVersion == nil || (try! HelperToolInfoPropertyList(from: bl).version) > self.helperMonitor.helperToolBundleVersion! {
-            print("Trying to update it")
+            MapleLogController.shared.local(log: "Attempting to update the installed Maple's Helper Tool")
             DispatchQueue.main.async {
                 let xpcService: XPCClient = XPCClient.forMachService(named: self.sharedConstants.machServiceName)
                 xpcService.sendMessage(bl, to: SharedConstants.updateRoute) { response in
@@ -58,20 +59,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         case .connectionInterrupted:
                             return
                         default:
-                            print("Update error: \(error.localizedDescription)")
+                            MapleLogController.shared.local(log: "ERROR Failed to update Maple's helper tool: \(error.localizedDescription)")
                         }
                     }
                 }
             }
         } else if !self.helperMonitor.registeredWithLaunchd {
-            print("Helper is not installed at appdidlaunch")
+            MapleLogController.shared.local(log: "ERROR Maple's helper tool is not registered with launchd. Will result in being unable to run privileged behaviours")
         }
         
         self.helperMonitor.determineStatus()
         
         MapleController.shared.configure()
-//        MapleController.shared.openLogWindow()
-        MapleController.shared.openWindowToInstallLeaf()
+        MapleController.shared.openSettingsWindow()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -83,7 +83,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        print("Checking if it should terminate")
         let shouldQuit = MapleNotificationController.shared.sendUserDialogue(withTitle: "Are you sure you want to quit?", andBody: "If you quit Maple, any currently injecting leaves will stop injecting and reset", withOptions: ["Quit", "Cancel"])
         if shouldQuit == "Quit" {
             return .terminateNow

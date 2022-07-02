@@ -19,10 +19,14 @@ struct Log: Equatable, Hashable {
         self.time = time
         self.type = type
     }
+    
+    public func stringRep() -> String {
+        return "\(self.type.rawValue)[\(self.bundle)] @(\(self.time)) - \(self.log)"
+    }
 }
 
-enum LogType {
-    case error
-    case warning
-    case normal
+enum LogType: String {
+    case error = "ERROR "
+    case warning = "WARNING "
+    case normal = ""
 }

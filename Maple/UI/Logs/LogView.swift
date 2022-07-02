@@ -38,6 +38,7 @@ struct LogView: View {
                     Text(self.log.log)
                         .padding(.trailing)
                         .lineLimit(1)
+                        .help(self.log.log)
                 }.foregroundColor(self.log == self.highLightedLog ? .white : self.logColor)
                 
                 Spacer()

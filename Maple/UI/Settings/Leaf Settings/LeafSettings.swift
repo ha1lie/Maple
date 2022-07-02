@@ -47,7 +47,7 @@ struct LeafSettings: View {
                             .font(.system(size: 70))
                         
                         MapleButton(action: {
-                            print("Link to install window here :)")
+                            self.mapleController.openWindowToInstallLeaf()
                         }, title: "Install A Leaf")
                         Spacer()
                     }

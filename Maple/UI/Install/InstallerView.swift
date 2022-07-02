@@ -71,9 +71,10 @@ struct InstallerView: View {
                 AnyView(InstallVerifyView(completed: $canContinue, title: $currentTitle, fileName: $chosenPackageName, leaf: $leaf, foundError: self.$error)),
                 AnyView(InstallStartView(complete: $canContinue, title: $currentTitle, leaf: $leaf, finished: self.$closed))
             ]
-            self.stepNum = 1
         }.onChange(of: self.closed) { newValue in
-            MapleController.shared.closeInstallWindow()
+            if newValue {
+                MapleController.shared.closeInstallWindow()
+            }
         }
     }
 }

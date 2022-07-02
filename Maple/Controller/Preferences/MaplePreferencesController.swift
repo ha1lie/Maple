@@ -8,6 +8,7 @@
 import Foundation
 import SecureXPC
 import MaplePreferences
+import LaunchAtLogin
 
 class MaplePreferencesController: ObservableObject {
     
@@ -79,9 +80,9 @@ class MaplePreferencesController: ObservableObject {
     @Published var launchAtLoginEnabled: Bool {
         didSet {
             if self.launchAtLoginEnabled {
-                print("Enable launch at login")
+                LaunchAtLogin.isEnabled = true
             } else {
-                print("Disable launch at login")
+                LaunchAtLogin.isEnabled = false
             }
         }
     }
@@ -105,13 +106,8 @@ class MaplePreferencesController: ObservableObject {
             self.developmentEnabled = false
         }
         
-        prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.launchAtLoginKey)
-        switch prefVal {
-        case .bool(let boolVal):
-            self.launchAtLoginEnabled = boolVal ?? false
-        default:
-            self.launchAtLoginEnabled = false
-        }
+        self.launchAtLoginEnabled = LaunchAtLogin.isEnabled
+        Preferences.saveValue(.bool(LaunchAtLogin.isEnabled), withKey: MaplePreferencesController.launchAtLoginKey, toContainer: MaplePreferencesController.mapleAppBundle)
         
         prefVal = Preferences.mapleAppPreferences.valueForKey(MaplePreferencesController.injectionEnabledKey)
         switch prefVal {

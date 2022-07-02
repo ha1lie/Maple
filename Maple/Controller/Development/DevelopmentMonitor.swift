@@ -64,7 +64,7 @@ class DevelopmentMonitor {
                         MapleLogController.shared.local(log: "Attempting to install a development leaf")
                         try MapleDevelopmentHelper.shared.installDevLeaf(fileAddition)
                     } catch {
-                        print("Failed to install a dev leaf \(error)")
+                        MapleLogController.shared.local(log: "ERROR Failed to install a development leaf iteration")
                         try? FileManager.default.removeItem(at: fileAddition)
                         return
                     }

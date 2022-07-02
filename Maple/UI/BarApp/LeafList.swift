@@ -44,14 +44,22 @@ struct LeafList: View {
                             self.showOtherOptions = hovered
                         }
                     }
-                
-                MapleButton(action: {
-                    self.mapleController.openWindowToInstallLeaf()
-                }, title: "New")
+                if self.mapleController.installedLeaves.count > 0 {
+                    MapleButton(action: {
+                        self.mapleController.openWindowToInstallLeaf()
+                    }, title: "New")
+                }
             }
             
             if self.mapleController.installedLeaves.count == 0 {
-                Text("You don't have any Leaves installed currently")
+                ScrollView(.vertical, showsIndicators: true) {
+                    Text("No leaves currently installed")
+                        .font(.title2)
+                        .bold()
+                    MapleButton(action: {
+                        self.mapleController.openWindowToInstallLeaf()
+                    }, title: "Install A Leaf", andSize: .small)
+                }
             } else {
                 LeafSettingsList(selectedLeaf: self.$selectedLeaf)
             }

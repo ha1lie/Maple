@@ -15,6 +15,8 @@ struct LogWindowView: View {
     
     @ObservedObject var logController: MapleLogController = .shared
     
+    @State var showLogExporter: Bool = false
+    
     var title: String {
         get {
             if self.selectiveShow == 0 {
@@ -27,15 +29,39 @@ struct LogWindowView: View {
         }
     }
     
+    private func exportLogs() {
+        
+    }
+    
     var body: some View {
         VStack {
             HStack {
-                Text(self.title)
-                    .bold()
-                    .font(.title)
+                VStack(alignment: .leading) {
+                    Text(self.title)
+                        .bold()
+                        .font(.title)
+                    
+                    Button {
+                        self.showLogExporter = true
+                    } label: {
+                        HStack(alignment: .center) {
+                            Text("Export \(self.title)")
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 14))
+                        }.foregroundColor(.accentColor)
+                    }.buttonStyle(PlainButtonStyle())
+                    .fileExporter(isPresented: self.$showLogExporter, document: LogFile(initialText: MapleLogController.shared.exportLogFile()), contentType: .log) { result in
+                        switch result {
+                        case .success(let exportedURL):
+                            MapleLogController.shared.local(log: "Successfully exported Maple's logs to \(exportedURL.path)")
+                        case .failure(let error):
+                            MapleLogController.shared.local(log: "ERROR Failed to export Maple's logs \(error.localizedDescription)")
+                        }
+                    }
+                }
                 
                 Spacer()
-                
+
                 MapleTextField(title: "Search", value: self.$searchValue)
                     .frame(width: 200)
             }.padding([.horizontal, .top])

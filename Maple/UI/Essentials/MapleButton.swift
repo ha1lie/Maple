@@ -17,7 +17,7 @@ struct MapleButton: View {
     let size: MapleButtonSize
     let color: Color
     
-    init(action: @escaping () -> Void, title: String, withColor color: Color = .blue, andSize size: MapleButtonSize = .regular) {
+    init(action: @escaping () -> Void, title: String, withColor color: Color = .accentColor, andSize size: MapleButtonSize = .regular) {
         self.action = action
         self.title = title
         self.size = size

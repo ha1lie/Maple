@@ -9,7 +9,6 @@ import SwiftUI
 import MaplePreferences
 
 struct PreferencesView: View {
-    
     let preferences: Preferences
     
     var body: some View {

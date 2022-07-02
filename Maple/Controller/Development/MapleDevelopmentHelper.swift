@@ -30,17 +30,9 @@ class MapleDevelopmentHelper: ObservableObject {
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devInstalledFolderURL, withIntermediateDirectories: true)
         try? FileManager.default.createDirectory(at: MapleDevelopmentHelper.devPreferencesFolderURL, withIntermediateDirectories: true)
         
-        if MapleDevelopmentHelper.devFolderString == "/Users/hallie/Library/Application Support/Maple/Development" {
-            print("Heyyo it got the right folder with it and everything")
-        } else {
-            print("Dev controller failed to actually make the right thing... hmm")
-            print(MapleDevelopmentHelper.devFolderString)
-        }
-        
         self.developmentMonitor = DevelopmentMonitor()
         self.developmentMonitor?.startMonitoring()
-        
-        DistributedNotificationCenter.default().addObserver(self, selector: #selector(valueRequestHandler(notification:)), name: NSNotification.Name("maple.valueRequest"), object: nil)
+        DistributedNotificationCenter.default().addObserver(self, selector: #selector(valueRequestHandler(notification:)), name: NSNotification.Name("maple.valueRequest"), object: nil, suspensionBehavior: .deliverImmediately)
     }
     
     @objc private func valueRequestHandler(notification: Notification) {
@@ -48,7 +40,7 @@ class MapleDevelopmentHelper: ObservableObject {
             let pieces = request.components(separatedBy: "::")
             if pieces.count == 2 {
                 if let value = Preferences.valueForKey(pieces[0], inContainer: pieces[1]) {
-                    DistributedNotificationCenter.default().post(name: Notification.Name("maple.valueRequestResponse"), object: value.toString())
+                    DistributedNotificationCenter.default().post(name: Notification.Name("maple.valueRequestResponse++\(pieces[0])++\(pieces[1])"), object: value.toString())
                 }
             }
         }

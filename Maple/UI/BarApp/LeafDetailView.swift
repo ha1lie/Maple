@@ -47,10 +47,15 @@ struct LeafDetailView: View {
                     Divider()
                     
                     BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, defaultValue: .bool(self.selectedLeaf?.enabled), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
-                        if let value = newValue as? Bool {
-                            if leaf.enabled != value {
-                                leaf.toggleEnable()
+                        switch newValue {
+                        case .bool(let boolValue):
+                            if let boolValue = boolValue {
+                                if leaf.enabled != boolValue {
+                                    leaf.toggleEnable()
+                                }
                             }
+                        default:
+                            ()
                         }
                     }))
                     

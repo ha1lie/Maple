@@ -19,6 +19,9 @@ struct SharedConstants {
         case missingSMPrivilegedExecutables
     }
     
+    /// The location to install the injector
+    static let injectorLocation: URL? = URL(string: "/Library/Maple/Maple-LibInjector")
+    
     /// XPC route to uninstall the helper tool.
     static let uninstallRoute = XPCRoute.named("uninstall")
     /// XPC route to update the helper tool.
@@ -37,6 +40,11 @@ struct SharedConstants {
     /// XPC Route to tell the helper tool to end leaf injection
     static let mapleInjectionEndInjection = XPCRoute.named("mapleEndInjecting")
                                                     .withReplyType(Optional<TerminalResponse>.self)
+    
+    static let installInjectorExecutable = XPCRoute.named("installInjector")
+                                                   .withReplyType(Optional<TerminalResponse>.self)
+    
+    static let uninstallInjectorExecutable = XPCRoute.named("uninstallInjector")
     
     /// The label of the helper tool. This is required by SMJobBless to match its filename.
     let helperToolLabel: String

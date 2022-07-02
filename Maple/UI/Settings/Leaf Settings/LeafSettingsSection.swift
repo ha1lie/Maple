@@ -30,16 +30,26 @@ struct LeafSettingsSection: View {
             Divider()
             
             BooleanPreferenceView(preference: Preference(withTitle: "Enabled", withType: .bool, defaultValue: .bool(self.leaf.enabled), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
-                if let value = newValue as? Bool {
-                    if self.leaf.enabled != value {
-                        self.leaf.toggleEnable()
+                switch newValue {
+                case .bool(let boolValue):
+                    if let boolValue = boolValue {
+                        if self.leaf.enabled != boolValue {
+                            self.leaf.toggleEnable()
+                        }
                     }
+                default:
+                    ()
                 }
             })).padding(.horizontal)
             
             BooleanPreferenceView(preference: Preference(withTitle: "Kill injected process on startup", description: "Will kill the affected process if currently running to ensure any changes are made", withType: .bool, defaultValue: .bool(self.leaf.killOnInject), andIdentifier: "nil", forContainer: "nil", toRunOnSet: { newValue in
-                if let value = newValue as? Bool {
-                    self.leaf.killOnInject = value
+                switch newValue {
+                case .bool(let boolValue):
+                    if let boolValue = boolValue {
+                        self.leaf.killOnInject = boolValue
+                    }
+                default:
+                    ()
                 }
             })).padding(.horizontal)
             

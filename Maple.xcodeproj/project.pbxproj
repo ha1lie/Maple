@@ -22,6 +22,8 @@
 		2617AC26282F3C0900E40CE8 /* InjectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC25282F3C0900E40CE8 /* InjectionError.swift */; };
 		2617AC27282F3C0900E40CE8 /* InjectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC25282F3C0900E40CE8 /* InjectionError.swift */; };
 		2617AC292833239600E40CE8 /* HelperToolMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617AC282833239600E40CE8 /* HelperToolMonitor.swift */; };
+		261D07D5286E31120017BAB9 /* LogFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261D07D4286E31120017BAB9 /* LogFile.swift */; };
+		261D07D8286FE40F0017BAB9 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 261D07D7286FE40F0017BAB9 /* LaunchAtLogin */; };
 		2624177D2868723400509858 /* LogWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2624177C2868723400509858 /* LogWindowView.swift */; };
 		2624177F2868784700509858 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2624177E2868784700509858 /* LogView.swift */; };
 		262417812868787700509858 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262417802868787700509858 /* Log.swift */; };
@@ -121,6 +123,7 @@
 		2617AC22282F360E00E40CE8 /* TerminalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalResponse.swift; sourceTree = "<group>"; };
 		2617AC25282F3C0900E40CE8 /* InjectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionError.swift; sourceTree = "<group>"; };
 		2617AC282833239600E40CE8 /* HelperToolMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperToolMonitor.swift; sourceTree = "<group>"; };
+		261D07D4286E31120017BAB9 /* LogFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogFile.swift; sourceTree = "<group>"; };
 		2624177C2868723400509858 /* LogWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowView.swift; sourceTree = "<group>"; };
 		2624177E2868784700509858 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		262417802868787700509858 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -196,6 +199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261D07D8286FE40F0017BAB9 /* LaunchAtLogin in Frameworks */,
 				261713E22858B54600105916 /* MaplePreferences in Frameworks */,
 				261265762858E74400C138DF /* Blessed in Frameworks */,
 				261265792858E75600C138DF /* SecureXPC in Frameworks */,
@@ -218,13 +222,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2624177B2868721C00509858 /* Development */ = {
+		2624177B2868721C00509858 /* Logs */ = {
 			isa = PBXGroup;
 			children = (
 				2624177C2868723400509858 /* LogWindowView.swift */,
 				2624177E2868784700509858 /* LogView.swift */,
 			);
-			path = Development;
+			path = Logs;
 			sourceTree = "<group>";
 		};
 		26303F8A283568DA000A0CEC /* Leaf Settings */ = {
@@ -331,7 +335,7 @@
 			children = (
 				26C35B7D27FA89E800BD4B2B /* ViewController.swift */,
 				26C35B8A27FA89FD00BD4B2B /* Autogen */,
-				2624177B2868721C00509858 /* Development */,
+				2624177B2868721C00509858 /* Logs */,
 				268B0D38281F700E0049F090 /* Settings */,
 				26C35BA127FA8A1F00BD4B2B /* BarApp */,
 				26C35B8C27FA8A1F00BD4B2B /* Install */,
@@ -389,6 +393,7 @@
 				26303F8D28356B19000A0CEC /* FileError.swift */,
 				268422392856478100C31DD2 /* Maple+Preferences.swift */,
 				262417802868787700509858 /* Log.swift */,
+				261D07D4286E31120017BAB9 /* LogFile.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -497,12 +502,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 26C35B8727FA89E900BD4B2B /* Build configuration list for PBXNativeTarget "Maple" */;
 			buildPhases = (
-				26F68712282330C80010D28A /* ShellScript */,
+				26F68712282330C80010D28A /* Run Blessed Helper */,
 				26C35B7427FA89E800BD4B2B /* Sources */,
 				26C35B7527FA89E800BD4B2B /* Frameworks */,
 				26C35B7627FA89E800BD4B2B /* Resources */,
+				261D07D9286FE4390017BAB9 /* Copy LaunchAtLogin Helper */,
 				26F68713282330F70010D28A /* CopyFiles */,
-				262B490F2829CD1E00DF1C03 /* ShellScript */,
+				262B490F2829CD1E00DF1C03 /* Cleanup Blessed Helper */,
 			);
 			buildRules = (
 			);
@@ -515,6 +521,7 @@
 				261265782858E75600C138DF /* SecureXPC */,
 				2612657B2858E76600C138DF /* EmbeddedPropertyList */,
 				2612657E2858E77500C138DF /* Zip */,
+				261D07D7286FE40F0017BAB9 /* LaunchAtLogin */,
 			);
 			productName = Maple;
 			productReference = 26C35B7827FA89E800BD4B2B /* Maple.app */;
@@ -577,6 +584,7 @@
 				261265772858E75600C138DF /* XCRemoteSwiftPackageReference "SecureXPC" */,
 				2612657A2858E76600C138DF /* XCRemoteSwiftPackageReference "EmbeddedPropertyList" */,
 				2612657D2858E77500C138DF /* XCRemoteSwiftPackageReference "Zip" */,
+				261D07D6286FE40F0017BAB9 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 			);
 			productRefGroup = 26C35B7927FA89E800BD4B2B /* Products */;
 			projectDirPath = "";
@@ -603,7 +611,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		262B490F2829CD1E00DF1C03 /* ShellScript */ = {
+		261D07D9286FE4390017BAB9 /* Copy LaunchAtLogin Helper */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -613,6 +621,26 @@
 			);
 			inputPaths = (
 			);
+			name = "Copy LaunchAtLogin Helper";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILT_PRODUCTS_DIR}/LaunchAtLogin_LaunchAtLogin.bundle/Contents/Resources/copy-helper-swiftpm.sh\"\n";
+		};
+		262B490F2829CD1E00DF1C03 /* Cleanup Blessed Helper */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Cleanup Blessed Helper";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -639,7 +667,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}\"/BuildScripts/PropertyListModifier.swift cleanup-job-bless-requirements cleanup-mach-services\n\n";
 		};
-		26F68712282330C80010D28A /* ShellScript */ = {
+		26F68712282330C80010D28A /* Run Blessed Helper */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -649,6 +677,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Blessed Helper";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -688,6 +717,7 @@
 				26D3421C283E8CD20073C07B /* MapleDevelopmentHelper.swift in Sources */,
 				268B0D3A281F70180049F090 /* SettingsView.swift in Sources */,
 				26BC6CCE2809E8A0004617C2 /* Maple+View.swift in Sources */,
+				261D07D5286E31120017BAB9 /* LogFile.swift in Sources */,
 				26F6870F28232F310010D28A /* DiagnosticSigningInfo.swift in Sources */,
 				26BC6CCC2809E663004617C2 /* LeafDetailView.swift in Sources */,
 				26303F94283570B3000A0CEC /* MapleSegmentPicker.swift in Sources */,
@@ -1040,6 +1070,14 @@
 				kind = branch;
 			};
 		};
+		261D07D6286FE40F0017BAB9 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1081,6 +1119,11 @@
 		261713E12858B54600105916 /* MaplePreferences */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MaplePreferences;
+		};
+		261D07D7286FE40F0017BAB9 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 261D07D6286FE40F0017BAB9 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
 		};
 		262417842869ED3500509858 /* MaplePreferences */ = {
 			isa = XCSwiftPackageProductDependency;
