@@ -44,7 +44,7 @@ class MapleLogController: ObservableObject {
                 #if DEBUG
                 print("+TIME [\(parts[0]) - \(parts[1])")
                 #endif
-                self.addLog(Log(parts[1], forBundle: parts[0], atTime: MapleLogController.formatter.string(from: Date.now), withType: .normal))
+                self.addLog(Log(parts[1], forBundle: parts[0], atTime: MapleLogController.formatter.string(from: Date(timeIntervalSinceNow: 0)), withType: .normal))
             } else {
                 self.addLog(Log("Failed to parse Log object from log observer: Wrong part count", forBundle: "dev.halz.Maple", atTime: "TIME", withType: .error))
             }
@@ -103,14 +103,14 @@ class MapleLogController: ObservableObject {
             value = String(str.suffix(from: str.index(str.startIndex, offsetBy: 8)))
             type = .warning
         }
-        return Log(value, forBundle: bundle, atTime: MapleLogController.formatter.string(from: Date.now), withType: type)
+        return Log(value, forBundle: bundle, atTime: MapleLogController.formatter.string(from: Date(timeIntervalSinceNow: 0)), withType: type)
     }
     
     /// Adds a log from the app 
     /// - Parameter log: Log to display to the user
     public func local(log: String) {
         #if DEBUG
-        print("+\(MapleLogController.formatter.string(from: Date.now)) [dev.halz.Maple] - \(log)")
+        print("+\(MapleLogController.formatter.string(from: Date(timeIntervalSinceNow: 0))) [dev.halz.Maple] - \(log)")
         #endif
         self.addLog(self.makeLog(fromString: log, inBundle: "dev.halz.Maple"))
     }

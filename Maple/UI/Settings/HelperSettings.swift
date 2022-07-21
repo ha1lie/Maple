@@ -51,7 +51,7 @@ struct HelperSettings: View {
                 if self.quoteShown {
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(nsColor: .darkGray))
+                            .foregroundColor(Color(.darkGray))
                         Text(self.helperToolTopQuote)
                             .foregroundColor(self.helperToolTopQuote.contains("Fail") ? .red : .white)
                             .fontWeight(.medium)

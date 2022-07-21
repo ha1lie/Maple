@@ -37,7 +37,7 @@ struct MapleSegmentPicker: View {
                         }
                     }, label: {
                         Text(self.options[index])
-                            .foregroundColor(index == self.value ? Color(nsColor: .labelColor) : Color(nsColor: .secondaryLabelColor))
+                            .foregroundColor(index == self.value ? Color(.labelColor) : Color(.secondaryLabelColor))
                             .padding(.vertical, 8)
                             .padding(.horizontal, 16)
                             .frame(minWidth: 0, maxWidth: .infinity)

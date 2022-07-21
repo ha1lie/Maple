@@ -14,21 +14,21 @@ struct DefaultColors: View {
     var body: some View {
         VStack {
             HStack {
-                ForEach([Color(nsColor: .systemRed), Color(nsColor: .systemOrange), Color(nsColor: .systemYellow), Color(nsColor: .systemGreen), Color(nsColor: .systemTeal)], id: \.self) { color in
+                ForEach([Color(.systemRed), Color(.systemOrange), Color(.systemYellow), Color(.systemGreen), Color(.systemTeal)], id: \.self) { color in
                     Button {
                         self.selectedColor = color
                     } label: {
                         ColorCell(color: color)
                     }.buttonStyle(PlainButtonStyle())
                     
-                    if color != Color(nsColor: .systemTeal) {
+                    if color != Color(.systemTeal) {
                         Spacer()
                     }
                 }
             }.padding()
             
             HStack {
-                ForEach([Color(nsColor: .systemBlue), Color(nsColor: .systemPurple), Color(nsColor: .systemPink), Color.white, Color.black], id: \.self) { color in
+                ForEach([Color(.systemBlue), Color(.systemPurple), Color(.systemPink), Color.white, Color.black], id: \.self) { color in
                     Button {
                         self.selectedColor = color
                     } label: {

@@ -25,14 +25,13 @@ struct MapleTextField: View {
             RoundedRectangle(cornerRadius: 6)
                 .foregroundColor(.gray.opacity(0.3))
                 .frame(height: 26)
-            TextField(self.title, text: self.$value)
+            TextField(self.title, text: self.$value, onCommit: {
+                if let onSubmit = self.onSubmit {
+                    onSubmit()
+                }
+            })
                 .textFieldStyle(PlainTextFieldStyle())
                 .padding(6)
-                .onSubmit {
-                    if let onSubmit = self.onSubmit {
-                        onSubmit()
-                    }
-                }
         }
     }
 }
