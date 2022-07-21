@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 import LaunchAtLogin
 
 struct MapleSettings: View {
@@ -96,6 +96,10 @@ struct MapleSettings: View {
                         MapleButton(action: {
                             MapleController.shared.uninstallInjector()
                         }, title: "Remove Files from /Library", withColor: .red, andSize: .small)
+                        
+                        MapleButton(action: {
+                            MaplePreferencesController.shared.completeWelcome(false)
+                        }, title: "Reset first time configuration", andSize: .small)
                     }
                 }
             }.padding()

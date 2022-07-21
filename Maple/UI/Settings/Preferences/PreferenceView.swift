@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 struct PreferenceView: View {
     let preference: Preference
@@ -20,10 +20,10 @@ struct PreferenceView: View {
                 BooleanPreferenceView(preference: self.preference)
             case .color:
                 ColorPreferenceView(preference: self.preference)
+            case .number:
+                NumberPreferenceView(preference: self.preference)
             case .unknown:
                 UnknownPreferenceView(preference: self.preference)
-            default:
-                EmptyView()
             }
         }
     }

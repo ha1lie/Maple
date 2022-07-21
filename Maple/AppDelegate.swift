@@ -71,7 +71,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.helperMonitor.determineStatus()
         
         MapleController.shared.configure()
-        MapleController.shared.openSettingsWindow()
+        if !MaplePreferencesController.shared.hasCompletedWelcome {
+            MapleController.shared.openFirstTimeWindow()
+        }
+        
+        if #available(macOS 13.0, *) {
+            MapleNotificationController.shared.sendUserAlert(withTitle: "Please Use Caution", andBody: "Maple is not tested or confirmed to work on MacOS versions newer than MacOS Monterey. While Maple should not cause any damage to your device, the creators of this software are not to be held liable in the event which it does.")
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

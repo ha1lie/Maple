@@ -6,39 +6,24 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 struct PreferencesGroupView: View {
-    @StateObject var group: PreferenceGroup
-    @State var shouldShow: Bool = false
+    @ObservedObject var group: PreferenceGroup
     
-    @State var listener: ShowListener?
+    let hasDivider: Bool
     
-    class ShowListener {
-        
-        private let groupView: PreferencesGroupView
-        private let key: String
-        
-        @objc func updateModal(_ notification: Notification) {
-            if let showable = notification.userInfo?["newValue"] as? Bool {
-                self.groupView.updateShow(showable)
-            }
-        }
-        
-        init(forKey key: String, _ groupView: PreferencesGroupView) {
-            self.key = key
-            self.groupView = groupView
-            DistributedNotificationCenter.default().addObserver(self, selector: #selector(updateModal(_:)), name: Notification.Name(self.key), object: nil, suspensionBehavior: .deliverImmediately)
-        }
-    }
-    
-    fileprivate func updateShow(_ toShow: Bool) {
-        self.shouldShow = toShow
+    init(group: PreferenceGroup, withDivider: Bool = false) {
+        self.group = group
+        self.hasDivider = withDivider
     }
     
     var body: some View {
         VStack(alignment: .leading) {
-            if self.shouldShow {
+            if self.group.canShow {
+                if self.hasDivider {
+                    Divider()
+                }
                 Text(self.group.name)
                     .font(.title)
                     .bold()
@@ -54,24 +39,6 @@ struct PreferencesGroupView: View {
                 }
             } else {
                 EmptyView()
-            }
-        }.onAppear {
-            if let showKey = self.group.optionallyShownKey {
-                self.listener = ShowListener(forKey: showKey, self)
-                if let preference = Preferences.valueForKey(showKey, inContainer: self.group.containerName) {
-                    switch preference {
-                    case .bool(let optional):
-                        if let optional = optional {
-                            self.shouldShow = optional
-                        }
-                    default:
-                        self.shouldShow = false
-                    }
-                } else {
-                    self.shouldShow = false
-                }
-            } else {
-                self.shouldShow = true
             }
         }
     }

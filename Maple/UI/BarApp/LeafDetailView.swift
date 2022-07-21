@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 /// Detail view about a Leaf
 struct LeafDetailView: View {

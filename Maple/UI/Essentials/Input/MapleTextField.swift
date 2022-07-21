@@ -12,6 +12,14 @@ struct MapleTextField: View {
     let title: String
     @Binding var value: String
     
+    let onSubmit: (() -> Void)?
+    
+    init(title: String, value: Binding<String>, onSubmit: (() -> Void)? = nil) {
+        self.title = title
+        self._value = value
+        self.onSubmit = onSubmit
+    }
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 6)
@@ -20,6 +28,11 @@ struct MapleTextField: View {
             TextField(self.title, text: self.$value)
                 .textFieldStyle(PlainTextFieldStyle())
                 .padding(6)
+                .onSubmit {
+                    if let onSubmit = self.onSubmit {
+                        onSubmit()
+                    }
+                }
         }
     }
 }

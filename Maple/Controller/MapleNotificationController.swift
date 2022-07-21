@@ -56,4 +56,16 @@ class MapleNotificationController {
             return alert.runModal() == .alertFirstButtonReturn ? "OK" : "Cancel"
         }
     }
+    
+    /// Sends an informative message to the user in the form of a pop-up alert
+    /// - Parameters:
+    ///   - t: Title of the alert
+    ///   - b: Body text of the alert
+    public func sendUserAlert(withTitle t: String, andBody b: String) {
+        let alert = NSAlert()
+        alert.messageText = t
+        alert.informativeText = b
+        alert.addButton(withTitle: "OK")
+        let _ = alert.runModal()
+    }
 }

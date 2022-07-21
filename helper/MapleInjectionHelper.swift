@@ -7,7 +7,7 @@
 
 import Foundation
 import AppKit
-import MaplePreferences
+import MapleKit
 
 /// Helper class to run injection-focused functions
 struct MapleInjectionHelper {

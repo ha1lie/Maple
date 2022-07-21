@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 struct ColorPreferenceView: View {
     let preference: Preference

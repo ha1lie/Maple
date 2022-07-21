@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MaplePreferences
+import MapleKit
 
 extension Preferences {
     
@@ -50,8 +50,6 @@ extension Preferences {
                                     ()
                                 }
                             }
-                        }.withPreference { groupContainer in
-                            Preference(withTitle: "Numer preference piece", withType: .number, andIdentifier: "random.numberfield.testing", forContainer: groupContainer)
                         }
                 }.withGroup { containerName in
                     PreferenceGroup(withName: "Development", andIdentifier: "dev.halz.Maple.app.prefs.developmentgroup", forContainer: containerName, optionallyShownIfKeyIsTrue: MaplePreferencesController.developmentKey)

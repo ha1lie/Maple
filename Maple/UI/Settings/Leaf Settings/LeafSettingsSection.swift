@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 struct LeafSettingsSection: View {
     let leaf: Leaf
     
     @State var selectedEnabled: Bool = false
+    @Binding var displayedLeaf: Leaf?
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -77,6 +78,7 @@ struct LeafSettingsSection: View {
                     .padding(.bottom, 6)
                 
                 Button {
+                    self.displayedLeaf = nil
                     MapleController.shared.uninstallLeaf(self.leaf)
                 } label: {
                     HStack {

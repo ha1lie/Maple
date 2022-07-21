@@ -7,7 +7,7 @@
 
 import Foundation
 import Zip
-import MaplePreferences
+import MapleKit
 
 class MapleDevelopmentHelper: ObservableObject {
     static let shared: MapleDevelopmentHelper = MapleDevelopmentHelper()

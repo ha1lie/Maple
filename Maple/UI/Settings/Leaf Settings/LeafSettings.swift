@@ -24,7 +24,7 @@ struct LeafSettings: View {
                         }
                     ScrollView(.vertical, showsIndicators: true) {
                         if self.displayedLeaf != nil {
-                            LeafSettingsSection(leaf: self.displayedLeaf!)
+                            LeafSettingsSection(leaf: self.displayedLeaf!, displayedLeaf: self.$displayedLeaf)
                                 .padding(.trailing)
                         } else {
                             Text("Select a Leaf")
@@ -62,6 +62,10 @@ struct LeafSettings: View {
                     }
                     
                     MaplePreferencesController.shared.openedLeafIndex = nil
+                }
+            }.onChange(of: self.displayedLeaf) { newValue in
+                if newValue == nil && self.mapleController.installedLeaves.count > 0 {
+                    self.displayedLeaf = self.mapleController.installedLeaves.first
                 }
             }
         }

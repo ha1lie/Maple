@@ -13,6 +13,8 @@ struct MapleColorPicker: View {
     
     @State var showPicker: Bool = false
     
+    @State var selectedView: Int = 0
+    
     var body: some View {
         Button {
             self.showPicker.toggle()
@@ -21,8 +23,14 @@ struct MapleColorPicker: View {
         }.buttonStyle(PlainButtonStyle())
         .popover(isPresented: self.$showPicker) {
             VStack {
-                DefaultColors(selectedColor: self.$selectedColor)
+                MapleSegmentPicker(withOptions: ["Defaults", "Custom"], andValue: self.$selectedView)
+                if self.selectedView == 0 {
+                    DefaultColors(selectedColor: self.$selectedColor)
+                } else {
+                    CustomColorView(selectedColor: self.$selectedColor)
+                }
             }.frame(width: 300)
+                .padding()
         }
     }
 }

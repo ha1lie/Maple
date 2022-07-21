@@ -7,7 +7,7 @@
 
 import Foundation
 import SecureXPC
-import MaplePreferences
+import MapleKit
 import LaunchAtLogin
 
 class MaplePreferencesController: ObservableObject {
@@ -22,8 +22,14 @@ class MaplePreferencesController: ObservableObject {
     public static let developmentKey: String = "dev.halz.Maple.prefs.development"
     public static let developmentNotifyKey: String = "dev.halz.Maple.prefs.development.notifyOnInstall"
     
+    private static let completedWelcomeKey: String = "dev.halz.Maple.prefs.completedWelcome"
+    
     @Published var openedPanel: Int? = nil
     @Published var openedLeafIndex: Int? = nil
+    
+    public var hasCompletedWelcome: Bool {
+        return UserDefaults(suiteName: "dev.halz.Maple.app")?.bool(forKey: MaplePreferencesController.completedWelcomeKey) ?? false
+    }
     
     private var authenticatedRootSIPDisabled: Bool {
         get {
@@ -124,5 +130,10 @@ class MaplePreferencesController: ObservableObject {
         default:
             self.developmentNotify = false
         }
+    }
+    
+    /// Mark Maple's system as complete
+    public func completeWelcome(_ toVal: Bool = true) {
+        UserDefaults(suiteName: MaplePreferencesController.mapleAppBundle)?.set(toVal, forKey: MaplePreferencesController.completedWelcomeKey)
     }
 }

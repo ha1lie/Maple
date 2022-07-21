@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import MaplePreferences
+import MapleKit
 
 class Leaf: ObservableObject, Identifiable, Codable, Equatable, Hashable, CustomStringConvertible {
     var description: String {

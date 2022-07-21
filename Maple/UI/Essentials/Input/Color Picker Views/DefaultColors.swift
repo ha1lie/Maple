@@ -26,6 +26,7 @@ struct DefaultColors: View {
                     }
                 }
             }.padding()
+            
             HStack {
                 ForEach([Color(nsColor: .systemBlue), Color(nsColor: .systemPurple), Color(nsColor: .systemPink), Color.white, Color.black], id: \.self) { color in
                     Button {

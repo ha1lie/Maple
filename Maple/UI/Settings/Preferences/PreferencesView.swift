@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import MaplePreferences
+import MapleKit
 
 struct PreferencesView: View {
     let preferences: Preferences
@@ -22,10 +22,7 @@ struct PreferencesView: View {
             if let groups = self.preferences.preferenceGroups {
                 // Groups
                 ForEach(groups, id: \.self) { group in
-                    if group != groups.first {
-                        Divider()
-                    }
-                    PreferencesGroupView(group: group)
+                    PreferencesGroupView(group: group, withDivider: group != groups.first)
                 }
             }
         }

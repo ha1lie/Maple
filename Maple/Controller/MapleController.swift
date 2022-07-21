@@ -9,7 +9,7 @@ import Foundation
 import Zip
 import SwiftUI
 import SecureXPC
-import MaplePreferences
+import MapleKit
 
 /// Controls all Leafs, and their running status
 class MapleController: ObservableObject {
@@ -83,11 +83,14 @@ class MapleController: ObservableObject {
     }
     
     /// Installs the injector to the shared location in /Library via the priv. tool
-    public func installInjector() {
+    public func installInjector(andRun run: ((_ success: Bool) -> Void)? = nil) {
         self.xpcService.send(to: SharedConstants.installInjectorExecutable) { response in
             switch response {
             case .failure(let error):
                 MapleLogController.shared.local(log: error.localizedDescription)
+                if let run = run {
+                    run(false)
+                }
             case .success(let terminalResponse):
                 if let terminalResponse = terminalResponse {
                     // There was actually an issue
@@ -97,8 +100,14 @@ class MapleController: ObservableObject {
                     if let error = terminalResponse.error {
                         MapleLogController.shared.local(log: "ERROR Injector installation error: \(error)")
                     }
+                    if let run = run {
+                        run(false)
+                    }
                 } else {
                     MapleLogController.shared.local(log: "Successfully installed Maple-LibInjector file")
+                    if let run = run {
+                        run(true)
+                    }
                 }
             }
         }
@@ -543,6 +552,20 @@ class MapleController: ObservableObject {
         self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: LogWindowView()))
         self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
         self.installerWindow?.title = "Maple Logs"
+        self.installerWindow?.styleMask = [.titled, .closable, .miniaturizable, .resizable]
+        self.installerWindow?.minSize = NSSize(width: 600, height: 400)
+        self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
+        
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+        self.installerWindow?.makeKey()
+        self.installerWindow?.orderFrontRegardless()
+    }
+    
+    public func openFirstTimeWindow() {
+        self.installerWindow = NSWindow(contentViewController: NSHostingController(rootView: FirstTimeWindow()))
+        self.installerWindow?.setContentSize(NSSize(width: 600, height: 400))
+        self.installerWindow?.title = "Welcome"
         self.installerWindow?.styleMask = [.titled, .closable, .miniaturizable, .resizable]
         self.installerWindow?.minSize = NSSize(width: 600, height: 400)
         self.installerWindow?.contentMinSize = NSSize(width: 600, height: 400)
